@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.20623.1 VSUPREVIEW
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Naru.WPF", "Naru.WPF\Naru.WPF.csproj", "{6DA2B9AD-0810-4C8C-A886-EDBD8130C89B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Naru.WPF.ModernUI", "Naru.WPF.ModernUI\Naru.WPF.ModernUI.csproj", "{CA857197-FC3D-4185-A4CA-CB8B78828B48}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Naru.WPF.Tests", "Naru.WPF.Tests\Naru.WPF.Tests.csproj", "{79909CE6-28AC-404D-AB05-C3BAFE84C164}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Naru.Tests", "Naru.Tests\Naru.Tests.csproj", "{28BFF6B4-12E5-4F81-851F-BA40DB9C900B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6DA2B9AD-0810-4C8C-A886-EDBD8130C89B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6DA2B9AD-0810-4C8C-A886-EDBD8130C89B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6DA2B9AD-0810-4C8C-A886-EDBD8130C89B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6DA2B9AD-0810-4C8C-A886-EDBD8130C89B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA857197-FC3D-4185-A4CA-CB8B78828B48}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA857197-FC3D-4185-A4CA-CB8B78828B48}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA857197-FC3D-4185-A4CA-CB8B78828B48}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA857197-FC3D-4185-A4CA-CB8B78828B48}.Release|Any CPU.Build.0 = Release|Any CPU
+		{79909CE6-28AC-404D-AB05-C3BAFE84C164}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{79909CE6-28AC-404D-AB05-C3BAFE84C164}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{79909CE6-28AC-404D-AB05-C3BAFE84C164}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{79909CE6-28AC-404D-AB05-C3BAFE84C164}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28BFF6B4-12E5-4F81-851F-BA40DB9C900B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28BFF6B4-12E5-4F81-851F-BA40DB9C900B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28BFF6B4-12E5-4F81-851F-BA40DB9C900B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28BFF6B4-12E5-4F81-851F-BA40DB9C900B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.2\lib\NET35
+	EndGlobalSection
+EndGlobal
