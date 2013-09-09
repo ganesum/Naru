@@ -207,6 +207,40 @@ namespace Naru.WPF.TPL
             return tcs.Task;
         }
 
+        public static Task<T1> Do<T1>(this Task<T1> first, Action<T1> next)
+        {
+            if (first == null) throw new ArgumentNullException("first");
+            if (next == null) throw new ArgumentNullException("next");
+
+            var tcs = new TaskCompletionSource<T1>();
+            first.ContinueWith(_ =>
+            {
+                if (first.IsFaulted)
+                {
+                    tcs.TrySetException(first.Exception.InnerExceptions);
+                }
+                else if (first.IsCanceled)
+                {
+                    tcs.TrySetCanceled();
+                }
+                else
+                {
+                    try
+                    {
+                        next(first.Result);
+
+                        tcs.TrySetResult(first.Result);
+                    }
+                    catch (Exception exc)
+                    {
+                        tcs.TrySetException(exc);
+                    }
+                }
+            }, TaskContinuationOptions.ExecuteSynchronously);
+
+            return tcs.Task;
+        }
+
         public static Task<T1> Do<T1>(this Task<T1> first, Func<Task> next)
         {
             if (first == null) throw new ArgumentNullException("first");
@@ -494,22 +528,6 @@ namespace Naru.WPF.TPL
             return task;
         }
 
-        public static Task<TSource> OrderBy<TSource, TKey>(this Task<TSource> source, Func<TSource, TKey> keySelector)
-        {
-            // A single item is already in sorted order, no matter what the key selector is, so just
-            // return the original.
-            if (source == null) throw new ArgumentNullException("source");
-            return source;
-        }
-
-        public static Task<TSource> OrderByDescending<TSource, TKey>(this Task<TSource> source, Func<TSource, TKey> keySelector)
-        {
-            // A single item is already in sorted order, no matter what the key selector is, so just
-            // return the original.
-            if (source == null) throw new ArgumentNullException("source");
-            return source;
-        }
-
         /// <summary>
         /// Task that immediately return the value passed in.
         /// </summary>
@@ -781,49 +799,6 @@ namespace Naru.WPF.TPL
         }
 
         /// <summary>
-        /// Execute an Func, Task completes when it is finished.
-        /// next is only called if first completed successfully.
-        /// </summary>
-        /// <typeparam name="T1"></typeparam>
-        /// <typeparam name="T2"></typeparam>
-        /// <param name="first"></param>
-        /// <param name="next"></param>
-        /// <returns></returns>
-        public static Task<T2> SelectMany<T1, T2>(this Task<T1> first, Func<T1, T2> next)
-        {
-            if (first == null) throw new ArgumentNullException("first");
-            if (next == null) throw new ArgumentNullException("next");
-
-            var tcs = new TaskCompletionSource<T2>();
-            first.ContinueWith(_ =>
-            {
-                if (first.IsFaulted)
-                {
-                    tcs.TrySetException(first.Exception.InnerExceptions);
-                }
-                else if (first.IsCanceled)
-                {
-                    tcs.TrySetCanceled();
-                }
-                else
-                {
-                    try
-                    {
-                        var result = next(first.Result);
-
-                        tcs.TrySetResult(result);
-                    }
-                    catch (Exception exc)
-                    {
-                        tcs.TrySetException(exc);
-                    }
-                }
-            }, TaskContinuationOptions.ExecuteSynchronously);
-
-            return tcs.Task;
-        }
-
-        /// <summary>
         /// Execute an Action, Task completes when it is finished.
         /// next is only called if first completed successfully.
         /// </summary>
@@ -912,22 +887,6 @@ namespace Naru.WPF.TPL
             return taskFactory.StartNew(action, CancellationToken.None, TaskCreationOptions.None, scheduler);
         }
 
-        public static Task<TSource> ThenBy<TSource, TKey>(this Task<TSource> source, Func<TSource, TKey> keySelector)
-        {
-            // A single item is already in sorted order, no matter what the key selector is, so just
-            // return the original.
-            if (source == null) throw new ArgumentNullException("source");
-            return source;
-        }
-
-        public static Task<TSource> ThenByDescending<TSource, TKey>(this Task<TSource> source, Func<TSource, TKey> keySelector)
-        {
-            // A single item is already in sorted order, no matter what the key selector is, so just
-            // return the original.
-            if (source == null) throw new ArgumentNullException("source");
-            return source;
-        }
-
         #region Timeouts
 
         /// <summary>Creates a new Task that mirrors the supplied task but that will be canceled after the specified timeout.</summary>
@@ -965,22 +924,5 @@ namespace Naru.WPF.TPL
         }
 
         #endregion
-
-        public static Task<TSource> Where<TSource>(this Task<TSource> source, Func<TSource, bool> predicate, TaskScheduler scheduler)
-        {
-            // Validate arguments
-            if (source == null) throw new ArgumentNullException("source");
-            if (predicate == null) throw new ArgumentNullException("predicate");
-
-            // Create a continuation to run the predicate and return the source's result.
-            // If the predicate returns false, cancel the returned Task.
-            var cts = new CancellationTokenSource();
-            return source.ContinueWith(t =>
-            {
-                var result = t.Result;
-                if (!predicate(result)) cts.CancelAndThrow();
-                return result;
-            }, cts.Token, TaskContinuationOptions.NotOnCanceled, scheduler);
-        }
     }
 }

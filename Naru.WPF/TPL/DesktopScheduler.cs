@@ -5,13 +5,13 @@ namespace Naru.WPF.TPL
 {
     public class DesktopScheduler : IScheduler
     {
-        public TaskScheduler Default { get; private set; }
+        public TaskScheduler Task { get; private set; }
 
         public DispatcherTaskSchedulerBase Dispatcher { get; private set; }
 
         public DesktopScheduler()
         {
-            Default = TaskScheduler.Default;
+            Task = TaskScheduler.Default;
             Dispatcher = new SynchronizationContextTaskScheduler(SynchronizationContext.Current);
         }
     }

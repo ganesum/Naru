@@ -140,5 +140,38 @@ namespace Naru.WPF.Tests.TPL
             Assert.That(task2HasRun, Is.True);
             Assert.That(task3HasRun, Is.True);
         }
+
+        [Test]
+        public void when_SelectMany_and_exception_is_thrown_in_previous_task_then_select_many_is_not_called()
+        {
+            var autoResetEvent = new AutoResetEvent(false);
+
+            var task1HasRun = false;
+            var task2HasRun = false;
+
+            var taskScheduler = TaskScheduler.Default;
+
+            new TaskFactory(taskScheduler)
+                .StartNew(() =>
+                {
+                    Assert.That(task1HasRun, Is.False);
+
+                    task1HasRun = true;
+
+                    throw new Exception();
+                })
+                .SelectMany(() =>
+                {
+                    Assert.That(task2HasRun, Is.False);
+
+                    task2HasRun = true;
+                })
+                .Finally(() => autoResetEvent.Set(), taskScheduler);
+
+            autoResetEvent.WaitOne();
+
+            Assert.That(task1HasRun, Is.True);
+            Assert.That(task2HasRun, Is.False);
+        }
     }
 }

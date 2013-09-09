@@ -128,7 +128,7 @@ namespace Naru.WPF.MVVM
         {
             return Task.Factory
                 .StartNew(() => AddRangeInternal(items), _scheduler.Dispatcher)
-                .SelectMany(RefreshAsync, _scheduler.Dispatcher);
+                .SelectMany(() => RefreshAsync(), _scheduler.Dispatcher);
         }
 
         private void AddRangeInternal(IEnumerable<T> items)
@@ -158,7 +158,7 @@ namespace Naru.WPF.MVVM
         {
             return Task.Factory
                 .StartNew(() => RemoveRangeInternal(items), _scheduler.Dispatcher)
-                .SelectMany(RefreshAsync, _scheduler.Dispatcher);
+                .SelectMany(() => RefreshAsync(), _scheduler.Dispatcher);
         }
 
         private void RemoveRangeInternal(IEnumerable<T> items)

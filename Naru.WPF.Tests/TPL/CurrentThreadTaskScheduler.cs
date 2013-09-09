@@ -9,18 +9,6 @@ namespace Naru.WPF.Tests.TPL
 {
     public class CurrentThreadTaskScheduler : DispatcherTaskSchedulerBase
     {
-        //private readonly TaskFactory _factory;
-
-        //public override TaskFactory Factory
-        //{
-        //    get { return _factory; }
-        //}
-
-        //public CurrentThreadTaskScheduler()
-        //{
-        //    _factory = new TaskFactory(this);
-        //}
-
         public override void ExecuteSync(Action action)
         {
             action();

@@ -4,7 +4,7 @@ namespace Naru.WPF.TPL
 {
     public interface IScheduler
     {
-        TaskScheduler Default { get; }
+        TaskScheduler Task { get; }
 
         DispatcherTaskSchedulerBase Dispatcher { get; }
     }

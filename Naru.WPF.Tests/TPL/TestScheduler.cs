@@ -6,13 +6,13 @@ namespace Naru.WPF.Tests.TPL
 {
     public class TestScheduler : IScheduler
     {
-        public TaskScheduler Default { get; private set; }
+        public TaskScheduler Task { get; private set; }
 
         public DispatcherTaskSchedulerBase Dispatcher { get; private set; }
 
         public TestScheduler()
         {
-            Default = new CurrentThreadTaskScheduler();
+            Task = new CurrentThreadTaskScheduler();
             Dispatcher = new CurrentThreadTaskScheduler();
         }
     }
