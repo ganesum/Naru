@@ -1,12 +1,30 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+using Naru.WPF.TPL;
+
 namespace Naru.WPF.Tests.TPL
 {
-    public class CurrentThreadTaskScheduler : TaskScheduler
+    public class CurrentThreadTaskScheduler : DispatcherTaskSchedulerBase
     {
-        // http://www.kjetilk.com/2012/11/unit-testing-asynchronous-operations.html
+        //private readonly TaskFactory _factory;
+
+        //public override TaskFactory Factory
+        //{
+        //    get { return _factory; }
+        //}
+
+        //public CurrentThreadTaskScheduler()
+        //{
+        //    _factory = new TaskFactory(this);
+        //}
+
+        public override void ExecuteSync(Action action)
+        {
+            action();
+        }
 
         protected override void QueueTask(Task task)
         {

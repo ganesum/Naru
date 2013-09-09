@@ -3,6 +3,7 @@
 using Moq;
 
 using Naru.WPF.MVVM;
+using Naru.WPF.TPL;
 
 using NUnit.Framework;
 
@@ -13,8 +14,8 @@ namespace Naru.WPF.Tests.MVVM
     {
         public class StubISupportActivationState : Workspace
         {
-            public StubISupportActivationState(ILog log, IDispatcherService dispatcherService) 
-                : base(log, dispatcherService)
+            public StubISupportActivationState(ILog log, IScheduler scheduler) 
+                : base(log, scheduler)
             {
             }
         }
@@ -22,11 +23,11 @@ namespace Naru.WPF.Tests.MVVM
         [Test]
         public void when_parent_is_activated_child_is_activated()
         {
-            var parent = new StubISupportActivationState(new Mock<ILog>().Object, new Mock<IDispatcherService>().Object) as ISupportActivationState;
+            var parent = new StubISupportActivationState(new Mock<ILog>().Object, new Mock<IScheduler>().Object) as ISupportActivationState;
             parent.DeActivate();
             Assert.That(parent.IsActive, Is.False);
 
-            var child = new StubISupportActivationState(new Mock<ILog>().Object, new Mock<IDispatcherService>().Object) as ISupportActivationState;
+            var child = new StubISupportActivationState(new Mock<ILog>().Object, new Mock<IScheduler>().Object) as ISupportActivationState;
             child.DeActivate();
             Assert.That(child.IsActive, Is.False);
 
@@ -41,11 +42,11 @@ namespace Naru.WPF.Tests.MVVM
         [Test]
         public void when_parent_is_deactivated_child_is_activated()
         {
-            var parent = new StubISupportActivationState(new Mock<ILog>().Object, new Mock<IDispatcherService>().Object) as ISupportActivationState;
+            var parent = new StubISupportActivationState(new Mock<ILog>().Object, new Mock<IScheduler>().Object) as ISupportActivationState;
             parent.Activate();
             Assert.That(parent.IsActive, Is.True);
 
-            var child = new StubISupportActivationState(new Mock<ILog>().Object, new Mock<IDispatcherService>().Object) as ISupportActivationState;
+            var child = new StubISupportActivationState(new Mock<ILog>().Object, new Mock<IScheduler>().Object) as ISupportActivationState;
             child.Activate();
             Assert.That(child.IsActive, Is.True);
 

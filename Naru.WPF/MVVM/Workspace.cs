@@ -12,7 +12,7 @@ namespace Naru.WPF.MVVM
 {
     public abstract class Workspace : ViewModel, ISupportClosing, ISupportActivationState
     {
-        protected readonly IDispatcherService DispatcherService;
+        protected readonly IScheduler Scheduler;
         protected readonly CompositeDisposable Disposables;
 
         #region IsBusy
@@ -51,10 +51,10 @@ namespace Naru.WPF.MVVM
 
         public DelegateCommand ClosingCommand { get; private set; }
 
-        protected Workspace(ILog log, IDispatcherService dispatcherService) 
+        protected Workspace(ILog log, IScheduler scheduler) 
             : base(log)
         {
-            DispatcherService = dispatcherService;
+            Scheduler = scheduler;
             Disposables = new CompositeDisposable();
 
             ClosingCommand = new DelegateCommand(Close);
@@ -99,12 +99,16 @@ namespace Naru.WPF.MVVM
 
         protected Task<Unit> BusyAsync(string message)
         {
-            return DispatcherService.ExecuteAsyncOnUI(() => Busy(message));
+            return Task.Factory
+                .StartNew(() => Busy(message), Scheduler.Dispatcher)
+                .Select(() => Unit.Default);
         }
 
         protected Task<Unit> IdleAsync()
         {
-            return DispatcherService.ExecuteAsyncOnUI(() => Idle());
+            return Task.Factory
+                .StartNew(Idle, Scheduler.Dispatcher)
+                .Select(() => Unit.Default);
         }
 
         #region SupportActivationState

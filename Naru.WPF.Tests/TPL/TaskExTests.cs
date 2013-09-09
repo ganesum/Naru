@@ -94,5 +94,51 @@ namespace Naru.WPF.Tests.TPL
             Assert.That(task2HasRun, Is.True);
             Assert.That(task3HasRun, Is.True);
         }
+
+        [Test]
+        public void catch_happens_before_finally_with_two_schedulers()
+        {
+            var autoResetEvent = new AutoResetEvent(false);
+
+            var task1HasRun = false;
+            var task2HasRun = false;
+            var task3HasRun = false;
+
+            var taskScheduler = TaskScheduler.Default;
+            var currentTaskScheduler = new CurrentThreadTaskScheduler();
+
+            new TaskFactory(taskScheduler)
+                .StartNew(() =>
+                {
+                    Assert.That(task1HasRun, Is.False);
+                    Assert.That(task2HasRun, Is.False);
+                    Assert.That(task3HasRun, Is.False);
+                    task1HasRun = true;
+
+                    throw new Exception();
+                })
+                .CatchAndHandle(_ =>
+                {
+                    Assert.That(task1HasRun, Is.True);
+                    Assert.That(task2HasRun, Is.False);
+                    Assert.That(task3HasRun, Is.False);
+                    task2HasRun = true;
+                }, taskScheduler)
+                .Finally(() =>
+                {
+                    Assert.That(task1HasRun, Is.True);
+                    Assert.That(task2HasRun, Is.True);
+                    Assert.That(task3HasRun, Is.False);
+                    task3HasRun = true;
+
+                    autoResetEvent.Set();
+                }, currentTaskScheduler);
+
+            autoResetEvent.WaitOne();
+
+            Assert.That(task1HasRun, Is.True);
+            Assert.That(task2HasRun, Is.True);
+            Assert.That(task3HasRun, Is.True);
+        }
     }
 }

@@ -4,13 +4,16 @@ using Naru.WPF.TPL;
 
 namespace Naru.WPF.Tests.TPL
 {
-    public class TestTaskScheduler : ITaskScheduler
+    public class TestScheduler : IScheduler
     {
         public TaskScheduler Default { get; private set; }
 
-        public TestTaskScheduler()
+        public DispatcherTaskSchedulerBase Dispatcher { get; private set; }
+
+        public TestScheduler()
         {
             Default = new CurrentThreadTaskScheduler();
+            Dispatcher = new CurrentThreadTaskScheduler();
         }
     }
 }

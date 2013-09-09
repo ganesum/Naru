@@ -104,7 +104,7 @@
     </Compile>
     <Compile Include="TPL\CurrentThreadTaskScheduler.cs" />
     <Compile Include="TPL\TaskExTests.cs" />
-    <Compile Include="TPL\TestTaskScheduler.cs" />
+    <Compile Include="TPL\TestScheduler.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

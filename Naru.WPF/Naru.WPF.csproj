@@ -94,9 +94,7 @@
     <Compile Include="MVVM\Dialog\IDialogBuilder.cs" />
     <Compile Include="MVVM\Dialog\IStandardDialogBuilder.cs" />
     <Compile Include="MVVM\Dialog\StandardDialogBuilder.cs" />
-    <Compile Include="MVVM\DispatcherService.cs" />
     <Compile Include="MVVM\EventHandlerExtensions.cs" />
-    <Compile Include="MVVM\IDispatcherService.cs" />
     <Compile Include="MVVM\IRegionBuilder.cs" />
     <Compile Include="MVVM\IService.cs" />
     <Compile Include="MVVM\ISupportActivationState.cs" />
@@ -137,8 +135,11 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="TPL\CancellationTokenExtensions.cs" />
-    <Compile Include="TPL\DesktopTaskScheduler.cs" />
-    <Compile Include="TPL\ITaskScheduler.cs" />
+    <Compile Include="TPL\CompletedTask.cs" />
+    <Compile Include="TPL\DesktopScheduler.cs" />
+    <Compile Include="TPL\SynchronizationContextTaskScheduler.cs" />
+    <Compile Include="TPL\DispatcherTaskSchedulerBase.cs" />
+    <Compile Include="TPL\IScheduler.cs" />
     <Compile Include="TPL\TaskCompletionSourceExtensions.cs" />
     <Compile Include="TPL\TaskEx.cs" />
     <Compile Include="TPL\Unit.cs" />

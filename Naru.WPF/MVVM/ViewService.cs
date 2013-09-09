@@ -8,6 +8,7 @@ using Microsoft.Practices.Unity;
 
 using Naru.WPF.ModernUI.Windows.Controls;
 using Naru.WPF.MVVM.Dialog;
+using Naru.WPF.TPL;
 
 namespace Naru.WPF.MVVM
 {
@@ -15,13 +16,13 @@ namespace Naru.WPF.MVVM
     {
         private readonly ILog _log;
         private readonly IUnityContainer _container;
-        private readonly IDispatcherService _dispatcherService;
+        private readonly IScheduler _scheduler;
 
-        public ViewService(ILog log, IUnityContainer container, IDispatcherService dispatcherService)
+        public ViewService(ILog log, IUnityContainer container, IScheduler scheduler)
         {
             _log = log;
             _container = container;
-            _dispatcherService = dispatcherService;
+            _scheduler = scheduler;
         }
 
         public IRegionBuilder RegionBuilder()
@@ -52,12 +53,12 @@ namespace Naru.WPF.MVVM
 
         public void ShowModal(IViewModel viewModel)
         {
-            _dispatcherService.ExecuteSyncOnUI(() => ShowModalInternal(viewModel));
+            _scheduler.Dispatcher.ExecuteSync(() => ShowModalInternal(viewModel));
         }
 
         public Task ShowModalAsync(IViewModel viewModel)
         {
-            return _dispatcherService.ExecuteAsyncOnUI(() => ShowModalInternal(viewModel));
+            return Task.Factory.StartNew(() => ShowModalInternal(viewModel), _scheduler.Dispatcher);
         }
 
         private void ShowModalInternal(IViewModel viewModel)
@@ -121,7 +122,7 @@ namespace Naru.WPF.MVVM
             EventHandler supportClosingOnClosed = null;
             supportClosingOnClosed = (s, e) =>
             {
-                _dispatcherService.ExecuteSyncOnUI(window.Close);
+                _scheduler.Dispatcher.ExecuteSync(window.Close);
 
                 if (supportClosingOnClosed != null)
                 {

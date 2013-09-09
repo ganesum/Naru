@@ -174,28 +174,6 @@ namespace Naru.WPF.TPL
             return tcs.Task;
         }
 
-        /// <summary>
-        /// Task that immediately completes.
-        /// </summary>
-        /// <returns></returns>
-        public static Task Completed()
-        {
-            var tcs = new TaskCompletionSource<object>();
-            tcs.TrySetResult(null);
-            return tcs.Task;
-        }
-
-        /// <summary>
-        /// Task that immediately completes.
-        /// </summary>
-        /// <returns></returns>
-        public static Task<T> Completed<T>()
-        {
-            var tcs = new TaskCompletionSource<T>();
-            tcs.TrySetResult(default(T));
-            return tcs.Task;
-        }
-
         public static Task<T1> Do<T1>(this Task<T1> first, Action next)
         {
             if (first == null) throw new ArgumentNullException("first");
@@ -571,8 +549,9 @@ namespace Naru.WPF.TPL
         /// </summary>
         /// <param name="first"></param>
         /// <param name="next"></param>
+        /// <param name="scheduler"></param>
         /// <returns></returns>
-        public static Task SelectMany(this Task first, Func<Task> next)
+        public static Task SelectMany(this Task first, Func<Task> next, TaskScheduler scheduler)
         {
             // http://blogs.msdn.com/b/pfxteam/archive/2010/11/21/10094564.aspx?Redirected=true
 
@@ -603,7 +582,7 @@ namespace Naru.WPF.TPL
                         tcs.TrySetException(exc);
                     }
                 }
-            }, TaskContinuationOptions.ExecuteSynchronously);
+            }, CancellationToken.None, TaskContinuationOptions.ExecuteSynchronously, scheduler);
 
             return tcs.Task;
         }
@@ -927,6 +906,11 @@ namespace Naru.WPF.TPL
         }
 
         #endregion
+
+        public static Task StartNew(this TaskFactory taskFactory, Action action, TaskScheduler scheduler)
+        {
+            return taskFactory.StartNew(action, CancellationToken.None, TaskCreationOptions.None, scheduler);
+        }
 
         public static Task<TSource> ThenBy<TSource, TKey>(this Task<TSource> source, Func<TSource, TKey> keySelector)
         {

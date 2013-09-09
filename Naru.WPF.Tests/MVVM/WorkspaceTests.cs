@@ -4,6 +4,7 @@ using Common.Logging;
 
 using Naru.Tests.UnityAutoMockContainer;
 using Naru.WPF.MVVM;
+using Naru.WPF.TPL;
 
 using NUnit.Framework;
 
@@ -14,8 +15,8 @@ namespace Naru.WPF.Tests.MVVM
     {
         public class WorkspaceViewModel : Workspace
         {
-            public WorkspaceViewModel(ILog log, IDispatcherService dispatcherService) 
-                : base(log, dispatcherService)
+            public WorkspaceViewModel(ILog log, IScheduler scheduler) 
+                : base(log, scheduler)
             {
                 Disposables.Add(AnonymousDisposable.Create(() => DisposablesWasDisposed.SafeInvoke(this)));
             }

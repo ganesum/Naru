@@ -15,27 +15,27 @@ namespace Naru.WPF.MVVM
     {
         private readonly ILog _log;
         private readonly Func<IRegionManager> _regionManagerFactory;
-        private readonly IDispatcherService _dispatcherService;
+        private readonly IScheduler _scheduler;
 
-        public RegionBuilder(ILog log, Func<IRegionManager> regionManagerFactory, IDispatcherService dispatcherService)
+        public RegionBuilder(ILog log, Func<IRegionManager> regionManagerFactory, IScheduler scheduler)
         {
             _log = log;
             _regionManagerFactory = regionManagerFactory;
-            _dispatcherService = dispatcherService;
+            _scheduler = scheduler;
         }
 
         public void Clear(string regionName)
         {
             _log.Debug(string.Format("Clearing region {0}", regionName));
 
-            _dispatcherService.ExecuteSyncOnUI(() => ClearInternal(regionName));
+            _scheduler.Dispatcher.ExecuteSync(() => ClearInternal(regionName));
         }
 
         public Task ClearAsync(string regionName)
         {
             _log.Debug(string.Format("Clearing region {0}", regionName));
 
-            return _dispatcherService.ExecuteAsyncOnUI(() => ClearInternal(regionName));
+            return Task.Factory.StartNew(() => ClearInternal(regionName), _scheduler.Dispatcher);
         }
 
         private void ClearInternal(string regionName)
@@ -68,17 +68,17 @@ namespace Naru.WPF.MVVM
         private readonly ILog _log;
         private readonly Func<IRegionManager> _regionManagerFactory;
         private readonly IUnityContainer _container;
-        private readonly IDispatcherService _dispatcherService;
+        private readonly IScheduler _scheduler;
 
         private bool _scope;
         private Action<TViewModel> _initialiseViewModel;
 
-        public RegionBuilder(ILog log, Func<IRegionManager> regionManagerFactory, IUnityContainer container, IDispatcherService dispatcherService)
+        public RegionBuilder(ILog log, Func<IRegionManager> regionManagerFactory, IUnityContainer container, IScheduler scheduler)
         {
             _log = log;
             _regionManagerFactory = regionManagerFactory;
             _container = container;
-            _dispatcherService = dispatcherService;
+            _scheduler = scheduler;
         }
 
         public IRegionBuilder<TViewModel> WithScope()
@@ -100,7 +100,7 @@ namespace Naru.WPF.MVVM
             _log.Debug(string.Format("Scope = {0}", _scope));
             var container = ViewService.GetContainer(_container, _scope);
 
-            _dispatcherService.ExecuteSyncOnUI(() => ShowInternal(regionName, viewModel, container));
+            _scheduler.Dispatcher.ExecuteSync(() => ShowInternal(regionName, viewModel, container));
         }
 
         public Task ShowAsync(string regionName, TViewModel viewModel)
@@ -108,7 +108,7 @@ namespace Naru.WPF.MVVM
             _log.Debug(string.Format("Scope = {0}", _scope));
             var container = ViewService.GetContainer(_container, _scope);
 
-            return _dispatcherService.ExecuteAsyncOnUI(() => ShowInternal(regionName, viewModel, container));
+            return Task.Factory.StartNew(() => ShowInternal(regionName, viewModel, container), _scheduler.Dispatcher);
         }
 
         public TViewModel Show(string regionName)
@@ -119,7 +119,7 @@ namespace Naru.WPF.MVVM
             _log.Debug(string.Format("Creating ViewModel - {0}", typeof(TViewModel).FullName));
             var viewModel = ViewService.CreateViewModel<TViewModel>(container);
 
-            _dispatcherService.ExecuteSyncOnUI(() => ShowInternal(regionName, viewModel, container));
+            _scheduler.Dispatcher.ExecuteSync(() => ShowInternal(regionName, viewModel, container));
 
             return viewModel;
         }
@@ -132,7 +132,9 @@ namespace Naru.WPF.MVVM
             _log.Debug(string.Format("Creating ViewModel - {0}", typeof(TViewModel).FullName));
             var viewModel = ViewService.CreateViewModel<TViewModel>(container);
 
-            return _dispatcherService.ExecuteAsyncOnUI(() => ShowInternal(regionName, viewModel, container)).Select(_ => viewModel);
+            return Task.Factory
+                .StartNew(() => ShowInternal(regionName, viewModel, container), _scheduler.Dispatcher)
+                .Select(() => viewModel);
         }
 
         private void ShowInternal(string regionName, TViewModel viewModel, IUnityContainer container)
@@ -150,7 +152,9 @@ namespace Naru.WPF.MVVM
             var regionManager = AddToRegion(_regionManagerFactory, regionName, view, _scope);
 
             if (_scope)
+            {
                 container.RegisterInstance(regionManager);
+            }
         }
 
         private static IRegionManager AddToRegion(Func<IRegionManager> regionManagerFactory, string regionName, FrameworkElement view, bool scoped = false)

@@ -10,11 +10,11 @@ namespace Naru.WPF.MVVM
 {
     public class BindableCollection<T> : ObservableCollection<T>
     {
-        private readonly IDispatcherService _dispatcherService;
+        private readonly IScheduler _scheduler;
 
-        public BindableCollection(IDispatcherService dispatcherService)
+        public BindableCollection(IScheduler scheduler)
         {
-            _dispatcherService = dispatcherService;
+            _scheduler = scheduler;
             IsNotifying = true;
         }
 
@@ -23,17 +23,17 @@ namespace Naru.WPF.MVVM
         public virtual void NotifyOfPropertyChange(string propertyName)
         {
             if (IsNotifying)
-                _dispatcherService.ExecuteSyncOnUI(() => OnPropertyChanged(new PropertyChangedEventArgs(propertyName)));
+                _scheduler.Dispatcher.ExecuteSync(() => OnPropertyChanged(new PropertyChangedEventArgs(propertyName)));
         }
 
         public void Refresh()
         {
-            _dispatcherService.ExecuteSyncOnUI(RefreshInternal);
+            _scheduler.Dispatcher.ExecuteSync(RefreshInternal);
         }
 
         public Task RefreshAsync()
         {
-            return _dispatcherService.ExecuteAsyncOnUI(RefreshInternal);
+            return Task.Factory.StartNew(RefreshInternal, _scheduler.Dispatcher);
         }
 
         private void RefreshInternal()
@@ -45,7 +45,7 @@ namespace Naru.WPF.MVVM
 
         protected override sealed void InsertItem(int index, T item)
         {
-            _dispatcherService.ExecuteSyncOnUI(() => InsertItemBase(index, item));
+            _scheduler.Dispatcher.ExecuteSync(() => InsertItemBase(index, item));
         }
 
         protected virtual void InsertItemBase(int index, T item)
@@ -55,7 +55,7 @@ namespace Naru.WPF.MVVM
 
         protected override sealed void MoveItem(int oldIndex, int newIndex)
         {
-            _dispatcherService.ExecuteSyncOnUI(() => MoveItemBase(oldIndex, newIndex));
+            _scheduler.Dispatcher.ExecuteSync(() => MoveItemBase(oldIndex, newIndex));
         }
 
         protected virtual void MoveItemBase(int oldIndex, int newIndex)
@@ -65,7 +65,7 @@ namespace Naru.WPF.MVVM
 
         protected override sealed void SetItem(int index, T item)
         {
-            _dispatcherService.ExecuteSyncOnUI(() => SetItemBase(index, item));
+            _scheduler.Dispatcher.ExecuteSync(() => SetItemBase(index, item));
         }
 
         protected virtual void SetItemBase(int index, T item)
@@ -75,7 +75,7 @@ namespace Naru.WPF.MVVM
 
         protected override sealed void RemoveItem(int index)
         {
-            _dispatcherService.ExecuteSyncOnUI(() => RemoveItemBase(index));
+            _scheduler.Dispatcher.ExecuteSync(() => RemoveItemBase(index));
         }
 
         protected virtual void RemoveItemBase(int index)
@@ -85,12 +85,12 @@ namespace Naru.WPF.MVVM
 
         public Task ClearAsync()
         {
-            return _dispatcherService.ExecuteAsyncOnUI(Clear);
+            return Task.Factory.StartNew(Clear, _scheduler.Dispatcher);
         }
 
         protected override sealed void ClearItems()
         {
-            _dispatcherService.ExecuteSyncOnUI(ClearItemsBase);
+            _scheduler.Dispatcher.ExecuteSync(ClearItemsBase);
         }
 
         protected virtual void ClearItemsBase()
@@ -116,7 +116,7 @@ namespace Naru.WPF.MVVM
 
         public void AddRange(IEnumerable<T> items)
         {
-            _dispatcherService.ExecuteSyncOnUI(() =>
+            _scheduler.Dispatcher.ExecuteSync(() =>
             {
                 AddRangeInternal(items);
 
@@ -126,9 +126,9 @@ namespace Naru.WPF.MVVM
 
         public Task AddRangeAsync(IEnumerable<T> items)
         {
-            return _dispatcherService
-                .ExecuteAsyncOnUI(() => AddRangeInternal(items))
-                .SelectMany(() => RefreshAsync());
+            return Task.Factory
+                .StartNew(() => AddRangeInternal(items), _scheduler.Dispatcher)
+                .SelectMany(RefreshAsync, _scheduler.Dispatcher);
         }
 
         private void AddRangeInternal(IEnumerable<T> items)
@@ -146,7 +146,7 @@ namespace Naru.WPF.MVVM
 
         public void RemoveRange(IEnumerable<T> items)
         {
-            _dispatcherService.ExecuteSyncOnUI(() =>
+            _scheduler.Dispatcher.ExecuteSync(() =>
             {
                 RemoveRangeInternal(items);
 
@@ -156,9 +156,9 @@ namespace Naru.WPF.MVVM
 
         public Task RemoveRangeAsync(IEnumerable<T> items)
         {
-            return _dispatcherService
-                .ExecuteAsyncOnUI(() => RemoveRangeInternal(items))
-                .SelectMany(() => RefreshAsync());
+            return Task.Factory
+                .StartNew(() => RemoveRangeInternal(items), _scheduler.Dispatcher)
+                .SelectMany(RefreshAsync, _scheduler.Dispatcher);
         }
 
         private void RemoveRangeInternal(IEnumerable<T> items)

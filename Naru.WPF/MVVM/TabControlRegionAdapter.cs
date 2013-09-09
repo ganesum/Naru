@@ -5,16 +5,18 @@ using System.Windows.Controls;
 
 using Microsoft.Practices.Prism.Regions;
 
+using Naru.WPF.TPL;
+
 namespace Naru.WPF.MVVM
 {
     public class TabControlRegionAdapter : RegionAdapterBase<TabControl>
     {
-        private readonly IDispatcherService _dispatcherService;
+        private readonly IScheduler _scheduler;
 
-        public TabControlRegionAdapter(IRegionBehaviorFactory regionBehaviorFactory, IDispatcherService dispatcherService)
+        public TabControlRegionAdapter(IRegionBehaviorFactory regionBehaviorFactory, IScheduler scheduler)
             : base(regionBehaviorFactory)
         {
-            _dispatcherService = dispatcherService;
+            _scheduler = scheduler;
         }
 
         protected override void Adapt(IRegion region, TabControl regionTarget)
@@ -137,7 +139,7 @@ namespace Naru.WPF.MVVM
             {
                 if (supportActivationState.IsActive)
                 {
-                    _dispatcherService.ExecuteSyncOnUI(() => tabControl.SelectedItem = tabItem);
+                    _scheduler.Dispatcher.ExecuteSync(() => tabControl.SelectedItem = tabItem);
                 }
             };
         }

@@ -4,6 +4,7 @@ using Common.Logging;
 
 using Naru.Tests.UnityAutoMockContainer;
 using Naru.WPF.MVVM;
+using Naru.WPF.TPL;
 
 using NUnit.Framework;
 
@@ -17,8 +18,8 @@ namespace Naru.WPF.Tests.MVVM
 
         public class StubViewModel : Workspace
         {
-            public StubViewModel(ILog log, IDispatcherService dispatcherService) 
-                : base(log, dispatcherService)
+            public StubViewModel(ILog log, IScheduler scheduler) 
+                : base(log, scheduler)
             {
             }
         }
@@ -29,8 +30,8 @@ namespace Naru.WPF.Tests.MVVM
         [UseView(typeof(StubViewNameNotMatchingView))]
         public class StubViewModelWithUseViewAttribute : Workspace
         {
-            public StubViewModelWithUseViewAttribute(ILog log, IDispatcherService dispatcherService)
-                : base(log, dispatcherService)
+            public StubViewModelWithUseViewAttribute(ILog log, IScheduler scheduler)
+                : base(log, scheduler)
             {
             }
         }
