@@ -142,7 +142,293 @@ namespace Naru.WPF.Tests.TPL
         }
 
         [Test]
-        public void when_SelectMany_and_exception_is_thrown_in_previous_task_then_select_many_is_not_called()
+        public void when_SelectMany_and_two_schedulers_then_they_are_called_in_order_overload1()
+        {
+            var autoResetEvent = new AutoResetEvent(false);
+
+            var task1HasRun = false;
+            var task2HasRun = false;
+
+            var taskScheduler = TaskScheduler.Default;
+            var currentThreadTaskScheduler = new CurrentThreadTaskScheduler();
+
+            new TaskFactory(taskScheduler)
+                .StartNew(() =>
+                {
+                    Assert.That(task1HasRun, Is.False);
+
+                    task1HasRun = true;
+
+                    return 0;
+                }, taskScheduler)
+                .SelectMany(_ =>
+                {
+                    Assert.That(task1HasRun, Is.True);
+                    Assert.That(task2HasRun, Is.False);
+
+                    task2HasRun = true;
+
+                    return CompletedTask<int>.Default;
+                }, currentThreadTaskScheduler)
+                .Finally(() => autoResetEvent.Set(), taskScheduler);
+
+            autoResetEvent.WaitOne();
+
+            Assert.That(task1HasRun, Is.True);
+            Assert.That(task2HasRun, Is.True);
+        }
+
+        [Test]
+        public void when_SelectMany_and_two_schedulers_then_they_are_called_in_order_overload2()
+        {
+            var autoResetEvent = new AutoResetEvent(false);
+
+            var task1HasRun = false;
+            var task2HasRun = false;
+
+            var taskScheduler = TaskScheduler.Default;
+            var currentThreadTaskScheduler = new CurrentThreadTaskScheduler();
+
+            new TaskFactory(taskScheduler)
+                .StartNew(() =>
+                {
+                    Assert.That(task1HasRun, Is.False);
+
+                    task1HasRun = true;
+
+                    return 0;
+                }, taskScheduler)
+                .SelectMany(() =>
+                {
+                    Assert.That(task1HasRun, Is.True);
+                    Assert.That(task2HasRun, Is.False);
+
+                    task2HasRun = true;
+
+                    return CompletedTask<int>.Default;
+                }, currentThreadTaskScheduler)
+                .Finally(() => autoResetEvent.Set(), taskScheduler);
+
+            autoResetEvent.WaitOne();
+
+            Assert.That(task1HasRun, Is.True);
+            Assert.That(task2HasRun, Is.True);
+        }
+
+        [Test]
+        public void when_SelectMany_and_two_schedulers_then_they_are_called_in_order_overload3()
+        {
+            var autoResetEvent = new AutoResetEvent(false);
+
+            var task1HasRun = false;
+            var task2HasRun = false;
+
+            var taskScheduler = TaskScheduler.Default;
+            var currentThreadTaskScheduler = new CurrentThreadTaskScheduler();
+
+            new TaskFactory(taskScheduler)
+                .StartNew(() =>
+                {
+                    Assert.That(task1HasRun, Is.False);
+
+                    task1HasRun = true;
+
+                    return 0;
+                }, taskScheduler)
+                .SelectMany(_ =>
+                {
+                    Assert.That(task1HasRun, Is.True);
+                    Assert.That(task2HasRun, Is.False);
+
+                    task2HasRun = true;
+
+                    return CompletedTask.Default;
+                }, currentThreadTaskScheduler)
+                .Finally(() => autoResetEvent.Set(), taskScheduler);
+
+            autoResetEvent.WaitOne();
+
+            Assert.That(task1HasRun, Is.True);
+            Assert.That(task2HasRun, Is.True);
+        }
+
+        [Test]
+        public void when_SelectMany_and_two_schedulers_then_they_are_called_in_order_overload4()
+        {
+            var autoResetEvent = new AutoResetEvent(false);
+
+            var task1HasRun = false;
+            var task2HasRun = false;
+
+            var taskScheduler = TaskScheduler.Default;
+            var currentThreadTaskScheduler = new CurrentThreadTaskScheduler();
+
+            new TaskFactory(taskScheduler)
+                .StartNew(() =>
+                {
+                    Assert.That(task1HasRun, Is.False);
+
+                    task1HasRun = true;
+
+                    return 0;
+                }, taskScheduler)
+                .SelectMany(_ =>
+                {
+                    Assert.That(task1HasRun, Is.True);
+                    Assert.That(task2HasRun, Is.False);
+
+                    task2HasRun = true;
+                }, currentThreadTaskScheduler)
+                .Finally(() => autoResetEvent.Set(), taskScheduler);
+
+            autoResetEvent.WaitOne();
+
+            Assert.That(task1HasRun, Is.True);
+            Assert.That(task2HasRun, Is.True);
+        }
+
+        [Test]
+        public void when_SelectMany_and_two_schedulers_then_they_are_called_in_order_overload5()
+        {
+            var autoResetEvent = new AutoResetEvent(false);
+
+            var task1HasRun = false;
+            var task2HasRun = false;
+
+            var taskScheduler = TaskScheduler.Default;
+            var currentThreadTaskScheduler = new CurrentThreadTaskScheduler();
+
+            new TaskFactory(taskScheduler)
+                .StartNew(() =>
+                {
+                    Assert.That(task1HasRun, Is.False);
+
+                    task1HasRun = true;
+                }, taskScheduler)
+                .SelectMany(() =>
+                {
+                    Assert.That(task1HasRun, Is.True);
+                    Assert.That(task2HasRun, Is.False);
+
+                    task2HasRun = true;
+                }, currentThreadTaskScheduler)
+                .Finally(() => autoResetEvent.Set(), taskScheduler);
+
+            autoResetEvent.WaitOne();
+
+            Assert.That(task1HasRun, Is.True);
+            Assert.That(task2HasRun, Is.True);
+        }
+
+        [Test]
+        public void when_SelectMany_and_two_schedulers_then_they_are_called_in_order_overload6()
+        {
+            var autoResetEvent = new AutoResetEvent(false);
+
+            var task1HasRun = false;
+            var task2HasRun = false;
+
+            var taskScheduler = TaskScheduler.Default;
+            var currentThreadTaskScheduler = new CurrentThreadTaskScheduler();
+
+            new TaskFactory(taskScheduler)
+                .StartNew(() =>
+                {
+                    Assert.That(task1HasRun, Is.False);
+
+                    task1HasRun = true;
+                }, taskScheduler)
+                .SelectMany(() =>
+                {
+                    Assert.That(task1HasRun, Is.True);
+                    Assert.That(task2HasRun, Is.False);
+
+                    task2HasRun = true;
+
+                    return CompletedTask.Default;
+                }, currentThreadTaskScheduler)
+                .Finally(() => autoResetEvent.Set(), taskScheduler);
+
+            autoResetEvent.WaitOne();
+
+            Assert.That(task1HasRun, Is.True);
+            Assert.That(task2HasRun, Is.True);
+        }
+
+        [Test]
+        public void when_SelectMany_and_exception_is_thrown_in_previous_task_then_select_many_is_not_called_overload1()
+        {
+            var autoResetEvent = new AutoResetEvent(false);
+
+            var task1HasRun = false;
+            var task2HasRun = false;
+
+            var taskScheduler = TaskScheduler.Default;
+
+            new TaskFactory(taskScheduler)
+                .StartNew(() =>
+                {
+                    Assert.That(task1HasRun, Is.False);
+
+                    task1HasRun = true;
+
+                    throw new Exception();
+
+                    return 0;
+                })
+                .SelectMany(_ =>
+                {
+                    Assert.That(task2HasRun, Is.False);
+
+                    task2HasRun = true;
+
+                    return CompletedTask<int>.Default;
+                })
+                .Finally(() => autoResetEvent.Set(), taskScheduler);
+
+            autoResetEvent.WaitOne();
+
+            Assert.That(task1HasRun, Is.True);
+            Assert.That(task2HasRun, Is.False);
+        }
+
+        [Test]
+        public void when_SelectMany_and_exception_is_thrown_in_previous_task_then_select_many_is_not_called_overload2()
+        {
+            var autoResetEvent = new AutoResetEvent(false);
+
+            var task1HasRun = false;
+            var task2HasRun = false;
+
+            var taskScheduler = TaskScheduler.Default;
+
+            new TaskFactory(taskScheduler)
+                .StartNew<int>(() =>
+                {
+                    Assert.That(task1HasRun, Is.False);
+
+                    task1HasRun = true;
+
+                    throw new Exception();
+                })
+                .SelectMany(() =>
+                {
+                    Assert.That(task2HasRun, Is.False);
+
+                    task2HasRun = true;
+
+                    return CompletedTask<int>.Default;
+                })
+                .Finally(() => autoResetEvent.Set(), taskScheduler);
+
+            autoResetEvent.WaitOne();
+
+            Assert.That(task1HasRun, Is.True);
+            Assert.That(task2HasRun, Is.False);
+        }
+
+        [Test]
+        public void when_SelectMany_and_exception_is_thrown_in_previous_task_then_select_many_is_not_called_overload3()
         {
             var autoResetEvent = new AutoResetEvent(false);
 
@@ -165,6 +451,111 @@ namespace Naru.WPF.Tests.TPL
                     Assert.That(task2HasRun, Is.False);
 
                     task2HasRun = true;
+
+                    return CompletedTask<int>.Default;
+                })
+                .Finally(() => autoResetEvent.Set(), taskScheduler);
+
+            autoResetEvent.WaitOne();
+
+            Assert.That(task1HasRun, Is.True);
+            Assert.That(task2HasRun, Is.False);
+        }
+
+        [Test]
+        public void when_SelectMany_and_exception_is_thrown_in_previous_task_then_select_many_is_not_called_overload4()
+        {
+            var autoResetEvent = new AutoResetEvent(false);
+
+            var task1HasRun = false;
+            var task2HasRun = false;
+
+            var taskScheduler = TaskScheduler.Default;
+
+            new TaskFactory(taskScheduler)
+                .StartNew<int>(() =>
+                {
+                    Assert.That(task1HasRun, Is.False);
+
+                    task1HasRun = true;
+
+                    throw new Exception();
+                })
+                .SelectMany(_ =>
+                {
+                    Assert.That(task2HasRun, Is.False);
+
+                    task2HasRun = true;
+
+                    return CompletedTask.Default;
+                })
+                .Finally(() => autoResetEvent.Set(), taskScheduler);
+
+            autoResetEvent.WaitOne();
+
+            Assert.That(task1HasRun, Is.True);
+            Assert.That(task2HasRun, Is.False);
+        }
+
+        [Test]
+        public void when_SelectMany_and_exception_is_thrown_in_previous_task_then_select_many_is_not_called_overload5()
+        {
+            var autoResetEvent = new AutoResetEvent(false);
+
+            var task1HasRun = false;
+            var task2HasRun = false;
+
+            var taskScheduler = TaskScheduler.Default;
+
+            new TaskFactory(taskScheduler)
+                .StartNew<int>(() =>
+                {
+                    Assert.That(task1HasRun, Is.False);
+
+                    task1HasRun = true;
+
+                    throw new Exception();
+                })
+                .SelectMany(_ =>
+                {
+                    Assert.That(task2HasRun, Is.False);
+
+                    task2HasRun = true;
+                })
+                .Finally(() => autoResetEvent.Set(), taskScheduler);
+
+            autoResetEvent.WaitOne();
+
+            Assert.That(task1HasRun, Is.True);
+            Assert.That(task2HasRun, Is.False);
+        }
+
+        [Test]
+        public void when_SelectMany_and_exception_is_thrown_in_previous_task_then_select_many_is_not_called_overload6()
+        {
+            var autoResetEvent = new AutoResetEvent(false);
+
+            var task1HasRun = false;
+            var task2HasRun = false;
+
+            var taskScheduler = TaskScheduler.Default;
+
+            new TaskFactory(taskScheduler)
+                .StartNew(() =>
+                {
+                    Assert.That(task1HasRun, Is.False);
+
+                    task1HasRun = true;
+
+                    throw new Exception();
+                })
+                .SelectMany(() =>
+                {
+                    Assert.That(task2HasRun, Is.False);
+
+                    task2HasRun = true;
+
+                    return CompletedTask.Default;
                 })
                 .Finally(() => autoResetEvent.Set(), taskScheduler);
 
