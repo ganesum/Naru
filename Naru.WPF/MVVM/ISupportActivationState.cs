@@ -12,8 +12,8 @@ namespace Naru.WPF.MVVM
 
         void DeActivate();
 
-        event EventHandler<DataEventArgs<bool>>  OnActivationStateChanged;
+        event EventHandler<DataEventArgs<bool>>  ActivationStateChanged;
 
-        event EventHandler OnInitialised;
+        event EventHandler Initialised;
     }
 }

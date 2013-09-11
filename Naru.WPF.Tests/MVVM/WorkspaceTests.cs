@@ -78,7 +78,7 @@ namespace Naru.WPF.Tests.MVVM
 
                     Assert.That(eventWasFired, Is.False);
 
-                    viewModel.OnClosed += (s, e) => eventWasFired = true;
+                    viewModel.Closed += (s, e) => eventWasFired = true;
 
                     viewModel.Close();
 
@@ -133,7 +133,7 @@ namespace Naru.WPF.Tests.MVVM
 
                 Assert.That(eventWasFired, Is.False);
 
-                viewModel.OnClosed += (s, e) => eventWasFired = true;
+                viewModel.Closed += (s, e) => eventWasFired = true;
 
                 viewModel.ClosingCommand.Execute();
 
@@ -177,7 +177,7 @@ namespace Naru.WPF.Tests.MVVM
 
                     Assert.That(eventWasFired, Is.EqualTo(0));
 
-                    viewModel.OnInitialised += (s, e) => eventWasFired++;
+                    viewModel.Initialised += (s, e) => eventWasFired++;
 
                     ((ISupportActivationState)viewModel).Activate();
                     ((ISupportActivationState)viewModel).DeActivate();
@@ -211,7 +211,7 @@ namespace Naru.WPF.Tests.MVVM
 
                     Assert.That(eventWasFired, Is.False);
 
-                    viewModel.OnActivationStateChanged += (s, e) => eventWasFired = true;
+                    viewModel.ActivationStateChanged += (s, e) => eventWasFired = true;
 
                     ((ISupportActivationState)viewModel).Activate();
 
@@ -269,7 +269,7 @@ namespace Naru.WPF.Tests.MVVM
 
                     Assert.That(eventWasFired, Is.False);
 
-                    viewModel.OnActivationStateChanged += (s, e) => eventWasFired = true;
+                    viewModel.ActivationStateChanged += (s, e) => eventWasFired = true;
 
                     ((ISupportActivationState)viewModel).DeActivate();
 

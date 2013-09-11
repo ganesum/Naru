@@ -21,8 +21,7 @@
                 <Canvas Width="22"
                         Height="22"
                         Visibility="{Binding ImageName, Converter={StaticResource NullToVisibilityConverter}, ConverterParameter=inverse}">
-                    <Path x:Name="Excel"
-                          Width="20"
+                    <Path Width="20"
                           Height="20"
                           Stretch="Fill"
                           Fill="{DynamicResource InputText}"

@@ -6,6 +6,6 @@ namespace Naru.WPF.MVVM
     {
         void Close();
 
-        event EventHandler OnClosed;
+        event EventHandler Closed;
     }
 }

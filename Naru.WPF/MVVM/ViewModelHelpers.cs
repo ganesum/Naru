@@ -8,6 +8,15 @@ namespace Naru.WPF.MVVM
 {
     public static class ViewModelHelpers
     {
+        public static HeaderViewModel CreateHeaderViewModel(this ISupportHeader viewModel, string displayName = null, string uri = null)
+        {
+            return new HeaderViewModel
+            {
+                DisplayName = displayName,
+                ImageName = uri
+            };
+        }
+
         public static IDisposable SyncViewModelActivationStates(this ISupportActivationState source, ISupportActivationState viewModel)
         {
             EventHandler<DataEventArgs<bool>> sourceOnActivationStateChanged = (s, e) =>
@@ -17,9 +26,9 @@ namespace Naru.WPF.MVVM
                 else
                     viewModel.DeActivate();
             };
-            source.OnActivationStateChanged += sourceOnActivationStateChanged;
+            source.ActivationStateChanged += sourceOnActivationStateChanged;
 
-            return AnonymousDisposable.Create(() => source.OnActivationStateChanged -= sourceOnActivationStateChanged);
+            return AnonymousDisposable.Create(() => source.ActivationStateChanged -= sourceOnActivationStateChanged);
         }
 
         public static IDisposable SyncViewModelDeActivation(this ISupportActivationState source, ISupportActivationState viewModel)
@@ -29,9 +38,9 @@ namespace Naru.WPF.MVVM
                 if (!e.Value)
                     viewModel.DeActivate();
             };
-            source.OnActivationStateChanged += sourceOnActivationStateChanged;
+            source.ActivationStateChanged += sourceOnActivationStateChanged;
 
-            return AnonymousDisposable.Create(() => source.OnActivationStateChanged -= sourceOnActivationStateChanged);
+            return AnonymousDisposable.Create(() => source.ActivationStateChanged -= sourceOnActivationStateChanged);
         }
 
         public static IDisposable SyncToolBarItemWithViewModelActivationState(this ISupportActivationState source, params IToolBarItem[] toolBarItems)
@@ -48,9 +57,9 @@ namespace Naru.WPF.MVVM
                     toolBarItem.IsVisible = e.Value;
                 }
             };
-            source.OnActivationStateChanged += sourceOnActivationStateChanged;
+            source.ActivationStateChanged += sourceOnActivationStateChanged;
 
-            return AnonymousDisposable.Create(() => source.OnActivationStateChanged -= sourceOnActivationStateChanged);
+            return AnonymousDisposable.Create(() => source.ActivationStateChanged -= sourceOnActivationStateChanged);
         }
     }
 }

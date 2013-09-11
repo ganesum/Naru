@@ -82,11 +82,16 @@ namespace Naru.WPF.MVVM
                 window = new ModernWindow
                 {
                     Content = view,
-                    Title = viewModel.DisplayName,
                     SizeToContent = SizeToContent.WidthAndHeight,
                     WindowStyle = WindowStyle.ToolWindow,
                     Owner = Application.Current.MainWindow
                 };
+
+                var supportHeader = viewModel as ISupportHeader;
+                if (supportHeader != null && supportHeader.Header != null)
+                {
+                    window.Title = supportHeader.Header.ToString();
+                }
 
                 ConnectUpActivation(viewModel, window);
                 ConnectUpClosing(viewModel, window);
@@ -126,10 +131,10 @@ namespace Naru.WPF.MVVM
 
                 if (supportClosingOnClosed != null)
                 {
-                    supportClosing.OnClosed -= supportClosingOnClosed;
+                    supportClosing.Closed -= supportClosingOnClosed;
                 }
             };
-            supportClosing.OnClosed += supportClosingOnClosed;
+            supportClosing.Closed += supportClosingOnClosed;
 
             // Window is closed
             EventHandler windowOnClosed = null;

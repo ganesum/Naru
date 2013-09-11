@@ -3,6 +3,7 @@ using System.Collections.Specialized;
 using System.Windows;
 using System.Windows.Controls;
 
+using Microsoft.Practices.Prism.Events;
 using Microsoft.Practices.Prism.Regions;
 
 using Naru.WPF.TPL;
@@ -35,10 +36,13 @@ namespace Naru.WPF.MVVM
                     var viewModel = view.DataContext as IViewModel;
                     if (viewModel == null) continue;
 
-                    var tabItem = new TabItem {Header = viewModel.DisplayName, Content = view};
+                    var tabItem = new TabItem {Content = view};
+
+                    SetupHeader(viewModel, tabItem);
 
                     ConnectUpActivation(viewModel, regionTarget, tabItem);
                     ConnectUpClosing(viewModel, regionTarget, tabItem);
+                    ConnectUpVisibility(viewModel, tabItem);
 
                     regionTarget.Items.Add(tabItem);
                 }
@@ -111,23 +115,23 @@ namespace Naru.WPF.MVVM
             return new SingleActiveRegion();
         }
 
-        private static void ConnectUpClosing(IViewModel viewModel, TabControl tabControl, TabItem tabItem)
+        private void ConnectUpClosing(IViewModel viewModel, TabControl tabControl, TabItem tabItem)
         {
             var supportClosing = viewModel as ISupportClosing;
             if (supportClosing == null) return;
 
             // ViewModel is closed
-            EventHandler supportClosingOnClosed = null;
-            supportClosingOnClosed = (s, e) =>
+            EventHandler supportClosingClosed = null;
+            supportClosingClosed = (s, e) =>
             {
-                tabControl.Items.Remove(tabItem);
+                _scheduler.Dispatcher.ExecuteSync(() => tabControl.Items.Remove(tabItem));
 
-                if (supportClosingOnClosed != null)
+                if (supportClosingClosed != null)
                 {
-                    supportClosing.OnClosed -= supportClosingOnClosed;
+                    supportClosing.Closed -= supportClosingClosed;
                 }
             };
-            supportClosing.OnClosed += supportClosingOnClosed;
+            supportClosing.Closed += supportClosingClosed;
         }
 
         private void ConnectUpActivation(IViewModel viewModel, TabControl tabControl, TabItem tabItem)
@@ -135,13 +139,76 @@ namespace Naru.WPF.MVVM
             var supportActivationState = viewModel as ISupportActivationState;
             if (supportActivationState == null) return;
 
-            supportActivationState.OnActivationStateChanged += (s, e) =>
+            var supportClosing = viewModel as ISupportClosing;
+            if (supportClosing == null) return;
+
+            EventHandler<DataEventArgs<bool>> supportActivationStateActivationStateChanged = null;
+            supportActivationStateActivationStateChanged = (s, e) =>
             {
                 if (supportActivationState.IsActive)
                 {
                     _scheduler.Dispatcher.ExecuteSync(() => tabControl.SelectedItem = tabItem);
                 }
             };
+            supportActivationState.ActivationStateChanged += supportActivationStateActivationStateChanged;
+
+            EventHandler supportClosingClosed = null;
+            supportClosingClosed = (s, e) =>
+            {
+                supportActivationState.ActivationStateChanged -= supportActivationStateActivationStateChanged;
+
+                if (supportClosingClosed != null)
+                {
+                    supportClosing.Closed -= supportClosingClosed;
+                }
+            };
+            supportClosing.Closed += supportClosingClosed;
+        }
+
+        private void ConnectUpVisibility(IViewModel viewModel, TabItem tabItem)
+        {
+            var supportVisibility = viewModel as ISupportVisibility;
+            if (supportVisibility == null) return;
+
+            var supportClosing = viewModel as ISupportClosing;
+            if (supportClosing == null) return;
+
+            _scheduler.Dispatcher.ExecuteSync(() => tabItem.Visibility = supportVisibility.IsVisible
+                    ? Visibility.Visible
+                    : Visibility.Collapsed);
+
+            EventHandler<DataEventArgs<bool>> supportVisibilityIsVisibleChanged = null;
+            supportVisibilityIsVisibleChanged = (s, e) =>
+                _scheduler.Dispatcher.ExecuteSync(() => tabItem.Visibility = supportVisibility.IsVisible
+                    ? Visibility.Visible
+                    : Visibility.Collapsed);
+            supportVisibility.IsVisibleChanged += supportVisibilityIsVisibleChanged;
+
+            EventHandler supportClosingClosed = null;
+            supportClosingClosed = (s, e) =>
+            {
+                supportVisibility.IsVisibleChanged -= supportVisibilityIsVisibleChanged;
+
+                if (supportClosingClosed != null)
+                {
+                    supportClosing.Closed -= supportClosingClosed;
+                }
+            };
+            supportClosing.Closed += supportClosingClosed;
+        }
+
+        private static void SetupHeader(IViewModel viewModel, TabItem tabItem)
+        {
+            var supportHeader = viewModel as ISupportHeader;
+            if (supportHeader == null) return;
+
+            var headerViewModel = supportHeader.Header;
+            if (headerViewModel == null) return;
+
+            var headerView = ViewService.CreateView(headerViewModel.GetType());
+            ViewService.BindViewModel(headerView, headerViewModel);
+
+            tabItem.Header = headerView;
         }
     }
 }

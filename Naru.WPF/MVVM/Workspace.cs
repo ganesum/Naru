@@ -10,10 +10,104 @@ using Naru.WPF.TPL;
 
 namespace Naru.WPF.MVVM
 {
-    public abstract class Workspace : ViewModel, ISupportClosing, ISupportActivationState
+    public abstract class Workspace : ViewModel, ISupportClosing, ISupportActivationState, ISupportAsync, ISupportVisibility, ISupportHeader
     {
         protected readonly IScheduler Scheduler;
         protected readonly CompositeDisposable Disposables;
+
+        public DelegateCommand ClosingCommand { get; private set; }
+
+        protected Workspace(ILog log, IScheduler scheduler) 
+            : base(log)
+        {
+            Scheduler = scheduler;
+            Disposables = new CompositeDisposable();
+
+            ClosingCommand = new DelegateCommand(Close);
+
+            Show();
+        }
+
+        #region SupportClosing
+
+        public void Close()
+        {
+            Log.Debug(string.Format("Closing ViewModel {0} - {1}", GetType().FullName, Header));
+
+            Closing();
+
+            Disposables.Dispose();
+
+            CleanUp();
+
+            Closed.SafeInvoke(this);
+        }
+
+        public event EventHandler Closed;
+
+        protected virtual void Closing()
+        { }
+
+        protected virtual void CleanUp()
+        { }
+
+        #endregion
+
+        #region SupportActivationState
+
+        private bool _onInitialiseHasBeenCalled;
+
+        public bool IsActive { get; private set; }
+
+        void ISupportActivationState.Activate()
+        {
+            Log.Debug(string.Format("Activate called on {0} - {1}", GetType().FullName, Header));
+            Log.Debug(string.Format("Active value - {0}", IsActive));
+            if (IsActive) return;
+
+            IsActive = true;
+            Log.Debug(string.Format("Active value - {0}", IsActive));
+
+            ActivationStateChanged.SafeInvoke(this, new DataEventArgs<bool>(IsActive));
+
+            OnActivate();
+
+            if (_onInitialiseHasBeenCalled) return;
+
+            Log.Debug(string.Format("Calling OnInitialise on {0} - {1}", GetType().FullName, Header));
+            OnInitialise();
+            Initialised.SafeInvoke(this);
+            _onInitialiseHasBeenCalled = true;
+        }
+
+        void ISupportActivationState.DeActivate()
+        {
+            IsActive = false;
+
+            Log.Debug(string.Format("DeActivate called on {0} - {1}", GetType().FullName, Header));
+            Log.Debug(string.Format("DeActivate value - {0}", IsActive));
+
+            ActivationStateChanged.SafeInvoke(this, new DataEventArgs<bool>(IsActive));
+
+            OnDeActivate();
+        }
+
+        public event EventHandler<DataEventArgs<bool>>  ActivationStateChanged;
+
+        public event EventHandler Initialised;
+
+        protected virtual void OnInitialise()
+        { }
+
+        protected virtual void OnActivate()
+        { }
+
+        protected virtual void OnDeActivate()
+        { }
+
+        #endregion
+
+        #region SupportAsync
 
         #region IsBusy
 
@@ -49,119 +143,70 @@ namespace Naru.WPF.MVVM
 
         #endregion
 
-        public DelegateCommand ClosingCommand { get; private set; }
-
-        protected Workspace(ILog log, IScheduler scheduler) 
-            : base(log)
-        {
-            Scheduler = scheduler;
-            Disposables = new CompositeDisposable();
-
-            ClosingCommand = new DelegateCommand(Close);
-        }
-
-        #region SupportClosing
-
-        public void Close()
-        {
-            Log.Debug(string.Format("Closing ViewModel {0} - {1}", GetType().FullName, DisplayName));
-
-            Closing();
-
-            Disposables.Dispose();
-
-            CleanUp();
-
-            OnClosed.SafeInvoke(this);
-        }
-
-        public event EventHandler OnClosed;
-
-        protected virtual void Closing()
-        { }
-
-        protected virtual void CleanUp()
-        { }
-
-        #endregion
-
-        protected void Busy(string message)
+        public void Busy(string message)
         {
             IsBusy = true;
             BusyMessage = message;
         }
 
-        protected void Idle()
+        public void Idle()
         {
             IsBusy = false;
             BusyMessage = string.Empty;
         }
 
-        protected Task<Unit> BusyAsync(string message)
+        public Task<Unit> BusyAsync(string message)
         {
-            return Task.Factory
-                .StartNew(() => Busy(message), Scheduler.Dispatcher)
+            return Task.Factory.StartNew(() => Busy(message), Scheduler.Dispatcher)
                 .Select(() => Unit.Default);
         }
 
-        protected Task<Unit> IdleAsync()
+        public Task<Unit> IdleAsync()
         {
-            return Task.Factory
-                .StartNew(Idle, Scheduler.Dispatcher)
+            return Task.Factory.StartNew(() => Idle(), Scheduler.Dispatcher)
                 .Select(() => Unit.Default);
         }
 
-        #region SupportActivationState
+        #endregion
 
-        private bool _onInitialiseHasBeenCalled;
+        #region SupportVisibility
 
-        public bool IsActive { get; private set; }
+        #region IsVisible
 
-        void ISupportActivationState.Activate()
+        private bool _isVisible;
+
+        public bool IsVisible
         {
-            Log.Debug(string.Format("Activate called on {0} - {1}", GetType().FullName, DisplayName));
-            Log.Debug(string.Format("Active value - {0}", IsActive));
-            if (IsActive) return;
+            get { return _isVisible; }
+            private set
+            {
+                if (value.Equals(_isVisible)) return;
+                _isVisible = value;
+                RaisePropertyChanged(() => IsVisible);
 
-            IsActive = true;
-            Log.Debug(string.Format("Active value - {0}", IsActive));
-
-            OnActivationStateChanged.SafeInvoke(this, new DataEventArgs<bool>(IsActive));
-
-            OnActivate();
-
-            if (_onInitialiseHasBeenCalled) return;
-
-            Log.Debug(string.Format("Calling OnInitialise on {0} - {1}", GetType().FullName, DisplayName));
-            OnInitialise();
-            OnInitialised.SafeInvoke(this);
-            _onInitialiseHasBeenCalled = true;
+                IsVisibleChanged.SafeInvoke(this, new DataEventArgs<bool>(IsVisible));
+            }
         }
 
-        void ISupportActivationState.DeActivate()
+        #endregion
+
+        public void Show()
         {
-            IsActive = false;
-
-            Log.Debug(string.Format("DeActivate called on {0} - {1}", GetType().FullName, DisplayName));
-            Log.Debug(string.Format("DeActivate value - {0}", IsActive));
-
-            OnActivationStateChanged.SafeInvoke(this, new DataEventArgs<bool>(IsActive));
-
-            OnDeActivate();
+            IsVisible = true;
         }
 
-        public event EventHandler<DataEventArgs<bool>>  OnActivationStateChanged;
+        public void Hide()
+        {
+            IsVisible = false;
+        }
 
-        public event EventHandler OnInitialised;
+        public event EventHandler<DataEventArgs<bool>> IsVisibleChanged;
 
-        protected virtual void OnInitialise()
-        { }
+        #endregion
 
-        protected virtual void OnActivate()
-        { }
+        #region SupportHeader
 
-        protected virtual void OnDeActivate()
-        { }
+        public IViewModel Header { get; protected set; }
 
         #endregion
     }

@@ -35,7 +35,7 @@ namespace Naru.WPF.MVVM.Dialog
 
         public void Initialise(DialogType dialogType, List<T> answers, string title, string message)
         {
-            DisplayName = string.Format("{0} - {1}", dialogType, title);
+            Header = this.CreateHeaderViewModel(string.Format("{0} - {1}", dialogType, title));
             Message = message;
 
             for (var index = 0; index < answers.Count; index++)

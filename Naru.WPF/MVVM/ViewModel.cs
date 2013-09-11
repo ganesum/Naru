@@ -8,28 +8,9 @@ namespace Naru.WPF.MVVM
     {
         protected readonly ILog Log;
 
-        #region DisplayName
-
-        private string _displayName;
-
-        public string DisplayName
-        {
-            get { return _displayName; }
-            set
-            {
-                if (value == _displayName) return;
-                _displayName = value;
-                RaisePropertyChanged(() => DisplayName);
-            }
-        }
-
-        #endregion
-
         protected ViewModel(ILog log)
         {
             Log = log;
-
-            DisplayName = string.Empty;
         }
     }
 }
