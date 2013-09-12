@@ -3,6 +3,7 @@
 using Naru.WPF.MVVM;
 using Naru.WPF.MVVM.Dialog;
 using Naru.WPF.MVVM.Menu;
+using Naru.WPF.MVVM.Prism;
 using Naru.WPF.MVVM.ToolBar;
 using Naru.WPF.TPL;
 

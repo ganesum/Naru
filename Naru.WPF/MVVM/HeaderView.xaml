@@ -10,7 +10,7 @@
              d:DesignHeight="300"
              d:DesignWidth="300"
              d:DataContext="{d:DesignInstance mvvm:HeaderViewModel}">
-    
+
     <UserControl.Resources>
 
         <icons:IconNameToImageConverter x:Key="IconNameToImageConverter" />
@@ -18,7 +18,7 @@
         <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
 
     </UserControl.Resources>
-    
+
     <StackPanel Orientation="Horizontal">
         <StackPanel Orientation="Horizontal"
                     VerticalAlignment="Center">
@@ -34,5 +34,5 @@
             <TextBlock Text="{Binding DisplayName}" />
         </StackPanel>
     </StackPanel>
-    
+
 </UserControl>

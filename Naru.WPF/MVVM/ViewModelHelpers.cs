@@ -8,13 +8,15 @@ namespace Naru.WPF.MVVM
 {
     public static class ViewModelHelpers
     {
-        public static HeaderViewModel CreateHeaderViewModel(this ISupportHeader viewModel, string displayName = null, string uri = null)
+        public static void SetupHeader(this ISupportHeader viewModel, string displayName = null, string uri = null)
         {
-            return new HeaderViewModel
+            var headerViewModel = new HeaderViewModel
             {
                 DisplayName = displayName,
                 ImageName = uri
             };
+
+            viewModel.SetupHeader(headerViewModel);
         }
 
         public static IDisposable SyncViewModelActivationStates(this ISupportActivationState source, ISupportActivationState viewModel)

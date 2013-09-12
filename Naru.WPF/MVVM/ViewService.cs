@@ -8,6 +8,7 @@ using Microsoft.Practices.Unity;
 
 using Naru.WPF.ModernUI.Windows.Controls;
 using Naru.WPF.MVVM.Dialog;
+using Naru.WPF.MVVM.Prism;
 using Naru.WPF.TPL;
 
 namespace Naru.WPF.MVVM
@@ -105,6 +106,9 @@ namespace Naru.WPF.MVVM
             var supportActivationState = viewModel as ISupportActivationState;
             if (supportActivationState == null) return;
 
+            var supportClosing = viewModel as ISupportClosing;
+            if (supportClosing == null) return;
+
             RoutedEventHandler windowOnLoaded = null;
             windowOnLoaded = (s, e) =>
             {
@@ -116,6 +120,21 @@ namespace Naru.WPF.MVVM
                 }
             };
             window.Loaded += windowOnLoaded;
+
+            EventHandler supportClosingOnClosed = null;
+            supportClosingOnClosed = (s, e) =>
+            {
+                if (windowOnLoaded != null)
+                {
+                    window.Loaded -= windowOnLoaded;
+                }
+
+                if (supportClosingOnClosed != null)
+                {
+                    supportClosing.Closed -= supportClosingOnClosed;
+                }
+            };
+            supportClosing.Closed += supportClosingOnClosed;
         }
 
         private void ConnectUpClosing(IViewModel viewModel, Window window)

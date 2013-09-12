@@ -15,8 +15,6 @@ namespace Naru.WPF.MVVM
         protected readonly IScheduler Scheduler;
         protected readonly CompositeDisposable Disposables;
 
-        public DelegateCommand ClosingCommand { get; private set; }
-
         protected Workspace(ILog log, IScheduler scheduler) 
             : base(log)
         {
@@ -29,6 +27,15 @@ namespace Naru.WPF.MVVM
         }
 
         #region SupportClosing
+
+        public DelegateCommand ClosingCommand { get; private set; }
+
+        public virtual bool CanClose()
+        {
+            return false;
+        }
+
+        public event EventHandler CanCloseChanged;
 
         public void Close()
         {
@@ -207,6 +214,11 @@ namespace Naru.WPF.MVVM
         #region SupportHeader
 
         public IViewModel Header { get; protected set; }
+
+        void ISupportHeader.SetupHeader(IViewModel headerViewModel)
+        {
+            Header = headerViewModel;
+        }
 
         #endregion
     }

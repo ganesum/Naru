@@ -100,7 +100,7 @@
       <DependentUpon>HeaderView.xaml</DependentUpon>
     </Compile>
     <Compile Include="MVVM\HeaderViewModel.cs" />
-    <Compile Include="MVVM\IRegionBuilder.cs" />
+    <Compile Include="MVVM\Prism\IRegionBuilder.cs" />
     <Compile Include="MVVM\IService.cs" />
     <Compile Include="MVVM\ISupportActivationState.cs" />
     <Compile Include="MVVM\ISupportAsync.cs" />
@@ -116,9 +116,13 @@
     <Compile Include="MVVM\Menu\MenuItemTemplateSelector.cs" />
     <Compile Include="MVVM\Menu\MenuSeperatorItem.cs" />
     <Compile Include="MVVM\Menu\MenuService.cs" />
-    <Compile Include="MVVM\RegionBuilder.cs" />
+    <Compile Include="MVVM\Prism\RegionBuilder.cs" />
+    <Compile Include="MVVM\Prism\TabControlHeaderView.xaml.cs">
+      <DependentUpon>TabControlHeaderView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MVVM\Prism\TabControlHeaderViewModel.cs" />
     <Compile Include="MVVM\Service.cs" />
-    <Compile Include="MVVM\TabControlRegionAdapter.cs" />
+    <Compile Include="MVVM\Prism\TabControlRegionAdapter.cs" />
     <Compile Include="MVVM\ToolBar\IToolBarItem.cs" />
     <Compile Include="MVVM\ToolBar\IToolBarService.cs" />
     <Compile Include="MVVM\ToolBar\ToolBarButtonItem.cs" />
@@ -178,6 +182,10 @@
     <Page Include="MVVM\Menu\MenuItemTemplates.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="MVVM\Prism\TabControlHeaderView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="MVVM\ToolBar\ToolBarItemTemplates.xaml">
       <Generator>MSBuild:Compile</Generator>
