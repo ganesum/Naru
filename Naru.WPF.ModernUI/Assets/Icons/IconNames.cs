@@ -5,5 +5,6 @@
         public const string EXCEL = "appbar.office.excel";
         public const string NEW = "appbar.page.new";
         public const string CLOSE = "appbar.close";
+        public const string EXECUTE = "appbar.control.play";
     }
 }
