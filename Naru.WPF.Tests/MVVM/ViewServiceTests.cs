@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using System;
+using System.Windows.Controls;
 
 using Common.Logging;
 
@@ -37,6 +38,7 @@ namespace Naru.WPF.Tests.MVVM
         }
 
         [Test]
+        [STAThread]
         public void check_viewmodel_is_set_as_the_datacontext_of_the_view()
         {
             var container = new UnityAutoMockContainer();
@@ -52,6 +54,7 @@ namespace Naru.WPF.Tests.MVVM
         }
 
         [Test]
+        [STAThread]
         public void check_that_the_correct_view_is_resolved_from_the_viewmodel_convention()
         {
             var container = new UnityAutoMockContainer();
@@ -64,6 +67,7 @@ namespace Naru.WPF.Tests.MVVM
         }
 
         [Test]
+        [STAThread]
         public void check_that_the_correct_view_is_resolved_from_the_viewmodel_UseViewAttribute()
         {
             var container = new UnityAutoMockContainer();
