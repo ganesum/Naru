@@ -5,7 +5,7 @@ using Common.Logging;
 
 using Microsoft.Practices.Prism.Commands;
 
-using Naru.WPF.TPL;
+using Naru.WPF.Scheduler;
 
 namespace Naru.WPF.MVVM.Dialog
 {
@@ -18,10 +18,10 @@ namespace Naru.WPF.MVVM.Dialog
 
         public string Message { get; private set; }
 
-        public DelegateCommand<DialogItemViewModel<T>> ExecuteCommand { get; private set; } 
+        public DelegateCommand<DialogItemViewModel<T>> ExecuteCommand { get; private set; }
 
-        public DialogViewModel(ILog log, IScheduler scheduler, BindableCollectionFactory bindableCollectionFactory) 
-            : base(log, scheduler)
+        public DialogViewModel(ILog log, IScheduler scheduler, IViewService viewService, BindableCollectionFactory bindableCollectionFactory) 
+            : base(log, scheduler, viewService)
         {
             Answers = bindableCollectionFactory.Get<DialogItemViewModel<T>>();
 

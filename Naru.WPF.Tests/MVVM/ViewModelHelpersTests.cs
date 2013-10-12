@@ -1,9 +1,9 @@
 ﻿using Common.Logging;
 
-using Moq;
-
+using Naru.Tests.UnityAutoMockContainer;
 using Naru.WPF.MVVM;
-using Naru.WPF.TPL;
+using Naru.WPF.Scheduler;
+using Naru.WPF.Tests.Scheduler;
 
 using NUnit.Framework;
 
@@ -12,10 +12,10 @@ namespace Naru.WPF.Tests.MVVM
     [TestFixture]
     public class ViewModelHelpersTests
     {
-        public class StubISupportActivationState : Workspace
+        public class WorkspaceViewModel : Workspace
         {
-            public StubISupportActivationState(ILog log, IScheduler scheduler) 
-                : base(log, scheduler)
+            public WorkspaceViewModel(ILog log, IScheduler scheduler, IViewService viewService) 
+                : base(log, scheduler, viewService)
             {
             }
         }
@@ -23,11 +23,14 @@ namespace Naru.WPF.Tests.MVVM
         [Test]
         public void when_parent_is_activated_child_is_activated()
         {
-            var parent = new StubISupportActivationState(new Mock<ILog>().Object, new Mock<IScheduler>().Object) as ISupportActivationState;
+            var container = new UnityAutoMockContainer();
+
+            container.RegisterInstance<IScheduler>(new TestScheduler());
+            var parent = container.Resolve<WorkspaceViewModel>() as ISupportActivationState;
             parent.DeActivate();
             Assert.That(parent.IsActive, Is.False);
 
-            var child = new StubISupportActivationState(new Mock<ILog>().Object, new Mock<IScheduler>().Object) as ISupportActivationState;
+            var child = container.Resolve<WorkspaceViewModel>() as ISupportActivationState;
             child.DeActivate();
             Assert.That(child.IsActive, Is.False);
 
@@ -42,11 +45,14 @@ namespace Naru.WPF.Tests.MVVM
         [Test]
         public void when_parent_is_deactivated_child_is_activated()
         {
-            var parent = new StubISupportActivationState(new Mock<ILog>().Object, new Mock<IScheduler>().Object) as ISupportActivationState;
+            var container = new UnityAutoMockContainer();
+
+            container.RegisterInstance<IScheduler>(new TestScheduler());
+            var parent = container.Resolve<WorkspaceViewModel>() as ISupportActivationState;
             parent.Activate();
             Assert.That(parent.IsActive, Is.True);
 
-            var child = new StubISupportActivationState(new Mock<ILog>().Object, new Mock<IScheduler>().Object) as ISupportActivationState;
+            var child = container.Resolve<WorkspaceViewModel>() as ISupportActivationState;
             child.Activate();
             Assert.That(child.IsActive, Is.True);
 

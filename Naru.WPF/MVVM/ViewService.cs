@@ -6,10 +6,10 @@ using Common.Logging;
 
 using Microsoft.Practices.Unity;
 
+using Naru.TPL;
 using Naru.WPF.ModernUI.Windows.Controls;
 using Naru.WPF.MVVM.Dialog;
-using Naru.WPF.MVVM.Prism;
-using Naru.WPF.TPL;
+using Naru.WPF.Scheduler;
 
 namespace Naru.WPF.MVVM
 {
@@ -24,17 +24,6 @@ namespace Naru.WPF.MVVM
             _log = log;
             _container = container;
             _scheduler = scheduler;
-        }
-
-        public IRegionBuilder RegionBuilder()
-        {
-            return _container.Resolve<IRegionBuilder>();
-        }
-
-        public IRegionBuilder<TViewModel> RegionBuilder<TViewModel>()
-            where TViewModel : IViewModel
-        {
-            return _container.Resolve<IRegionBuilder<TViewModel>>();
         }
 
         public IDialogBuilder<Answer> DialogBuilder()
@@ -183,7 +172,7 @@ namespace Naru.WPF.MVVM
             return view;
         }
 
-        internal static TViewModel CreateViewModel<TViewModel>(IUnityContainer container)
+        public static TViewModel CreateViewModel<TViewModel>(IUnityContainer container)
             where TViewModel : IViewModel
         {
             return container.Resolve<TViewModel>();
@@ -195,7 +184,7 @@ namespace Naru.WPF.MVVM
             view.DataContext = viewModel;
         }
 
-        internal static IUnityContainer GetContainer(IUnityContainer container, bool scoped)
+        public static IUnityContainer GetContainer(IUnityContainer container, bool scoped)
         {
             return scoped ? container.CreateChildContainer() : container;
         }

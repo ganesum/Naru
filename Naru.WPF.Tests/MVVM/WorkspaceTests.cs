@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 using Common.Logging;
 
 using Naru.Tests.UnityAutoMockContainer;
+using Naru.TPL;
 using Naru.WPF.MVVM;
-using Naru.WPF.TPL;
+using Naru.WPF.Scheduler;
+using Naru.WPF.Tests.Scheduler;
 
 using NUnit.Framework;
 
@@ -15,8 +18,8 @@ namespace Naru.WPF.Tests.MVVM
     {
         public class WorkspaceViewModel : Workspace
         {
-            public WorkspaceViewModel(ILog log, IScheduler scheduler) 
-                : base(log, scheduler)
+            public WorkspaceViewModel(ILog log, IScheduler scheduler, IViewService viewService) 
+                : base(log, scheduler, viewService)
             {
                 Disposables.Add(AnonymousDisposable.Create(() => DisposablesWasDisposed.SafeInvoke(this)));
             }
@@ -31,9 +34,11 @@ namespace Naru.WPF.Tests.MVVM
 
             public event EventHandler OnDeActivateWasCalled;
 
-            protected override void OnInitialise()
+            protected override Task OnInitialise()
             {
                 OnInitialiseWasCalled.SafeInvoke(this);
+
+                return CompletedTask.Default;
             }
 
             protected override void OnActivate()
@@ -49,16 +54,6 @@ namespace Naru.WPF.Tests.MVVM
             protected override void CleanUp()
             {
                 CleanUpWasCalled.SafeInvoke(this);
-            }
-
-            public new void Busy(string message)
-            {
-                base.Busy(message);
-            }
-
-            public new void Idle()
-            {
-                base.Idle();
             }
         }
 
@@ -135,7 +130,7 @@ namespace Naru.WPF.Tests.MVVM
 
                 viewModel.Closed += (s, e) => eventWasFired = true;
 
-                viewModel.ClosingCommand.Execute();
+                viewModel.CloseCommand.Execute();
 
                 Assert.That(eventWasFired, Is.True);
             }
@@ -153,6 +148,7 @@ namespace Naru.WPF.Tests.MVVM
 
                     var eventWasFired = 0;
 
+                    container.RegisterInstance<IScheduler>(new TestScheduler());
                     var viewModel = container.Resolve<WorkspaceViewModel>();
 
                     Assert.That(eventWasFired, Is.EqualTo(0));
@@ -173,6 +169,7 @@ namespace Naru.WPF.Tests.MVVM
 
                     var eventWasFired = 0;
 
+                    container.RegisterInstance<IScheduler>(new TestScheduler());
                     var viewModel = container.Resolve<WorkspaceViewModel>();
 
                     Assert.That(eventWasFired, Is.EqualTo(0));
@@ -191,6 +188,7 @@ namespace Naru.WPF.Tests.MVVM
                 {
                     var container = new UnityAutoMockContainer();
 
+                    container.RegisterInstance<IScheduler>(new TestScheduler());
                     var viewModel = container.Resolve<WorkspaceViewModel>();
 
                     Assert.That(viewModel.IsActive, Is.False);
@@ -207,6 +205,7 @@ namespace Naru.WPF.Tests.MVVM
 
                     var eventWasFired = false;
 
+                    container.RegisterInstance<IScheduler>(new TestScheduler());
                     var viewModel = container.Resolve<WorkspaceViewModel>();
 
                     Assert.That(eventWasFired, Is.False);
@@ -225,6 +224,7 @@ namespace Naru.WPF.Tests.MVVM
 
                     var eventWasFired = false;
 
+                    container.RegisterInstance<IScheduler>(new TestScheduler());
                     var viewModel = container.Resolve<WorkspaceViewModel>();
 
                     Assert.That(eventWasFired, Is.False);
@@ -245,6 +245,7 @@ namespace Naru.WPF.Tests.MVVM
                 {
                     var container = new UnityAutoMockContainer();
 
+                    container.RegisterInstance<IScheduler>(new TestScheduler());
                     var viewModel = container.Resolve<WorkspaceViewModel>();
 
                     Assert.That(viewModel.IsActive, Is.False);
@@ -265,6 +266,7 @@ namespace Naru.WPF.Tests.MVVM
 
                     var eventWasFired = false;
 
+                    container.RegisterInstance<IScheduler>(new TestScheduler());
                     var viewModel = container.Resolve<WorkspaceViewModel>();
 
                     Assert.That(eventWasFired, Is.False);
@@ -283,6 +285,7 @@ namespace Naru.WPF.Tests.MVVM
 
                     var eventWasFired = false;
 
+                    container.RegisterInstance<IScheduler>(new TestScheduler());
                     var viewModel = container.Resolve<WorkspaceViewModel>();
 
                     Assert.That(eventWasFired, Is.False);
@@ -293,73 +296,6 @@ namespace Naru.WPF.Tests.MVVM
 
                     Assert.That(eventWasFired, Is.True);
                 }
-            }
-        }
-
-        public class when_Busy
-        {
-            [Test]
-            public void is_called_then_IsBusy_is_set_to_true()
-            {
-                var container = new UnityAutoMockContainer();
-
-                var viewModel = container.Resolve<WorkspaceViewModel>();
-
-                Assert.That(viewModel.IsBusy, Is.False);
-
-                viewModel.Busy(string.Empty);
-
-                Assert.That(viewModel.IsBusy, Is.True);
-            }
-
-            [Test]
-            public void is_called_with_a_message_then_BusyMessage_is_set_to_the_message()
-            {
-                var container = new UnityAutoMockContainer();
-
-                var viewModel = container.Resolve<WorkspaceViewModel>();
-
-                Assert.That(viewModel.BusyMessage, Is.Null);
-
-                var busyMessage = Guid.NewGuid().ToString();
-
-                viewModel.Busy(busyMessage);
-
-                Assert.That(viewModel.BusyMessage, Is.EqualTo(busyMessage));
-            }
-        }
-
-        public class when_Idle
-        {
-            [Test]
-            public void is_called_then_IsBusy_is_set_to_false()
-            {
-                var container = new UnityAutoMockContainer();
-
-                var viewModel = container.Resolve<WorkspaceViewModel>();
-                viewModel.Busy(string.Empty);
-
-                Assert.That(viewModel.IsBusy, Is.True);
-
-                viewModel.Idle();
-
-                Assert.That(viewModel.IsBusy, Is.False);
-            }
-
-            [Test]
-            public void is_called_then_BusyMessage_is_set_to_empty_string()
-            {
-                var container = new UnityAutoMockContainer();
-
-                var viewModel = container.Resolve<WorkspaceViewModel>();
-
-                var busyMessage = Guid.NewGuid().ToString();
-
-                viewModel.Busy(busyMessage);
-
-                viewModel.Idle();
-
-                Assert.That(viewModel.BusyMessage, Is.EqualTo(string.Empty));
             }
         }
     }

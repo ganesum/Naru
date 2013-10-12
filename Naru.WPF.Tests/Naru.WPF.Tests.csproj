@@ -85,6 +85,7 @@
   <ItemGroup>
     <Compile Include="MVVM\AnonymousDisposableTests.cs" />
     <Compile Include="MVVM\BooleanToVisibilityConverterTests.cs" />
+    <Compile Include="MVVM\BusyTests.cs" />
     <Compile Include="MVVM\CompositeDisposableTests.cs" />
     <Compile Include="MVVM\ViewModelHelpersTests.cs" />
     <Compile Include="MVVM\ViewServiceTests.cs" />
@@ -102,14 +103,13 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="TPL\CurrentThreadTaskScheduler.cs" />
-    <Compile Include="TPL\TaskExTests.cs" />
-    <Compile Include="TPL\TestScheduler.cs" />
+    <Compile Include="Scheduler\CurrentThreadTaskScheduler.cs" />
+    <Compile Include="Scheduler\TaskExTests.cs" />
+    <Compile Include="Scheduler\TestScheduler.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="App.config" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -121,6 +121,14 @@
     <ProjectReference Include="..\Naru.Tests\Naru.Tests.csproj">
       <Project>{28bff6b4-12e5-4f81-851f-ba40db9c900b}</Project>
       <Name>Naru.Tests</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Naru.TPL.Tests\Naru.TPL.Tests.csproj">
+      <Project>{2d4294bf-4452-4371-afa4-6870f45fd8ba}</Project>
+      <Name>Naru.TPL.Tests</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Naru.TPL\Naru.TPL.csproj">
+      <Project>{2bbca269-6fdf-446d-9651-32717907afa8}</Project>
+      <Name>Naru.TPL</Name>
     </ProjectReference>
     <ProjectReference Include="..\Naru.WPF\Naru.WPF.csproj">
       <Project>{6da2b9ad-0810-4c8c-a886-edbd8130c89b}</Project>

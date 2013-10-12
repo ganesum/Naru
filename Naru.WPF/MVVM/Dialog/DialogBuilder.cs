@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-using Naru.WPF.TPL;
+using Naru.TPL;
 
 namespace Naru.WPF.MVVM.Dialog
 {

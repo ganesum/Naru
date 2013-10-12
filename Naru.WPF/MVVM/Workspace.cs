@@ -6,36 +6,42 @@ using Common.Logging;
 using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Events;
 
-using Naru.WPF.TPL;
+using Naru.TPL;
+using Naru.WPF.Scheduler;
 
 namespace Naru.WPF.MVVM
 {
-    public abstract class Workspace : ViewModel, ISupportClosing, ISupportActivationState, ISupportAsync, ISupportVisibility, ISupportHeader
+    public abstract class Workspace : ViewModel, ISupportClosing, ISupportActivationState, ISupportVisibility, ISupportHeader, ISupportInitialisation
     {
         protected readonly IScheduler Scheduler;
+        protected readonly IViewService ViewService;
         protected readonly CompositeDisposable Disposables;
 
-        protected Workspace(ILog log, IScheduler scheduler) 
+        public BusyViewModel BusyViewModel { get; private set; }
+
+        protected Workspace(ILog log, IScheduler scheduler, IViewService viewService) 
             : base(log)
         {
             Scheduler = scheduler;
+            ViewService = viewService;
+
+            BusyViewModel = new BusyViewModel(log, scheduler);
+
             Disposables = new CompositeDisposable();
 
-            ClosingCommand = new DelegateCommand(Close);
+            CloseCommand = new DelegateCommand(Close);
 
             Show();
         }
 
         #region SupportClosing
 
-        public DelegateCommand ClosingCommand { get; private set; }
+        public DelegateCommand CloseCommand { get; private set; }
 
         public virtual bool CanClose()
         {
             return false;
         }
-
-        public event EventHandler CanCloseChanged;
 
         public void Close()
         {
@@ -82,9 +88,20 @@ namespace Naru.WPF.MVVM
             if (_onInitialiseHasBeenCalled) return;
 
             Log.Debug(string.Format("Calling OnInitialise on {0} - {1}", GetType().FullName, Header));
-            OnInitialise();
-            Initialised.SafeInvoke(this);
-            _onInitialiseHasBeenCalled = true;
+
+            BusyViewModel.ActiveAsync("... Initialising ...")
+                .SelectMany(() =>
+                {
+                    OnInitialise();
+
+                    Initialised.SafeInvoke(this);
+                    _onInitialiseHasBeenCalled = true;
+                }, Scheduler.Task)
+                .LogException(Log)
+                .CatchAndHandle(ex => ViewService
+                    .StandardDialogBuilder()
+                    .Error("Error", string.Format("Exception in OnInitialise() call. {0}", ex.Message)), Scheduler.Task)
+                .Finally(BusyViewModel.InActive, Scheduler.Task);
         }
 
         void ISupportActivationState.DeActivate()
@@ -103,76 +120,16 @@ namespace Naru.WPF.MVVM
 
         public event EventHandler Initialised;
 
-        protected virtual void OnInitialise()
-        { }
+        protected virtual Task OnInitialise()
+        {
+            return CompletedTask.Default;
+        }
 
         protected virtual void OnActivate()
         { }
 
         protected virtual void OnDeActivate()
         { }
-
-        #endregion
-
-        #region SupportAsync
-
-        #region IsBusy
-
-        private bool _isBusy;
-
-        public bool IsBusy
-        {
-            get { return _isBusy; }
-            private set
-            {
-                if (value.Equals(_isBusy)) return;
-                _isBusy = value;
-                RaisePropertyChanged(() => IsBusy);
-            }
-        }
-
-        #endregion
-
-        #region BusyMessage
-
-        private string _busyMessage;
-
-        public string BusyMessage
-        {
-            get { return _busyMessage; }
-            private set
-            {
-                if (value == _busyMessage) return;
-                _busyMessage = value;
-                RaisePropertyChanged(() => BusyMessage);
-            }
-        }
-
-        #endregion
-
-        public void Busy(string message)
-        {
-            IsBusy = true;
-            BusyMessage = message;
-        }
-
-        public void Idle()
-        {
-            IsBusy = false;
-            BusyMessage = string.Empty;
-        }
-
-        public Task<Unit> BusyAsync(string message)
-        {
-            return Task.Factory.StartNew(() => Busy(message), Scheduler.Dispatcher)
-                .Select(() => Unit.Default);
-        }
-
-        public Task<Unit> IdleAsync()
-        {
-            return Task.Factory.StartNew(() => Idle(), Scheduler.Dispatcher)
-                .Select(() => Unit.Default);
-        }
 
         #endregion
 
@@ -218,6 +175,15 @@ namespace Naru.WPF.MVVM
         void ISupportHeader.SetupHeader(IViewModel headerViewModel)
         {
             Header = headerViewModel;
+        }
+
+        #endregion
+
+        #region SupportInitialisation
+
+        Task ISupportInitialisation.OnInitialise()
+        {
+            return OnInitialise();
         }
 
         #endregion

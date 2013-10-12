@@ -6,8 +6,6 @@ namespace Naru.WPF.MVVM
     {
         bool CanClose();
 
-        event EventHandler CanCloseChanged;
-
         void Close();
 
         event EventHandler Closed;

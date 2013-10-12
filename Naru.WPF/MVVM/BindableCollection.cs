@@ -4,7 +4,8 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Threading.Tasks;
 
-using Naru.WPF.TPL;
+using Naru.TPL;
+using Naru.WPF.Scheduler;
 
 namespace Naru.WPF.MVVM
 {

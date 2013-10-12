@@ -3,9 +3,8 @@
 using Naru.WPF.MVVM;
 using Naru.WPF.MVVM.Dialog;
 using Naru.WPF.MVVM.Menu;
-using Naru.WPF.MVVM.Prism;
 using Naru.WPF.MVVM.ToolBar;
-using Naru.WPF.TPL;
+using Naru.WPF.Scheduler;
 
 namespace Naru.WPF
 {
@@ -18,8 +17,6 @@ namespace Naru.WPF
                 .RegisterTransient<IViewService, ViewService>()
                 .RegisterType(typeof (IDialogBuilder<>), typeof (DialogBuilder<>))
                 .RegisterTransient<IStandardDialogBuilder, StandardDialogBuilder>()
-                .RegisterTransient<IRegionBuilder, RegionBuilder>()
-                .RegisterType(typeof (IRegionBuilder<>), typeof (RegionBuilder<>))
                 .RegisterSingleton<IToolBarService, ToolBarService>()
                 .RegisterSingleton<IMenuService, MenuService>();
 

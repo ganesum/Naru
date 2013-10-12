@@ -12,9 +12,9 @@ namespace Naru.Tests.UnityAutoMockContainer
 {
     public class UnityAutoMockContainerFixture
     {
-        protected UnityAutoMockContainer GetAutoMockContainer(MockFactory factory)
+        private UnityAutoMockContainer GetAutoMockContainer(MockRepository mockRepository)
         {
-            return new UnityAutoMockContainer(factory);
+            return new UnityAutoMockContainer(mockRepository);
         }
 
         public static void RunAllTests(Action<string> messageWriter)
@@ -71,7 +71,7 @@ namespace Naru.Tests.UnityAutoMockContainer
         [Test]
         public void CreatesLooseMocksIfFactoryIsMockBehaviorLoose()
         {
-            var factory = GetAutoMockContainer(new MockFactory(MockBehavior.Loose));
+            var factory = GetAutoMockContainer(new MockRepository(MockBehavior.Loose));
             var component = factory.Resolve<TestComponent>();
 
             component.RunAll();
@@ -80,7 +80,7 @@ namespace Naru.Tests.UnityAutoMockContainer
         [Test]
         public void CanRegisterImplementationAndResolveIt()
         {
-            var factory = GetAutoMockContainer(new MockFactory(MockBehavior.Loose));
+            var factory = GetAutoMockContainer(new MockRepository(MockBehavior.Loose));
             factory.Register<ITestComponent, TestComponent>();
 
             var testComponent = factory.Resolve<ITestComponent>();
@@ -92,7 +92,7 @@ namespace Naru.Tests.UnityAutoMockContainer
         [Test]
         public void ResolveUnregisteredInterfaceReturnsMock()
         {
-            var factory = GetAutoMockContainer(new MockFactory(MockBehavior.Loose));
+            var factory = GetAutoMockContainer(new MockRepository(MockBehavior.Loose));
 
             var service = factory.Resolve<IServiceA>();
 
@@ -103,7 +103,7 @@ namespace Naru.Tests.UnityAutoMockContainer
         [Test]
         public void DefaultConstructorWorksWithAllTests()
         {
-            var factory = GetAutoMockContainer(new MockFactory(MockBehavior.Loose));
+            var factory = GetAutoMockContainer(new MockRepository(MockBehavior.Loose));
             var a = false;
             var b = false;
 
@@ -122,7 +122,7 @@ namespace Naru.Tests.UnityAutoMockContainer
         [Test]
         public void ThrowsIfStrictMockWithoutExpectation()
         {
-            var factory = GetAutoMockContainer(new MockFactory(MockBehavior.Strict));
+            var factory = GetAutoMockContainer(new MockRepository(MockBehavior.Strict));
             factory.GetMock<IServiceB>().Setup(x => x.RunB());
 
             var component = factory.Resolve<TestComponent>();
@@ -134,7 +134,7 @@ namespace Naru.Tests.UnityAutoMockContainer
         [Test]
         public void StrictWorksWithAllExpectationsMet()
         {
-            var factory = GetAutoMockContainer(new MockFactory(MockBehavior.Strict));
+            var factory = GetAutoMockContainer(new MockRepository(MockBehavior.Strict));
             factory.GetMock<IServiceA>().Setup(x => x.RunA());
             factory.GetMock<IServiceB>().Setup(x => x.RunB());
 
@@ -145,7 +145,7 @@ namespace Naru.Tests.UnityAutoMockContainer
         [Test]
         public void GetMockedInstanceOfConcreteClass()
         {
-            var factory = GetAutoMockContainer(new MockFactory(MockBehavior.Loose));
+            var factory = GetAutoMockContainer(new MockRepository(MockBehavior.Loose));
             var mockedInstance = factory.GetMock<TestComponent>();
 
             Assert.IsNotNull(mockedInstance);
@@ -156,7 +156,7 @@ namespace Naru.Tests.UnityAutoMockContainer
         [Test]
         public void GetMockedInstanceOfConcreteClassWithInterfaceConstructorParameter()
         {
-            var factory = GetAutoMockContainer(new MockFactory(MockBehavior.Loose));
+            var factory = GetAutoMockContainer(new MockRepository(MockBehavior.Loose));
             var mockedInstance = factory.GetMock<TestComponent>();
             Assert.IsNotNull(mockedInstance);
         }
@@ -164,7 +164,7 @@ namespace Naru.Tests.UnityAutoMockContainer
         [Test]
         public void WhenMockedInstanceIsRetrievedAnyFutureResolvesOfTheSameConcreteClassShouldReturnedTheMockedInstance()
         {
-            var factory = GetAutoMockContainer(new MockFactory(MockBehavior.Loose));
+            var factory = GetAutoMockContainer(new MockRepository(MockBehavior.Loose));
             var mockedInstance = factory.GetMock<TestComponent>();
 
             var resolvedInstance = factory.Resolve<TestComponent>();

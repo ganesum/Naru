@@ -30,16 +30,16 @@ namespace Naru.Tests.UnityAutoMockContainer
         /// Same as calling <code>new UnityAutoMockContainer(new MockFactory(MockBehavior.Loose))</code>
         /// </summary>
         public UnityAutoMockContainer()
-            : this(new MockFactory(MockBehavior.Loose))
+            : this(new MockRepository(MockBehavior.Loose))
         {
         }
 
         /// <summary>
         /// Allows you to specify the MockFactory that will be used when creating mocked items.
         /// </summary>
-        public UnityAutoMockContainer(MockFactory factory)
+        public UnityAutoMockContainer(MockRepository mockRepository)
         {
-            _container = new UnityAutoMockerBackingContainer(factory);
+            _container = new UnityAutoMockerBackingContainer(mockRepository);
         }
 
         #region Public interface
@@ -105,9 +105,9 @@ namespace Naru.Tests.UnityAutoMockContainer
         {
             private readonly IUnityContainer _unityContainer = new UnityContainer();
 
-            public UnityAutoMockerBackingContainer(MockFactory factory)
+            public UnityAutoMockerBackingContainer(MockRepository mockRepository)
             {
-                _unityContainer.AddExtension(new MockFactoryContainerExtension(factory, this));
+                _unityContainer.AddExtension(new MockFactoryContainerExtension(mockRepository, this));
             }
 
             public void RegisterInstance<TService>(TService instance)
@@ -139,35 +139,35 @@ namespace Naru.Tests.UnityAutoMockContainer
 
             private class MockFactoryContainerExtension : UnityContainerExtension
             {
-                private readonly MockFactory _mockFactory;
+                private readonly MockRepository _mockRepository;
                 private readonly IAutoMockerBackingContainer _container;
 
-                public MockFactoryContainerExtension(MockFactory mockFactory, IAutoMockerBackingContainer container)
+                public MockFactoryContainerExtension(MockRepository mockRepository, IAutoMockerBackingContainer container)
                 {
-                    _mockFactory = mockFactory;
+                    _mockRepository = mockRepository;
                     _container = container;
                 }
 
                 protected override void Initialize()
                 {
-                    Context.Strategies.Add(new MockExtensibilityStrategy(_mockFactory, _container),
+                    Context.Strategies.Add(new MockExtensibilityStrategy(_mockRepository, _container),
                         UnityBuildStage.PreCreation);
                 }
             }
 
             private class MockExtensibilityStrategy : BuilderStrategy
             {
-                private readonly MockFactory _factory;
+                private readonly MockRepository _mockRepository;
                 private readonly IAutoMockerBackingContainer _container;
                 private readonly MethodInfo _createMethod;
                 private readonly Dictionary<Type, Mock> _alreadyCreatedMocks = new Dictionary<Type, Mock>();
                 private MethodInfo _createMethodWithParameters;
 
-                public MockExtensibilityStrategy(MockFactory factory, IAutoMockerBackingContainer container)
+                public MockExtensibilityStrategy(MockRepository mockRepository, IAutoMockerBackingContainer container)
                 {
-                    _factory = factory;
+                    _mockRepository = mockRepository;
                     _container = container;
-                    _createMethod = factory.GetType().GetMethod("Create", new Type[] {});
+                    _createMethod = mockRepository.GetType().GetMethod("Create", new Type[] {});
                     Debug.Assert(_createMethod != null);
                 }
 
@@ -203,20 +203,20 @@ namespace Naru.Tests.UnityAutoMockContainer
                             {
                                 object[] mockedParametersToInject = GetConstructorParameters(context).ToArray();
 
-                                _createMethodWithParameters = _factory.GetType()
+                                _createMethodWithParameters = _mockRepository.GetType()
                                     .GetMethod("Create", new[] {typeof (object[])});
 
                                 MethodInfo specificCreateMethod =
                                     _createMethodWithParameters.MakeGenericMethod(new[] {mockServiceType});
 
-                                var x = specificCreateMethod.Invoke(_factory, new object[] {mockedParametersToInject});
+                                var x = specificCreateMethod.Invoke(_mockRepository, new object[] {mockedParametersToInject});
                                 mockedObject = (Mock) x;
                             }
                             else
                             {
                                 MethodInfo specificCreateMethod =
                                     _createMethod.MakeGenericMethod(new[] {mockServiceType});
-                                mockedObject = (Mock) specificCreateMethod.Invoke(_factory, null);
+                                mockedObject = (Mock) specificCreateMethod.Invoke(_mockRepository, null);
                             }
 
                             _alreadyCreatedMocks.Add(mockServiceType, mockedObject);
