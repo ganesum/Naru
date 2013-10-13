@@ -3,8 +3,6 @@ using System.Linq;
 
 using Common.Logging;
 
-using Microsoft.Practices.Prism.Commands;
-
 using Naru.WPF.Scheduler;
 
 namespace Naru.WPF.MVVM.Dialog

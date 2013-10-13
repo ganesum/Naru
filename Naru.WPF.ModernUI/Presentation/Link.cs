@@ -1,4 +1,4 @@
-﻿using Microsoft.Practices.Prism.Commands;
+﻿using System.Windows.Input;
 
 namespace Naru.WPF.ModernUI.Presentation
 {
@@ -7,6 +7,6 @@ namespace Naru.WPF.ModernUI.Presentation
     /// </summary>
     public class Link : Displayable
     {
-        public DelegateCommand Command { get; set; }
+        public ICommand Command { get; set; }
     }
 }

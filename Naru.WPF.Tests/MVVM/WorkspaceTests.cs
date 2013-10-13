@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 
 using Common.Logging;
 
+using Naru.Core;
 using Naru.Tests.UnityAutoMockContainer;
 using Naru.TPL;
 using Naru.WPF.MVVM;
@@ -130,7 +131,7 @@ namespace Naru.WPF.Tests.MVVM
 
                 viewModel.Closed += (s, e) => eventWasFired = true;
 
-                viewModel.CloseCommand.Execute();
+                viewModel.CloseCommand.Execute(null);
 
                 Assert.That(eventWasFired, Is.True);
             }

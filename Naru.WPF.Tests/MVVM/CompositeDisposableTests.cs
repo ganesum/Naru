@@ -1,4 +1,5 @@
-﻿using Naru.WPF.MVVM;
+﻿using Naru.Core;
+using Naru.WPF.MVVM;
 
 using NUnit.Framework;
 

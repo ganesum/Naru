@@ -1,5 +1,6 @@
 ﻿using Microsoft.Practices.Unity;
 
+using Naru.Unity;
 using Naru.WPF.MVVM;
 using Naru.WPF.MVVM.Dialog;
 using Naru.WPF.MVVM.Menu;
@@ -10,7 +11,7 @@ namespace Naru.WPF
 {
     public static class Bootstrapper
     {
-        public static IUnityContainer ConfigureNaru(this IUnityContainer container)
+        public static IUnityContainer ConfigureNaruWPF(this IUnityContainer container)
         {
             container
                 .RegisterSingleton<IScheduler, DesktopScheduler>()

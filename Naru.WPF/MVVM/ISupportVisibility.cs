@@ -1,6 +1,6 @@
 ﻿using System;
 
-using Microsoft.Practices.Prism.Events;
+using Naru.Core;
 
 namespace Naru.WPF.MVVM
 {

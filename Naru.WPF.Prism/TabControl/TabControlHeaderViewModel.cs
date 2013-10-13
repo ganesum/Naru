@@ -1,6 +1,4 @@
-﻿using Microsoft.Practices.Prism.Commands;
-
-using Naru.WPF.MVVM;
+﻿using Naru.WPF.MVVM;
 
 namespace Naru.WPF.Prism.TabControl
 {

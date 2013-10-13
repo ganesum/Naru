@@ -1,7 +1,6 @@
 ﻿using System;
 
-using Microsoft.Practices.Prism.Events;
-
+using Naru.Core;
 using Naru.WPF.MVVM.ToolBar;
 
 namespace Naru.WPF.MVVM

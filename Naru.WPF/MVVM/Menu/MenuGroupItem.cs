@@ -1,8 +1,6 @@
-﻿using Microsoft.Practices.Prism.ViewModel;
-
-namespace Naru.WPF.MVVM.Menu
+﻿namespace Naru.WPF.MVVM.Menu
 {
-    public class MenuGroupItem : NotificationObject, IMenuItem
+    public class MenuGroupItem : NotifyPropertyChanged, IMenuItem
     {
         public string DisplayName { get; set; }
 

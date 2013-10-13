@@ -1,9 +1,6 @@
-﻿using Microsoft.Practices.Prism.Commands;
-using Microsoft.Practices.Prism.ViewModel;
-
-namespace Naru.WPF.MVVM.Menu
+﻿namespace Naru.WPF.MVVM.Menu
 {
-    public class MenuButtonItem : NotificationObject, IMenuItem
+    public class MenuButtonItem : NotifyPropertyChanged, IMenuItem
     {
         public string DisplayName { get; set; }
 

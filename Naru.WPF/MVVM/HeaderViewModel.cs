@@ -1,8 +1,6 @@
-﻿using Microsoft.Practices.Prism.ViewModel;
-
-namespace Naru.WPF.MVVM
+﻿namespace Naru.WPF.MVVM
 {
-    public class HeaderViewModel : NotificationObject, IViewModel
+    public class HeaderViewModel : NotifyPropertyChanged, IViewModel
     {
         #region DisplayName
 

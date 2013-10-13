@@ -3,9 +3,7 @@ using System.Threading.Tasks;
 
 using Common.Logging;
 
-using Microsoft.Practices.Prism.Commands;
-using Microsoft.Practices.Prism.Events;
-
+using Naru.Core;
 using Naru.TPL;
 using Naru.WPF.Scheduler;
 

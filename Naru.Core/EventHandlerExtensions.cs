@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Naru.WPF.MVVM
+namespace Naru.Core
 {
     public static class EventHandlerExtensions
     {

@@ -1,10 +1,8 @@
 ﻿using Common.Logging;
 
-using Microsoft.Practices.Prism.ViewModel;
-
 namespace Naru.WPF.MVVM
 {
-    public abstract class ViewModel : NotificationObject, IViewModel
+    public abstract class ViewModel : NotifyPropertyChanged, IViewModel
     {
         protected readonly ILog Log;
 

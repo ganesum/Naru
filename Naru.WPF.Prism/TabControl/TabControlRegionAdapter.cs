@@ -3,9 +3,9 @@ using System.Collections.Specialized;
 using System.Windows;
 using System.Windows.Controls;
 
-using Microsoft.Practices.Prism.Events;
 using Microsoft.Practices.Prism.Regions;
 
+using Naru.Core;
 using Naru.WPF.MVVM;
 using Naru.WPF.Scheduler;
 

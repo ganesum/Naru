@@ -10,6 +10,8 @@ using Naru.WPF.ModernUI.Presentation;
 
 using Microsoft.Windows.Shell;
 
+using SystemCommands = Microsoft.Windows.Shell.SystemCommands;
+
 namespace Naru.WPF.ModernUI.Windows.Controls
 {
     /// <summary>

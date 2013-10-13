@@ -1,9 +1,6 @@
-﻿using Microsoft.Practices.Prism.Commands;
-using Microsoft.Practices.Prism.ViewModel;
-
-namespace Naru.WPF.MVVM.ToolBar
+﻿namespace Naru.WPF.MVVM.ToolBar
 {
-    public class ToolBarButtonItem : NotificationObject, IToolBarItem
+    public class ToolBarButtonItem : NotifyPropertyChanged, IToolBarItem
     {
         public string DisplayName { get; set; }
 

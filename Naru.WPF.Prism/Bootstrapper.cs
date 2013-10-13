@@ -1,5 +1,6 @@
 ﻿using Microsoft.Practices.Unity;
 
+using Naru.Unity;
 using Naru.WPF.Prism.Region;
 
 namespace Naru.WPF.Prism

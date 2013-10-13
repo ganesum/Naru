@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 
-namespace Naru.WPF.MVVM
+namespace Naru.Core
 {
     public sealed class AnonymousDisposable : IDisposable
     {
