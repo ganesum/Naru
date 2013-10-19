@@ -2,6 +2,8 @@
 using System.Windows;
 using System.Windows.Interactivity;
 
+using Naru.WPF.ViewModel;
+
 namespace Naru.WPF.MVVM
 {
     public class InitialisationBehavior : Behavior<FrameworkElement>

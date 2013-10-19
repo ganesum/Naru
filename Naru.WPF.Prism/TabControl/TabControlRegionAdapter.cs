@@ -8,14 +8,15 @@ using Microsoft.Practices.Prism.Regions;
 using Naru.Core;
 using Naru.WPF.MVVM;
 using Naru.WPF.Scheduler;
+using Naru.WPF.ViewModel;
 
 namespace Naru.WPF.Prism.TabControl
 {
     public class TabControlRegionAdapter : RegionAdapterBase<System.Windows.Controls.TabControl>
     {
-        private readonly IScheduler _scheduler;
+        private readonly ISchedulerProvider _scheduler;
 
-        public TabControlRegionAdapter(IRegionBehaviorFactory regionBehaviorFactory, IScheduler scheduler)
+        public TabControlRegionAdapter(IRegionBehaviorFactory regionBehaviorFactory, ISchedulerProvider scheduler)
             : base(regionBehaviorFactory)
         {
             _scheduler = scheduler;

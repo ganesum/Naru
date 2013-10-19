@@ -1,19 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-using Naru.WPF.Scheduler;
-
 namespace Naru.WPF.Tests.Scheduler
 {
-    public class CurrentThreadTaskScheduler : DispatcherTaskSchedulerBase
+    public class CurrentThreadTaskScheduler : TaskScheduler
     {
-        public override void ExecuteSync(Action action)
-        {
-            action();
-        }
-
         protected override void QueueTask(Task task)
         {
             TryExecuteTask(task);

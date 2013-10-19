@@ -9,7 +9,7 @@ namespace Naru.WPF.Scheduler
     /// <summary>
     /// Provides a task scheduler that targets a specific SynchronizationContext.
     /// </summary>
-    public sealed class DispatcherTaskScheduler : DispatcherTaskSchedulerBase
+    public sealed class DispatcherTaskScheduler : TaskScheduler
     {
         /// <summary>
         /// The queue of tasks to execute, maintained for debugging purposes.
@@ -20,26 +20,6 @@ namespace Naru.WPF.Scheduler
         /// The target context under which to execute the queued tasks.
         /// </summary>
         private readonly Dispatcher _context;
-
-        public override void ExecuteSync(Action action)
-        {
-            if (_context.CheckAccess())
-            {
-                action();
-                return;
-            }
-
-            var taskCompletionSource = new TaskCompletionSource<object>();
-
-            Action wrappedAction = () =>
-            {
-                action();
-                taskCompletionSource.TrySetResult(null);
-            };
-            _context.BeginInvoke(wrappedAction);
-
-            taskCompletionSource.Task.Wait();
-        }
 
         /// <summary>
         /// Initializes an instance of the SynchronizationContextTaskScheduler class

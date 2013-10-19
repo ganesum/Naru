@@ -10,6 +10,7 @@ using Microsoft.Practices.Unity;
 using Naru.TPL;
 using Naru.WPF.MVVM;
 using Naru.WPF.Scheduler;
+using Naru.WPF.ViewModel;
 
 namespace Naru.WPF.Prism.Region
 {
@@ -17,9 +18,9 @@ namespace Naru.WPF.Prism.Region
     {
         private readonly ILog _log;
         private readonly Func<IRegionManager> _regionManagerFactory;
-        private readonly IScheduler _scheduler;
+        private readonly ISchedulerProvider _scheduler;
 
-        public RegionBuilder(ILog log, Func<IRegionManager> regionManagerFactory, IScheduler scheduler)
+        public RegionBuilder(ILog log, Func<IRegionManager> regionManagerFactory, ISchedulerProvider scheduler)
         {
             _log = log;
             _regionManagerFactory = regionManagerFactory;
@@ -37,7 +38,7 @@ namespace Naru.WPF.Prism.Region
         {
             _log.Debug(string.Format("Clearing region {0}", regionName));
 
-            return Task.Factory.StartNew(() => ClearInternal(regionName), _scheduler.Dispatcher);
+            return Task.Factory.StartNew(() => ClearInternal(regionName), _scheduler.TPL.Dispatcher);
         }
 
         private void ClearInternal(string regionName)
@@ -70,12 +71,12 @@ namespace Naru.WPF.Prism.Region
         private readonly ILog _log;
         private readonly Func<IRegionManager> _regionManagerFactory;
         private readonly IUnityContainer _container;
-        private readonly IScheduler _scheduler;
+        private readonly ISchedulerProvider _scheduler;
 
         private bool _scope;
         private Action<TViewModel> _initialiseViewModel;
 
-        public RegionBuilder(ILog log, Func<IRegionManager> regionManagerFactory, IUnityContainer container, IScheduler scheduler)
+        public RegionBuilder(ILog log, Func<IRegionManager> regionManagerFactory, IUnityContainer container, ISchedulerProvider scheduler)
         {
             _log = log;
             _regionManagerFactory = regionManagerFactory;
@@ -110,7 +111,7 @@ namespace Naru.WPF.Prism.Region
             _log.Debug(string.Format("Scope = {0}", _scope));
             var container = ViewService.GetContainer(_container, _scope);
 
-            return Task.Factory.StartNew(() => ShowInternal(regionName, viewModel, container), _scheduler.Dispatcher);
+            return Task.Factory.StartNew(() => ShowInternal(regionName, viewModel, container), _scheduler.TPL.Dispatcher);
         }
 
         public TViewModel Show(string regionName)
@@ -135,7 +136,7 @@ namespace Naru.WPF.Prism.Region
             var viewModel = ViewService.CreateViewModel<TViewModel>(container);
 
             return Task.Factory
-                .StartNew(() => ShowInternal(regionName, viewModel, container), _scheduler.Dispatcher)
+                .StartNew(() => ShowInternal(regionName, viewModel, container), _scheduler.TPL.Dispatcher)
                 .Select(() => viewModel);
         }
 

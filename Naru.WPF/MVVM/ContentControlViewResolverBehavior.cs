@@ -2,6 +2,8 @@
 using System.Windows.Controls;
 using System.Windows.Interactivity;
 
+using Naru.WPF.ViewModel;
+
 namespace Naru.WPF.MVVM
 {
     /// <summary>

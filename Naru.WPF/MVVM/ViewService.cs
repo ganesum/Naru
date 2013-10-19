@@ -7,9 +7,10 @@ using Common.Logging;
 using Microsoft.Practices.Unity;
 
 using Naru.TPL;
+using Naru.WPF.Dialog;
 using Naru.WPF.ModernUI.Windows.Controls;
-using Naru.WPF.MVVM.Dialog;
 using Naru.WPF.Scheduler;
+using Naru.WPF.ViewModel;
 
 namespace Naru.WPF.MVVM
 {
@@ -17,9 +18,9 @@ namespace Naru.WPF.MVVM
     {
         private readonly ILog _log;
         private readonly IUnityContainer _container;
-        private readonly IScheduler _scheduler;
+        private readonly ISchedulerProvider _scheduler;
 
-        public ViewService(ILog log, IUnityContainer container, IScheduler scheduler)
+        public ViewService(ILog log, IUnityContainer container, ISchedulerProvider scheduler)
         {
             _log = log;
             _container = container;
@@ -48,7 +49,7 @@ namespace Naru.WPF.MVVM
 
         public Task ShowModalAsync(IViewModel viewModel)
         {
-            return Task.Factory.StartNew(() => ShowModalInternal(viewModel), _scheduler.Dispatcher);
+            return Task.Factory.StartNew(() => ShowModalInternal(viewModel), _scheduler.TPL.Dispatcher);
         }
 
         private void ShowModalInternal(IViewModel viewModel)

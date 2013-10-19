@@ -50,6 +50,21 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Reactive.Core">
+      <HintPath>..\packages\Rx-Core.2.1.30214.0\lib\Net45\System.Reactive.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.Interfaces">
+      <HintPath>..\packages\Rx-Interfaces.2.1.30214.0\lib\Net45\System.Reactive.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.Linq">
+      <HintPath>..\packages\Rx-Linq.2.1.30214.0\lib\Net45\System.Reactive.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.PlatformServices">
+      <HintPath>..\packages\Rx-PlatformServices.2.1.30214.0\lib\Net45\System.Reactive.PlatformServices.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.Windows.Threading">
+      <HintPath>..\packages\Rx-XAML.2.1.30214.0\lib\Net45\System.Reactive.Windows.Threading.dll</HintPath>
+    </Reference>
     <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -65,62 +80,72 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bootstrapper.cs" />
-    <Compile Include="MVVM\DelegateCommand.cs" />
-    <Compile Include="MVVM\NotifyPropertyChanged.cs" />
-    <Compile Include="MVVM\PropertyExtensions.cs" />
-    <Compile Include="Scheduler\DesktopScheduler.cs" />
+    <Compile Include="Command\DelegateCommand.cs" />
+    <Compile Include="Command\ObservableCommand.cs" />
+    <Compile Include="Scheduler\IDispatcherService.cs" />
+    <Compile Include="Scheduler\IRXSchedulerProvider.cs" />
+    <Compile Include="Scheduler\ISchedulerProvider.cs" />
+    <Compile Include="Scheduler\ITPLSchedulerProvider.cs" />
+    <Compile Include="Scheduler\TPLSchedulerProvider.cs" />
+    <Compile Include="ViewModel\IReactiveMultiSelect.cs" />
+    <Compile Include="ViewModel\IReactiveSingleSelect.cs" />
+    <Compile Include="ViewModel\NotifyPropertyChanged.cs" />
+    <Compile Include="ViewModel\PropertyExtensions.cs" />
+    <Compile Include="Scheduler\SchedulerProvider.cs" />
     <Compile Include="Scheduler\DispatcherTaskScheduler.cs" />
-    <Compile Include="Scheduler\DispatcherTaskSchedulerBase.cs" />
-    <Compile Include="Scheduler\IScheduler.cs" />
+    <Compile Include="Scheduler\DispatcherService.cs" />
+    <Compile Include="Scheduler\RxSchedulerProvider.cs" />
     <Compile Include="MVVM\BindableCollection.cs" />
     <Compile Include="MVVM\BindableCollectionFactory.cs" />
-    <Compile Include="MVVM\BooleanToVisibilityConverter.cs" />
-    <Compile Include="MVVM\BusyViewModel.cs" />
-    <Compile Include="MVVM\CompositeDisposable.cs" />
+    <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
+    <Compile Include="ViewModel\BusyViewModel.cs" />
+    <Compile Include="Core\CompositeDisposable.cs" />
     <Compile Include="MVVM\ContentControlViewResolverBehavior.cs" />
-    <Compile Include="MVVM\Dialog\Answer.cs" />
-    <Compile Include="MVVM\Dialog\DialogBuilder.cs" />
-    <Compile Include="MVVM\Dialog\DialogItemViewModel.cs" />
-    <Compile Include="MVVM\Dialog\DialogType.cs" />
-    <Compile Include="MVVM\Dialog\DialogView.xaml.cs">
+    <Compile Include="Dialog\Answer.cs" />
+    <Compile Include="Dialog\DialogBuilder.cs" />
+    <Compile Include="Dialog\DialogItemViewModel.cs" />
+    <Compile Include="Dialog\DialogType.cs" />
+    <Compile Include="Dialog\DialogView.xaml.cs">
       <DependentUpon>DialogView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MVVM\Dialog\DialogViewModel.cs" />
-    <Compile Include="MVVM\Dialog\IDialogBuilder.cs" />
-    <Compile Include="MVVM\Dialog\IStandardDialogBuilder.cs" />
-    <Compile Include="MVVM\Dialog\StandardDialogBuilder.cs" />
+    <Compile Include="Dialog\DialogViewModel.cs" />
+    <Compile Include="Dialog\IDialogBuilder.cs" />
+    <Compile Include="Dialog\IStandardDialogBuilder.cs" />
+    <Compile Include="Dialog\StandardDialogBuilder.cs" />
     <Compile Include="MVVM\HeaderView.xaml.cs">
       <DependentUpon>HeaderView.xaml</DependentUpon>
     </Compile>
     <Compile Include="MVVM\HeaderViewModel.cs" />
     <Compile Include="MVVM\InitialisationBehavior.cs" />
-    <Compile Include="MVVM\ISupportInitialisation.cs" />
-    <Compile Include="MVVM\IService.cs" />
-    <Compile Include="MVVM\ISupportActivationState.cs" />
-    <Compile Include="MVVM\ISupportBusy.cs" />
-    <Compile Include="MVVM\ISupportClosing.cs" />
-    <Compile Include="MVVM\ISupportHeader.cs" />
-    <Compile Include="MVVM\ISupportVisibility.cs" />
-    <Compile Include="MVVM\IViewModel.cs" />
+    <Compile Include="ViewModel\ISupportInitialisation.cs" />
+    <Compile Include="ViewModel\IService.cs" />
+    <Compile Include="ViewModel\ISupportActivationState.cs" />
+    <Compile Include="ViewModel\ISupportBusy.cs" />
+    <Compile Include="ViewModel\ISupportClosing.cs" />
+    <Compile Include="ViewModel\ISupportHeader.cs" />
+    <Compile Include="ViewModel\ISupportVisibility.cs" />
+    <Compile Include="ViewModel\IViewModel.cs" />
     <Compile Include="MVVM\IViewService.cs" />
-    <Compile Include="MVVM\Menu\IMenuItem.cs" />
-    <Compile Include="MVVM\Menu\IMenuService.cs" />
-    <Compile Include="MVVM\Menu\MenuButtonItem.cs" />
-    <Compile Include="MVVM\Menu\MenuGroupItem.cs" />
-    <Compile Include="MVVM\Menu\MenuItemTemplateSelector.cs" />
-    <Compile Include="MVVM\Menu\MenuSeperatorItem.cs" />
-    <Compile Include="MVVM\Menu\MenuService.cs" />
-    <Compile Include="MVVM\Service.cs" />
-    <Compile Include="MVVM\ToolBar\IToolBarItem.cs" />
-    <Compile Include="MVVM\ToolBar\IToolBarService.cs" />
-    <Compile Include="MVVM\ToolBar\ToolBarButtonItem.cs" />
-    <Compile Include="MVVM\ToolBar\ToolBarItemTemplateSelector.cs" />
-    <Compile Include="MVVM\ToolBar\ToolBarService.cs" />
+    <Compile Include="Menu\IMenuItem.cs" />
+    <Compile Include="Menu\IMenuService.cs" />
+    <Compile Include="Menu\MenuButtonItem.cs" />
+    <Compile Include="Menu\MenuGroupItem.cs" />
+    <Compile Include="Menu\MenuItemTemplateSelector.cs" />
+    <Compile Include="Menu\MenuSeperatorItem.cs" />
+    <Compile Include="Menu\MenuService.cs" />
+    <Compile Include="ViewModel\ReactiveMultiSelectCollection.cs" />
+    <Compile Include="ViewModel\ReactiveSingleSelectCollection.cs" />
+    <Compile Include="ViewModel\Service.cs" />
+    <Compile Include="ToolBar\IToolBarItem.cs" />
+    <Compile Include="ToolBar\IToolBarService.cs" />
+    <Compile Include="ToolBar\ToolBarButtonItem.cs" />
+    <Compile Include="ToolBar\ToolBarItemTemplateSelector.cs" />
+    <Compile Include="ToolBar\ToolBarService.cs" />
     <Compile Include="MVVM\UseViewAttribute.cs" />
-    <Compile Include="MVVM\ViewModel.cs" />
-    <Compile Include="MVVM\ViewModelHelpers.cs" />
+    <Compile Include="ViewModel\ViewModel.cs" />
+    <Compile Include="ViewModel\ViewModelHelpers.cs" />
     <Compile Include="MVVM\ViewService.cs" />
-    <Compile Include="MVVM\Workspace.cs" />
+    <Compile Include="ViewModel\Workspace.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -147,10 +172,10 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="MVVM\Dialog\[ReadMe].txt" />
+    <Resource Include="Dialog\[ReadMe].txt" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="MVVM\Dialog\DialogView.xaml">
+    <Page Include="Dialog\DialogView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -158,11 +183,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MVVM\Menu\MenuItemTemplates.xaml">
+    <Page Include="Menu\MenuItemTemplates.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="MVVM\ToolBar\ToolBarItemTemplates.xaml">
+    <Page Include="ToolBar\ToolBarItemTemplates.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

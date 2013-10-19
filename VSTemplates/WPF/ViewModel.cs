@@ -10,10 +10,10 @@ namespace $rootnamespace$.$fileinputname$
 {
     public class $fileinputname$ViewModel : Workspace
     {
-        private I$fileinputname$Service _service;
+        private readonly I$fileinputname$Service _service;
 
-        public $fileinputname$ViewModel(ILog log, IDispatcherService dispatcherService, I$fileinputname$Service service)
-            : base(log, dispatcherService)
+        public $fileinputname$ViewModel(ILog log, IScheduler scheduler, IViewService viewService, IDataSourceSelectorService service)
+            : base(log, scheduler, viewService)
         {
             _service = service;
 

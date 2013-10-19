@@ -11,9 +11,9 @@ namespace Naru.WPF.MVVM
 {
     public class BindableCollection<T> : ObservableCollection<T>
     {
-        private readonly IScheduler _scheduler;
+        private readonly ISchedulerProvider _scheduler;
 
-        public BindableCollection(IScheduler scheduler)
+        public BindableCollection(ISchedulerProvider scheduler)
         {
             _scheduler = scheduler;
             IsNotifying = true;
@@ -34,7 +34,7 @@ namespace Naru.WPF.MVVM
 
         public Task RefreshAsync()
         {
-            return Task.Factory.StartNew(RefreshInternal, _scheduler.Dispatcher);
+            return Task.Factory.StartNew(RefreshInternal, _scheduler.TPL.Dispatcher);
         }
 
         private void RefreshInternal()
@@ -86,7 +86,7 @@ namespace Naru.WPF.MVVM
 
         public Task ClearAsync()
         {
-            return Task.Factory.StartNew(Clear, _scheduler.Dispatcher);
+            return Task.Factory.StartNew(Clear, _scheduler.TPL.Dispatcher);
         }
 
         protected override sealed void ClearItems()
@@ -128,8 +128,8 @@ namespace Naru.WPF.MVVM
         public Task AddRangeAsync(IEnumerable<T> items)
         {
             return Task.Factory
-                .StartNew(() => AddRangeInternal(items), _scheduler.Dispatcher)
-                .SelectMany(() => RefreshAsync(), _scheduler.Dispatcher);
+                .StartNew(() => AddRangeInternal(items), _scheduler.TPL.Dispatcher)
+                .SelectMany(() => RefreshAsync(), _scheduler.TPL.Dispatcher);
         }
 
         private void AddRangeInternal(IEnumerable<T> items)
@@ -158,8 +158,8 @@ namespace Naru.WPF.MVVM
         public Task RemoveRangeAsync(IEnumerable<T> items)
         {
             return Task.Factory
-                .StartNew(() => RemoveRangeInternal(items), _scheduler.Dispatcher)
-                .SelectMany(() => RefreshAsync(), _scheduler.Dispatcher);
+                .StartNew(() => RemoveRangeInternal(items), _scheduler.TPL.Dispatcher)
+                .SelectMany(() => RefreshAsync(), _scheduler.TPL.Dispatcher);
         }
 
         private void RemoveRangeInternal(IEnumerable<T> items)

@@ -1,4 +1,6 @@
-﻿namespace Naru.WPF.MVVM
+﻿using Naru.WPF.ViewModel;
+
+namespace Naru.WPF.MVVM
 {
     public class HeaderViewModel : NotifyPropertyChanged, IViewModel
     {

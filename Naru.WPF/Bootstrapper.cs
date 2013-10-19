@@ -1,11 +1,11 @@
 ﻿using Microsoft.Practices.Unity;
 
 using Naru.Unity;
+using Naru.WPF.Dialog;
+using Naru.WPF.Menu;
 using Naru.WPF.MVVM;
-using Naru.WPF.MVVM.Dialog;
-using Naru.WPF.MVVM.Menu;
-using Naru.WPF.MVVM.ToolBar;
 using Naru.WPF.Scheduler;
+using Naru.WPF.ToolBar;
 
 namespace Naru.WPF
 {
@@ -14,7 +14,7 @@ namespace Naru.WPF
         public static IUnityContainer ConfigureNaruWPF(this IUnityContainer container)
         {
             container
-                .RegisterSingleton<IScheduler, DesktopScheduler>()
+                .RegisterSingleton<ISchedulerProvider, SchedulerProvider>()
                 .RegisterTransient<IViewService, ViewService>()
                 .RegisterType(typeof (IDialogBuilder<>), typeof (DialogBuilder<>))
                 .RegisterTransient<IStandardDialogBuilder, StandardDialogBuilder>()
@@ -22,7 +22,7 @@ namespace Naru.WPF
                 .RegisterSingleton<IMenuService, MenuService>();
 
             // This must be done here, so the correct Dispatcher is created
-            container.Resolve<IScheduler>();
+            container.Resolve<ISchedulerProvider>();
 
             return container;
         }

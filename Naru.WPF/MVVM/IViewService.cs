@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 
-using Naru.WPF.MVVM.Dialog;
+using Naru.WPF.Dialog;
+using Naru.WPF.ViewModel;
 
 namespace Naru.WPF.MVVM
 {

@@ -1,4 +1,5 @@
 ﻿using Naru.WPF.MVVM;
+using Naru.WPF.ViewModel;
 
 namespace Naru.WPF.Prism.Region
 {

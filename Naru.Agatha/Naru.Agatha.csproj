@@ -35,6 +35,9 @@
     <Reference Include="Agatha.Common">
       <HintPath>..\packages\Agatha-Common-Unity.1.3\lib\net40\Agatha.Common.dll</HintPath>
     </Reference>
+    <Reference Include="Agatha.ServiceLayer">
+      <HintPath>..\packages\Agatha-ServiceLayer-Unity.1.3\lib\net40\Agatha.ServiceLayer.dll</HintPath>
+    </Reference>
     <Reference Include="Agatha.Unity">
       <HintPath>..\packages\Agatha-Common-Unity.1.3\lib\net40\Agatha.Unity.dll</HintPath>
     </Reference>
@@ -60,6 +63,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AgathaKnownTypeRegistration.cs" />
+    <Compile Include="Bootstrapper.cs" />
+    <Compile Include="Handler.cs" />
     <Compile Include="IRequestTask.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Request.cs" />
@@ -73,6 +78,10 @@
     <ProjectReference Include="..\Naru.Core\Naru.Core.csproj">
       <Project>{17EA4111-2679-4155-A6E5-FE45E171AC2B}</Project>
       <Name>Naru.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Naru.Unity\Naru.Unity.csproj">
+      <Project>{50893d70-53a5-4435-89da-5705ee16c206}</Project>
+      <Name>Naru.Unity</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
