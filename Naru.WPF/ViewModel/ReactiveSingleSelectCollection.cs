@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reactive.Linq;
 using System.Reactive.Subjects;
 
 using Naru.WPF.MVVM;
@@ -27,7 +28,7 @@ namespace Naru.WPF.ViewModel
             }
         }
 
-        public IObservable<T> SelectedItemChanged { get; private set; }
+        public IObservable<T> SelectedItemChanged { get { return _selectedItemChanged.AsObservable(); } }
 
         #endregion
 

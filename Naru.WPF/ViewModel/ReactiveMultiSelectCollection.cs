@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reactive.Linq;
 using System.Reactive.Subjects;
 
 using Naru.WPF.MVVM;
@@ -30,7 +31,7 @@ namespace Naru.WPF.ViewModel
 
         #endregion
 
-        public IObservable<IEnumerable<T>> SelectedItemsChanged { get { return _selectedItemChanged; } }
+        public IObservable<IEnumerable<T>> SelectedItemsChanged { get { return _selectedItemChanged.AsObservable(); } }
 
         public ReactiveMultiSelectCollection(BindableCollectionFactory bindableCollectionFactory)
         {
