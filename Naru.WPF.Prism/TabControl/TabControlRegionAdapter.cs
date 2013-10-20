@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Specialized;
+using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -123,17 +124,7 @@ namespace Naru.WPF.Prism.TabControl
             if (supportClosing == null) return;
 
             // ViewModel is closed
-            EventHandler supportClosingClosed = null;
-            supportClosingClosed = (s, e) =>
-            {
-                _scheduler.Dispatcher.ExecuteSync(() => tabControl.Items.Remove(tabItem));
-
-                if (supportClosingClosed != null)
-                {
-                    supportClosing.Closed -= supportClosingClosed;
-                }
-            };
-            supportClosing.Closed += supportClosingClosed;
+            supportClosing.ExecuteOnClosed(() => _scheduler.Dispatcher.ExecuteSync(() => tabControl.Items.Remove(tabItem)));
         }
 
         private void ConnectUpActivation(IViewModel viewModel, System.Windows.Controls.TabControl tabControl, TabItem tabItem)
@@ -144,30 +135,15 @@ namespace Naru.WPF.Prism.TabControl
             var supportClosing = viewModel as ISupportClosing;
             if (supportClosing == null) return;
 
-            EventHandler<DataEventArgs<bool>> supportActivationStateActivationStateChanged = null;
-            supportActivationStateActivationStateChanged = (s, e) =>
-            {
-                if (supportActivationState.IsActive)
-                {
-                    _scheduler.Dispatcher.ExecuteSync(() => tabControl.SelectedItem = tabItem);
-                }
-            };
-            supportActivationState.ActivationStateChanged += supportActivationStateActivationStateChanged;
-
-            EventHandler supportClosingClosed = null;
-            supportClosingClosed = (s, e) =>
-            {
-                if (supportActivationStateActivationStateChanged != null)
-                {
-                    supportActivationState.ActivationStateChanged -= supportActivationStateActivationStateChanged;
-                }
-
-                if (supportClosingClosed != null)
-                {
-                    supportClosing.Closed -= supportClosingClosed;
-                }
-            };
-            supportClosing.Closed += supportClosingClosed;
+            supportActivationState.ActivationStateChanged
+                                  .TakeUntil(supportClosing.Closed)
+                                  .Subscribe(x =>
+                                  {
+                                      if (supportActivationState.IsActive)
+                                      {
+                                          _scheduler.Dispatcher.ExecuteSync(() => tabControl.SelectedItem = tabItem);
+                                      }
+                                  });
         }
 
         private void ConnectUpVisibility(IViewModel viewModel, TabItem tabItem)
@@ -182,27 +158,15 @@ namespace Naru.WPF.Prism.TabControl
                     ? Visibility.Visible
                     : Visibility.Collapsed);
 
-            EventHandler<DataEventArgs<bool>> supportVisibilityIsVisibleChanged = null;
-            supportVisibilityIsVisibleChanged = (s, e) =>
-                _scheduler.Dispatcher.ExecuteSync(() => tabItem.Visibility = supportVisibility.IsVisible
-                    ? Visibility.Visible
-                    : Visibility.Collapsed);
-            supportVisibility.IsVisibleChanged += supportVisibilityIsVisibleChanged;
-
-            EventHandler supportClosingClosed = null;
-            supportClosingClosed = (s, e) =>
-            {
-                if (supportVisibilityIsVisibleChanged != null)
-                {
-                    supportVisibility.IsVisibleChanged -= supportVisibilityIsVisibleChanged;
-                }
-
-                if (supportClosingClosed != null)
-                {
-                    supportClosing.Closed -= supportClosingClosed;
-                }
-            };
-            supportClosing.Closed += supportClosingClosed;
+            supportVisibility.IsVisibleChanged
+                             .TakeUntil(supportClosing.Closed)
+                             .Subscribe(x =>
+                             {
+                                 _scheduler.Dispatcher.ExecuteSync(
+                                     () => tabItem.Visibility = supportVisibility.IsVisible
+                                         ? Visibility.Visible
+                                         : Visibility.Collapsed);
+                             });
         }
 
         private static void SetupHeader(IViewModel viewModel, TabItem tabItem)

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Threading.Tasks;
 
 using Common.Logging;
@@ -10,6 +12,8 @@ using Naru.WPF.Core;
 using Naru.WPF.MVVM;
 using Naru.WPF.Scheduler;
 
+using Unit = System.Reactive.Unit;
+
 namespace Naru.WPF.ViewModel
 {
     public abstract class Workspace : ViewModel, ISupportClosing, ISupportActivationState, ISupportVisibility, ISupportHeader, ISupportInitialisation
@@ -17,6 +21,10 @@ namespace Naru.WPF.ViewModel
         protected readonly ISchedulerProvider Scheduler;
         protected readonly IViewService ViewService;
         protected readonly CompositeDisposable Disposables;
+
+        private readonly Subject<bool> _activationStateChanged = new Subject<bool>();
+        private readonly Subject<Unit> _closed = new Subject<Unit>();
+        private readonly Subject<bool> _isVisibleChanged = new Subject<bool>();
 
         public BusyViewModel BusyViewModel { get; private set; }
 
@@ -54,10 +62,10 @@ namespace Naru.WPF.ViewModel
 
             CleanUp();
 
-            Closed.SafeInvoke(this);
+            _closed.OnNext(Unit.Default);
         }
 
-        public event EventHandler Closed;
+        public IObservable<Unit> Closed { get { return _closed.AsObservable(); } }
 
         protected virtual void Closing()
         { }
@@ -82,7 +90,7 @@ namespace Naru.WPF.ViewModel
             IsActive = true;
             Log.Debug(string.Format("Active value - {0}", IsActive));
 
-            ActivationStateChanged.SafeInvoke(this, new DataEventArgs<bool>(IsActive));
+            _activationStateChanged.OnNext(IsActive);
 
             OnActivate();
 
@@ -112,12 +120,12 @@ namespace Naru.WPF.ViewModel
             Log.Debug(string.Format("DeActivate called on {0} - {1}", GetType().FullName, Header));
             Log.Debug(string.Format("DeActivate value - {0}", IsActive));
 
-            ActivationStateChanged.SafeInvoke(this, new DataEventArgs<bool>(IsActive));
+            _activationStateChanged.OnNext(IsActive);
 
             OnDeActivate();
         }
 
-        public event EventHandler<DataEventArgs<bool>>  ActivationStateChanged;
+        public IObservable<bool> ActivationStateChanged{get { return _activationStateChanged.AsObservable(); }}
 
         public event EventHandler Initialised;
 
@@ -149,7 +157,7 @@ namespace Naru.WPF.ViewModel
                 _isVisible = value;
                 RaisePropertyChanged(() => IsVisible);
 
-                IsVisibleChanged.SafeInvoke(this, new DataEventArgs<bool>(IsVisible));
+                _isVisibleChanged.OnNext(IsVisible);
             }
         }
 
@@ -165,7 +173,7 @@ namespace Naru.WPF.ViewModel
             IsVisible = false;
         }
 
-        public event EventHandler<DataEventArgs<bool>> IsVisibleChanged;
+        public IObservable<bool> IsVisibleChanged{get { return _isVisibleChanged.AsObservable(); }}
 
         #endregion
 

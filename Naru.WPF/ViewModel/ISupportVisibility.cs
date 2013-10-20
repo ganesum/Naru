@@ -1,7 +1,5 @@
 ﻿using System;
 
-using Naru.Core;
-
 namespace Naru.WPF.ViewModel
 {
     public interface ISupportVisibility
@@ -12,6 +10,6 @@ namespace Naru.WPF.ViewModel
 
         void Hide();
 
-        event EventHandler<DataEventArgs<bool>> IsVisibleChanged;
+        IObservable<bool> IsVisibleChanged { get; }
     }
 }

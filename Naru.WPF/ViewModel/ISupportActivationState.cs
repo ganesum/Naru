@@ -1,7 +1,5 @@
 ﻿using System;
 
-using Naru.Core;
-
 namespace Naru.WPF.ViewModel
 {
     public interface ISupportActivationState
@@ -12,7 +10,7 @@ namespace Naru.WPF.ViewModel
 
         void DeActivate();
 
-        event EventHandler<DataEventArgs<bool>>  ActivationStateChanged;
+        IObservable<bool> ActivationStateChanged { get; }
 
         event EventHandler Initialised;
     }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reactive;
 
 namespace Naru.WPF.ViewModel
 {
@@ -8,6 +9,6 @@ namespace Naru.WPF.ViewModel
 
         void Close();
 
-        event EventHandler Closed;
+        IObservable<Unit> Closed { get; }
     }
 }

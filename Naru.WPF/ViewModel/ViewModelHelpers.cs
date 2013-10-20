@@ -1,6 +1,5 @@
 ﻿using System;
 
-using Naru.Core;
 using Naru.WPF.MVVM;
 using Naru.WPF.ToolBar;
 
@@ -21,28 +20,24 @@ namespace Naru.WPF.ViewModel
 
         public static IDisposable SyncViewModelActivationStates(this ISupportActivationState source, ISupportActivationState viewModel)
         {
-            EventHandler<DataEventArgs<bool>> sourceOnActivationStateChanged = (s, e) =>
-            {
-                if (e.Value)
-                    viewModel.Activate();
-                else
-                    viewModel.DeActivate();
-            };
-            source.ActivationStateChanged += sourceOnActivationStateChanged;
-
-            return AnonymousDisposable.Create(() => source.ActivationStateChanged -= sourceOnActivationStateChanged);
+            return source.ActivationStateChanged
+                         .Subscribe(x =>
+                         {
+                             if (x)
+                                 viewModel.Activate();
+                             else
+                                 viewModel.DeActivate();
+                         });
         }
 
         public static IDisposable SyncViewModelDeActivation(this ISupportActivationState source, ISupportActivationState viewModel)
         {
-            EventHandler<DataEventArgs<bool>> sourceOnActivationStateChanged = (s, e) =>
-            {
-                if (!e.Value)
-                    viewModel.DeActivate();
-            };
-            source.ActivationStateChanged += sourceOnActivationStateChanged;
-
-            return AnonymousDisposable.Create(() => source.ActivationStateChanged -= sourceOnActivationStateChanged);
+            return source.ActivationStateChanged
+                         .Subscribe(x =>
+                         {
+                             if (!x)
+                                 viewModel.DeActivate();
+                         });
         }
 
         public static IDisposable SyncToolBarItemWithViewModelActivationState(this ISupportActivationState source, params IToolBarItem[] toolBarItems)
@@ -52,16 +47,45 @@ namespace Naru.WPF.ViewModel
                 toolBarItem.IsVisible = source.IsActive;
             }
 
-            EventHandler<DataEventArgs<bool>> sourceOnActivationStateChanged = (s, e) =>
-            {
-                foreach (var toolBarItem in toolBarItems)
-                {
-                    toolBarItem.IsVisible = e.Value;
-                }
-            };
-            source.ActivationStateChanged += sourceOnActivationStateChanged;
+            return source.ActivationStateChanged
+                         .Subscribe(x =>
+                         {
+                             foreach (var toolBarItem in toolBarItems)
+                             {
+                                 toolBarItem.IsVisible = x;
+                             }
+                         });
+        }
 
-            return AnonymousDisposable.Create(() => source.ActivationStateChanged -= sourceOnActivationStateChanged);
+        public static IDisposable SyncViewModelBusy(this ISupportBusy destination, ISupportBusy source)
+        {
+            return source.IsActiveChanged
+                         .Subscribe(x =>
+                         {
+                             if (x)
+                             {
+                                 destination.Active(source.Message);
+                             }
+                             else
+                             {
+                                 destination.InActive();
+                             }
+                         });
+        }
+
+        public static void ExecuteOnClosed(this ISupportClosing source, Action action)
+        {
+            IDisposable supportClosingClosed = null;
+            supportClosingClosed = source.Closed
+                                         .Subscribe(x =>
+                                         {
+                                             action();
+
+                                             if (supportClosingClosed != null)
+                                             {
+                                                 supportClosingClosed.Dispose();
+                                             }
+                                         });
         }
     }
 }

@@ -111,20 +111,13 @@ namespace Naru.WPF.MVVM
             };
             window.Loaded += windowOnLoaded;
 
-            EventHandler supportClosingOnClosed = null;
-            supportClosingOnClosed = (s, e) =>
+            supportClosing.ExecuteOnClosed(() =>
             {
                 if (windowOnLoaded != null)
                 {
                     window.Loaded -= windowOnLoaded;
                 }
-
-                if (supportClosingOnClosed != null)
-                {
-                    supportClosing.Closed -= supportClosingOnClosed;
-                }
-            };
-            supportClosing.Closed += supportClosingOnClosed;
+            });
         }
 
         private void ConnectUpClosing(IViewModel viewModel, Window window)
@@ -133,17 +126,7 @@ namespace Naru.WPF.MVVM
             if (supportClosing == null) return;
 
             // ViewModel is closed
-            EventHandler supportClosingOnClosed = null;
-            supportClosingOnClosed = (s, e) =>
-            {
-                _scheduler.Dispatcher.ExecuteSync(window.Close);
-
-                if (supportClosingOnClosed != null)
-                {
-                    supportClosing.Closed -= supportClosingOnClosed;
-                }
-            };
-            supportClosing.Closed += supportClosingOnClosed;
+            supportClosing.ExecuteOnClosed(() => _scheduler.Dispatcher.ExecuteSync(window.Close));
 
             // Window is closed
             EventHandler windowOnClosed = null;

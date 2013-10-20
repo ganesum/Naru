@@ -1,21 +1,15 @@
-﻿using System.Threading.Tasks;
-
-using Naru.TPL;
+﻿using System;
 
 namespace Naru.WPF.ViewModel
 {
     public interface ISupportBusy
     {
-        bool IsActive { get; }
+        IObservable<bool> IsActiveChanged { get; }
 
         string Message { get; }
 
         void Active(string message);
 
         void InActive();
-
-        Task<Unit> ActiveAsync(string message);
-
-        Task<Unit> InActiveAsync();
     }
 }
