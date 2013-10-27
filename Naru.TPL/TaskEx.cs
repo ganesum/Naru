@@ -261,7 +261,7 @@ namespace Naru.TPL
                 {
                     try
                     {
-                        next().SelectMany(() => tcs.TrySetResult(first.Result));
+                        next().Then(() => tcs.TrySetResult(first.Result));
                     }
                     catch (Exception exc)
                     {
@@ -293,7 +293,7 @@ namespace Naru.TPL
                 {
                     try
                     {
-                        next(first.Result).SelectMany(() => tcs.TrySetResult(first.Result));
+                        next(first.Result).Then(() => tcs.TrySetResult(first.Result));
                     }
                     catch (Exception exc)
                     {
@@ -567,7 +567,7 @@ namespace Naru.TPL
             return source.ContinueWith(t => selector(), TaskContinuationOptions.NotOnCanceled);
         }
 
-        #region SelectMany
+        #region Then
 
         /// <summary>
         /// When first completes, pass the results to next.
@@ -578,7 +578,7 @@ namespace Naru.TPL
         /// <param name="first"></param>
         /// <param name="next"></param>
         /// <returns></returns>
-        public static Task<T2> SelectMany<T1, T2>(this Task<T1> first, Func<T1, Task<T2>> next)
+        public static Task<T2> Then<T1, T2>(this Task<T1> first, Func<T1, Task<T2>> next)
         {
             // http://blogs.msdn.com/b/pfxteam/archive/2010/11/21/10094564.aspx?Redirected=true
 
@@ -643,7 +643,7 @@ namespace Naru.TPL
         /// <param name="first"></param>
         /// <param name="next"></param>
         /// <returns></returns>
-        public static Task<T2> SelectMany<T1, T2>(this Task<T1> first, Func<T1, Task<T2>> next, TaskScheduler scheduler)
+        public static Task<T2> Then<T1, T2>(this Task<T1> first, Func<T1, Task<T2>> next, TaskScheduler scheduler)
         {
             // http://blogs.msdn.com/b/pfxteam/archive/2010/11/21/10094564.aspx?Redirected=true
 
@@ -707,7 +707,7 @@ namespace Naru.TPL
         /// <param name="first"></param>
         /// <param name="next"></param>
         /// <returns></returns>
-        public static Task<T1> SelectMany<T1>(this Task first, Func<Task<T1>> next)
+        public static Task<T1> Then<T1>(this Task first, Func<Task<T1>> next)
         {
             // http://blogs.msdn.com/b/pfxteam/archive/2010/11/21/10094564.aspx?Redirected=true
 
@@ -771,7 +771,7 @@ namespace Naru.TPL
         /// <param name="first"></param>
         /// <param name="next"></param>
         /// <returns></returns>
-        public static Task<T1> SelectMany<T1>(this Task first, Func<Task<T1>> next, TaskScheduler scheduler)
+        public static Task<T1> Then<T1>(this Task first, Func<Task<T1>> next, TaskScheduler scheduler)
         {
             // http://blogs.msdn.com/b/pfxteam/archive/2010/11/21/10094564.aspx?Redirected=true
 
@@ -835,7 +835,7 @@ namespace Naru.TPL
         /// <param name="first"></param>
         /// <param name="next"></param>
         /// <returns></returns>
-        public static Task SelectMany<T1>(this Task<T1> first, Func<T1, Task> next)
+        public static Task Then<T1>(this Task<T1> first, Func<T1, Task> next)
         {
             // http://blogs.msdn.com/b/pfxteam/archive/2010/11/21/10094564.aspx?Redirected=true
 
@@ -898,7 +898,7 @@ namespace Naru.TPL
         /// <param name="first"></param>
         /// <param name="next"></param>
         /// <returns></returns>
-        public static Task SelectMany<T1>(this Task<T1> first, Func<T1, Task> next, TaskScheduler scheduler)
+        public static Task Then<T1>(this Task<T1> first, Func<T1, Task> next, TaskScheduler scheduler)
         {
             // http://blogs.msdn.com/b/pfxteam/archive/2010/11/21/10094564.aspx?Redirected=true
 
@@ -962,7 +962,7 @@ namespace Naru.TPL
         /// <param name="first"></param>
         /// <param name="next"></param>
         /// <returns></returns>
-        public static Task SelectMany<T1>(this Task<T1> first, Action<T1> next)
+        public static Task Then<T1>(this Task<T1> first, Action<T1> next)
         {
             if (first == null) throw new ArgumentNullException("first");
             if (next == null) throw new ArgumentNullException("next");
@@ -1001,10 +1001,53 @@ namespace Naru.TPL
         /// next is only called if first completed successfully.
         /// </summary>
         /// <typeparam name="T1"></typeparam>
+        /// <typeparam name="T2"></typeparam>
         /// <param name="first"></param>
         /// <param name="next"></param>
         /// <returns></returns>
-        public static Task SelectMany<T1>(this Task<T1> first, Action<T1> next, TaskScheduler scheduler)
+        public static Task<T2> Then<T1, T2>(this Task<T1> first, Func<T1, T2> next, TaskScheduler scheduler)
+        {
+            if (first == null) throw new ArgumentNullException("first");
+            if (next == null) throw new ArgumentNullException("next");
+
+            var tcs = new TaskCompletionSource<T2>();
+            first.ContinueWith(_ =>
+            {
+                if (first.IsFaulted)
+                {
+                    tcs.TrySetException(first.Exception.InnerExceptions);
+                }
+                else if (first.IsCanceled)
+                {
+                    tcs.TrySetCanceled();
+                }
+                else
+                {
+                    try
+                    {
+                        var result = next(first.Result);
+
+                        tcs.TrySetResult(result);
+                    }
+                    catch (Exception exc)
+                    {
+                        tcs.TrySetException(exc);
+                    }
+                }
+            }, CancellationToken.None, TaskContinuationOptions.ExecuteSynchronously, scheduler);
+
+            return tcs.Task;
+        }
+
+        /// <summary>
+        /// Execute an Action, Task completes when it is finished.
+        /// next is only called if first completed successfully.
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <param name="first"></param>
+        /// <param name="next"></param>
+        /// <returns></returns>
+        public static Task Then<T1>(this Task<T1> first, Action<T1> next, TaskScheduler scheduler)
         {
             if (first == null) throw new ArgumentNullException("first");
             if (next == null) throw new ArgumentNullException("next");
@@ -1044,7 +1087,7 @@ namespace Naru.TPL
         /// <param name="first"></param>
         /// <param name="next"></param>
         /// <returns></returns>
-        public static Task SelectMany(this Task first, Action next)
+        public static Task Then(this Task first, Action next)
         {
             if (first == null) throw new ArgumentNullException("first");
             if (next == null) throw new ArgumentNullException("next");
@@ -1084,7 +1127,7 @@ namespace Naru.TPL
         /// <param name="first"></param>
         /// <param name="next"></param>
         /// <returns></returns>
-        public static Task SelectMany(this Task first, Action next, TaskScheduler scheduler)
+        public static Task Then(this Task first, Action next, TaskScheduler scheduler)
         {
             if (first == null) throw new ArgumentNullException("first");
             if (next == null) throw new ArgumentNullException("next");
@@ -1126,7 +1169,7 @@ namespace Naru.TPL
         /// <param name="next"></param>
         /// <param name="scheduler"></param>
         /// <returns></returns>
-        public static Task SelectMany(this Task first, Func<Task> next)
+        public static Task Then(this Task first, Func<Task> next)
         {
             // http://blogs.msdn.com/b/pfxteam/archive/2010/11/21/10094564.aspx?Redirected=true
 
@@ -1170,7 +1213,7 @@ namespace Naru.TPL
         /// <param name="next"></param>
         /// <param name="scheduler"></param>
         /// <returns></returns>
-        public static Task SelectMany(this Task first, Func<Task> next, TaskScheduler scheduler)
+        public static Task Then(this Task first, Func<Task> next, TaskScheduler scheduler)
         {
             // http://blogs.msdn.com/b/pfxteam/archive/2010/11/21/10094564.aspx?Redirected=true
 

@@ -82,6 +82,11 @@
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="Command\DelegateCommand.cs" />
     <Compile Include="Command\ObservableCommand.cs" />
+    <Compile Include="ContextMenu\ContextMenuGroupItem.cs" />
+    <Compile Include="ContextMenu\ContextMenuButtonItem.cs" />
+    <Compile Include="ContextMenu\ContextMenuItemTemplateSelector.cs" />
+    <Compile Include="ContextMenu\ContextMenuSeperatorItem.cs" />
+    <Compile Include="ContextMenu\IContextMenuItem.cs" />
     <Compile Include="Scheduler\IDispatcherService.cs" />
     <Compile Include="Scheduler\IRXSchedulerProvider.cs" />
     <Compile Include="Scheduler\ISchedulerProvider.cs" />
@@ -175,6 +180,10 @@
     <Resource Include="Dialog\[ReadMe].txt" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="ContextMenu\ContextMenuItemTemplates.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Dialog\DialogView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

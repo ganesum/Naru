@@ -161,7 +161,7 @@ namespace Naru.WPF.Tests.Scheduler
 
                     return 0;
                 }, taskScheduler)
-                .SelectMany(_ =>
+                .Then(_ =>
                 {
                     Assert.That(task1HasRun, Is.True);
                     Assert.That(task2HasRun, Is.False);
@@ -198,7 +198,7 @@ namespace Naru.WPF.Tests.Scheduler
 
                     return 0;
                 }, taskScheduler)
-                .SelectMany(() =>
+                .Then(() =>
                 {
                     Assert.That(task1HasRun, Is.True);
                     Assert.That(task2HasRun, Is.False);
@@ -235,7 +235,7 @@ namespace Naru.WPF.Tests.Scheduler
 
                     return 0;
                 }, taskScheduler)
-                .SelectMany(_ =>
+                .Then(_ =>
                 {
                     Assert.That(task1HasRun, Is.True);
                     Assert.That(task2HasRun, Is.False);
@@ -272,7 +272,7 @@ namespace Naru.WPF.Tests.Scheduler
 
                     return 0;
                 }, taskScheduler)
-                .SelectMany(_ =>
+                .Then(_ =>
                 {
                     Assert.That(task1HasRun, Is.True);
                     Assert.That(task2HasRun, Is.False);
@@ -305,7 +305,7 @@ namespace Naru.WPF.Tests.Scheduler
 
                     task1HasRun = true;
                 }, taskScheduler)
-                .SelectMany(() =>
+                .Then(() =>
                 {
                     Assert.That(task1HasRun, Is.True);
                     Assert.That(task2HasRun, Is.False);
@@ -338,7 +338,7 @@ namespace Naru.WPF.Tests.Scheduler
 
                     task1HasRun = true;
                 }, taskScheduler)
-                .SelectMany(() =>
+                .Then(() =>
                 {
                     Assert.That(task1HasRun, Is.True);
                     Assert.That(task2HasRun, Is.False);
@@ -374,7 +374,7 @@ namespace Naru.WPF.Tests.Scheduler
 
                     throw new Exception();
                 })
-                .SelectMany(_ =>
+                .Then(_ =>
                 {
                     Assert.That(task2HasRun, Is.False);
 
@@ -409,7 +409,7 @@ namespace Naru.WPF.Tests.Scheduler
 
                     throw new Exception();
                 })
-                .SelectMany(() =>
+                .Then(() =>
                 {
                     Assert.That(task2HasRun, Is.False);
 
@@ -444,7 +444,7 @@ namespace Naru.WPF.Tests.Scheduler
 
                     throw new Exception();
                 })
-                .SelectMany(() =>
+                .Then(() =>
                 {
                     Assert.That(task2HasRun, Is.False);
 
@@ -479,7 +479,7 @@ namespace Naru.WPF.Tests.Scheduler
 
                     throw new Exception();
                 })
-                .SelectMany(_ =>
+                .Then(_ =>
                 {
                     Assert.That(task2HasRun, Is.False);
 
@@ -514,7 +514,7 @@ namespace Naru.WPF.Tests.Scheduler
 
                     throw new Exception();
                 })
-                .SelectMany(_ =>
+                .Then(_ =>
                 {
                     Assert.That(task2HasRun, Is.False);
 
@@ -547,7 +547,7 @@ namespace Naru.WPF.Tests.Scheduler
 
                     throw new Exception();
                 })
-                .SelectMany(() =>
+                .Then(() =>
                 {
                     Assert.That(task2HasRun, Is.False);
 

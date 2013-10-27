@@ -99,7 +99,7 @@ namespace Naru.WPF.ViewModel
             Log.Debug(string.Format("Calling OnInitialise on {0} - {1}", GetType().FullName, Header));
 
             BusyViewModel.ActiveAsync("... Initialising ...")
-                .SelectMany(() =>
+                .Then(() =>
                 {
                     OnInitialise();
 
