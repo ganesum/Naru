@@ -19,7 +19,7 @@ namespace Naru.WPF
 
             // Dialogs
             builder.RegisterGeneric(typeof(DialogBuilder<>)).As(typeof(IDialogBuilder<>)).InstancePerDependency();
-            builder.RegisterType<StandardDialogBuilder>().As<StandardDialogBuilder>().InstancePerDependency();
+            builder.RegisterType<StandardDialogBuilder>().As<IStandardDialogBuilder>().InstancePerDependency();
 
             // ToolBar
             builder.RegisterType<ToolBarService>().As<IToolBarService>().SingleInstance();
