@@ -9,11 +9,11 @@ namespace Naru.WPF.ToolBar
         private readonly Func<ToolBarButtonItem> _toolBarButtonItemFactory;
         public BindableCollection<IToolBarItem> Items { get; private set; }
 
-        public ToolBarService(BindableCollectionFactory bindableCollectionFactory,
+        public ToolBarService(BindableCollection<IToolBarItem> itemsCollection,
                               Func<ToolBarButtonItem> toolBarButtonItemFactory)
         {
             _toolBarButtonItemFactory = toolBarButtonItemFactory;
-            Items = bindableCollectionFactory.Get<IToolBarItem>();
+            Items = itemsCollection;
         }
 
         public ToolBarButtonItem CreateToolBarButtonItem()

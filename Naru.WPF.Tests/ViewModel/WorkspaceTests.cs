@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Common.Logging;
 
 using Naru.Core;
-using Naru.Tests.UnityAutoMockContainer;
+using Naru.Tests;
 using Naru.TPL;
 using Naru.WPF.MVVM;
 using Naru.WPF.Scheduler;
@@ -67,11 +67,11 @@ namespace Naru.WPF.Tests.ViewModel
                 [Test]
                 public void is_called_then_OnClosed_event_is_fired()
                 {
-                    var container = new UnityAutoMockContainer();
+                    var container = AutoMock.GetLoose();
 
                     var eventWasFired = false;
 
-                    var viewModel = container.Resolve<WorkspaceViewModel>();
+                    var viewModel = container.Create<WorkspaceViewModel>();
 
                     Assert.That(eventWasFired, Is.False);
 
@@ -85,11 +85,11 @@ namespace Naru.WPF.Tests.ViewModel
                 [Test]
                 public void is_called_then_Disposables_are_disposed()
                 {
-                    var container = new UnityAutoMockContainer();
+                    var container = AutoMock.GetLoose();
 
                     var eventWasFired = false;
 
-                    var viewModel = container.Resolve<WorkspaceViewModel>();
+                    var viewModel = container.Create<WorkspaceViewModel>();
 
                     Assert.That(eventWasFired, Is.False);
 
@@ -103,11 +103,11 @@ namespace Naru.WPF.Tests.ViewModel
                 [Test]
                 public void is_called_then_CleanUp_is_called()
                 {
-                    var container = new UnityAutoMockContainer();
+                    var container = AutoMock.GetLoose();
 
                     var eventWasFired = false;
 
-                    var viewModel = container.Resolve<WorkspaceViewModel>();
+                    var viewModel = container.Create<WorkspaceViewModel>();
 
                     Assert.That(eventWasFired, Is.False);
 
@@ -122,11 +122,11 @@ namespace Naru.WPF.Tests.ViewModel
             [Test]
             public void when_CloseCommand_is_executed_then_OnClosed_event_is_fired()
             {
-                var container = new UnityAutoMockContainer();
+                var container = AutoMock.GetLoose();
 
                 var eventWasFired = false;
 
-                var viewModel = container.Resolve<WorkspaceViewModel>();
+                var viewModel = container.Create<WorkspaceViewModel>();
 
                 Assert.That(eventWasFired, Is.False);
 
@@ -146,12 +146,12 @@ namespace Naru.WPF.Tests.ViewModel
                 [Test]
                 public void is_called_multiple_time_then_OnInitialise_is_only_called_once()
                 {
-                    var container = new UnityAutoMockContainer();
+                    var container = AutoMock.GetLoose();
 
                     var eventWasFired = 0;
 
-                    container.RegisterInstance<ISchedulerProvider>(new TestSchedulerProvider());
-                    var viewModel = container.Resolve<WorkspaceViewModel>();
+                    container.Provide<ISchedulerProvider>(new TestSchedulerProvider());
+                    var viewModel = container.Create<WorkspaceViewModel>();
 
                     Assert.That(eventWasFired, Is.EqualTo(0));
 
@@ -167,12 +167,12 @@ namespace Naru.WPF.Tests.ViewModel
                 [Test]
                 public void is_called_multiple_time_then_OnInitialised_event_is_only_fired_once()
                 {
-                    var container = new UnityAutoMockContainer();
+                    var container = AutoMock.GetLoose();
 
                     var eventWasFired = 0;
 
-                    container.RegisterInstance<ISchedulerProvider>(new TestSchedulerProvider());
-                    var viewModel = container.Resolve<WorkspaceViewModel>();
+                    container.Provide<ISchedulerProvider>(new TestSchedulerProvider());
+                    var viewModel = container.Create<WorkspaceViewModel>();
 
                     Assert.That(eventWasFired, Is.EqualTo(0));
 
@@ -188,10 +188,10 @@ namespace Naru.WPF.Tests.ViewModel
                 [Test]
                 public void is_called_then_IsActive_is_true()
                 {
-                    var container = new UnityAutoMockContainer();
+                    var container = AutoMock.GetLoose();
 
-                    container.RegisterInstance<ISchedulerProvider>(new TestSchedulerProvider());
-                    var viewModel = container.Resolve<WorkspaceViewModel>();
+                    container.Provide<ISchedulerProvider>(new TestSchedulerProvider());
+                    var viewModel = container.Create<WorkspaceViewModel>();
 
                     Assert.That(viewModel.IsActive, Is.False);
 
@@ -203,12 +203,12 @@ namespace Naru.WPF.Tests.ViewModel
                 [Test]
                 public void is_called_then_OnActivationStateChanged_event_is_fired()
                 {
-                    var container = new UnityAutoMockContainer();
+                    var container = AutoMock.GetLoose();
 
                     var eventWasFired = false;
 
-                    container.RegisterInstance<ISchedulerProvider>(new TestSchedulerProvider());
-                    var viewModel = container.Resolve<WorkspaceViewModel>();
+                    container.Provide<ISchedulerProvider>(new TestSchedulerProvider());
+                    var viewModel = container.Create<WorkspaceViewModel>();
 
                     Assert.That(eventWasFired, Is.False);
 
@@ -223,12 +223,12 @@ namespace Naru.WPF.Tests.ViewModel
                 [Test]
                 public void is_called_then_OnActivate_is_called()
                 {
-                    var container = new UnityAutoMockContainer();
+                    var container = AutoMock.GetLoose();
 
                     var eventWasFired = false;
 
-                    container.RegisterInstance<ISchedulerProvider>(new TestSchedulerProvider());
-                    var viewModel = container.Resolve<WorkspaceViewModel>();
+                    container.Provide<ISchedulerProvider>(new TestSchedulerProvider());
+                    var viewModel = container.Create<WorkspaceViewModel>();
 
                     Assert.That(eventWasFired, Is.False);
 
@@ -246,10 +246,10 @@ namespace Naru.WPF.Tests.ViewModel
                 [Test]
                 public void is_called_then_IsActive_is_false()
                 {
-                    var container = new UnityAutoMockContainer();
+                    var container = AutoMock.GetLoose();
 
-                    container.RegisterInstance<ISchedulerProvider>(new TestSchedulerProvider());
-                    var viewModel = container.Resolve<WorkspaceViewModel>();
+                    container.Provide<ISchedulerProvider>(new TestSchedulerProvider());
+                    var viewModel = container.Create<WorkspaceViewModel>();
 
                     Assert.That(viewModel.IsActive, Is.False);
 
@@ -265,12 +265,12 @@ namespace Naru.WPF.Tests.ViewModel
                 [Test]
                 public void is_called_then_OnActivationStateChanged_event_is_fired()
                 {
-                    var container = new UnityAutoMockContainer();
+                    var container = AutoMock.GetLoose();
 
                     var eventWasFired = false;
 
-                    container.RegisterInstance<ISchedulerProvider>(new TestSchedulerProvider());
-                    var viewModel = container.Resolve<WorkspaceViewModel>();
+                    container.Provide<ISchedulerProvider>(new TestSchedulerProvider());
+                    var viewModel = container.Create<WorkspaceViewModel>();
 
                     Assert.That(eventWasFired, Is.False);
 
@@ -285,12 +285,12 @@ namespace Naru.WPF.Tests.ViewModel
                 [Test]
                 public void is_called_then_OnDeActivate_is_called()
                 {
-                    var container = new UnityAutoMockContainer();
+                    var container = AutoMock.GetLoose();
 
                     var eventWasFired = false;
 
-                    container.RegisterInstance<ISchedulerProvider>(new TestSchedulerProvider());
-                    var viewModel = container.Resolve<WorkspaceViewModel>();
+                    container.Provide<ISchedulerProvider>(new TestSchedulerProvider());
+                    var viewModel = container.Create<WorkspaceViewModel>();
 
                     Assert.That(eventWasFired, Is.False);
 

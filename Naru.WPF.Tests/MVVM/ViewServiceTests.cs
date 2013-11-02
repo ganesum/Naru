@@ -3,7 +3,7 @@ using System.Windows.Controls;
 
 using Common.Logging;
 
-using Naru.Tests.UnityAutoMockContainer;
+using Naru.Tests;
 using Naru.WPF.MVVM;
 using Naru.WPF.Scheduler;
 using Naru.WPF.ViewModel;
@@ -42,12 +42,12 @@ namespace Naru.WPF.Tests.MVVM
         [STAThread]
         public void check_viewmodel_is_set_as_the_datacontext_of_the_view()
         {
-            var container = new UnityAutoMockContainer();
+            var container = AutoMock.GetStrict();
 
             var view = new UserControl();
             Assert.That(view.DataContext, Is.Null);
 
-            var viewModel = container.Resolve<StubViewModel>();
+            var viewModel = container.Create<StubViewModel>();
 
             ViewService.BindViewModel(view, viewModel);
 
@@ -58,9 +58,9 @@ namespace Naru.WPF.Tests.MVVM
         [STAThread]
         public void check_that_the_correct_view_is_resolved_from_the_viewmodel_convention()
         {
-            var container = new UnityAutoMockContainer();
+            var container = AutoMock.GetStrict();
 
-            var viewModel = container.Resolve<StubViewModel>();
+            var viewModel = container.Create<StubViewModel>();
 
             var view = ViewService.CreateView(viewModel.GetType());
 
@@ -71,9 +71,9 @@ namespace Naru.WPF.Tests.MVVM
         [STAThread]
         public void check_that_the_correct_view_is_resolved_from_the_viewmodel_UseViewAttribute()
         {
-            var container = new UnityAutoMockContainer();
+            var container = AutoMock.GetStrict();
 
-            var viewModel = container.Resolve<StubViewModelWithUseViewAttribute>();
+            var viewModel = container.Create<StubViewModelWithUseViewAttribute>();
 
             var view = ViewService.CreateView(viewModel.GetType());
 

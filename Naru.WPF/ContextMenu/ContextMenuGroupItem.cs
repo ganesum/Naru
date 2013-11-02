@@ -28,9 +28,9 @@ namespace Naru.WPF.ContextMenu
 
         public BindableCollection<IContextMenuItem> Items { get; private set; }
 
-        public ContextMenuGroupItem(BindableCollectionFactory bindableCollectionFactory)
+        public ContextMenuGroupItem(BindableCollection<IContextMenuItem> itemsCollection)
         {
-            Items = bindableCollectionFactory.Get<IContextMenuItem>();
+            Items = itemsCollection;
 
             IsVisible = true;
         }

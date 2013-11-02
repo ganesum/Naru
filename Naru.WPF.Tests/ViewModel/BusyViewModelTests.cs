@@ -1,6 +1,6 @@
 ﻿using System;
 
-using Naru.Tests.UnityAutoMockContainer;
+using Naru.Tests;
 using Naru.WPF.ViewModel;
 
 using NUnit.Framework;
@@ -15,9 +15,9 @@ namespace Naru.WPF.Tests.ViewModel
             [Test]
             public void is_called_then_IsActive_is_set_to_true()
             {
-                var container = new UnityAutoMockContainer();
+                var container = AutoMock.GetStrict();
 
-                var viewModel = container.Resolve<BusyViewModel>();
+                var viewModel = container.Create<BusyViewModel>();
 
                 Assert.That(viewModel.IsActive, Is.False);
 
@@ -29,9 +29,9 @@ namespace Naru.WPF.Tests.ViewModel
             [Test]
             public void is_called_with_a_message_then_Message_is_set_to_the_message()
             {
-                var container = new UnityAutoMockContainer();
+                var container = AutoMock.GetStrict();
 
-                var viewModel = container.Resolve<BusyViewModel>();
+                var viewModel = container.Create<BusyViewModel>();
 
                 Assert.That(viewModel.Message, Is.Null);
 
@@ -48,9 +48,9 @@ namespace Naru.WPF.Tests.ViewModel
             [Test]
             public void is_called_then_IsActive_is_set_to_false()
             {
-                var container = new UnityAutoMockContainer();
+                var container = AutoMock.GetStrict();
 
-                var viewModel = container.Resolve<BusyViewModel>();
+                var viewModel = container.Create<BusyViewModel>();
                 viewModel.Active(string.Empty);
 
                 Assert.That(viewModel.IsActive, Is.True);
@@ -63,9 +63,9 @@ namespace Naru.WPF.Tests.ViewModel
             [Test]
             public void is_called_then_Message_is_set_to_empty_string()
             {
-                var container = new UnityAutoMockContainer();
+                var container = AutoMock.GetStrict();
 
-                var viewModel = container.Resolve<BusyViewModel>();
+                var viewModel = container.Create<BusyViewModel>();
 
                 var busyMessage = Guid.NewGuid().ToString();
 

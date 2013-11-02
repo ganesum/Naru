@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Windows;
-
+using Autofac;
 using Common.Logging;
-
-using Microsoft.Practices.Unity;
 
 using Naru.TPL;
 using Naru.WPF.Dialog;
@@ -17,29 +15,32 @@ namespace Naru.WPF.MVVM
     public class ViewService : IViewService
     {
         private readonly ILog _log;
-        private readonly IUnityContainer _container;
         private readonly ISchedulerProvider _scheduler;
+        private readonly ILifetimeScope _lifetimeScope;
 
-        public ViewService(ILog log, IUnityContainer container, ISchedulerProvider scheduler)
+        public ViewService(ILog log, ISchedulerProvider scheduler, ILifetimeScope lifetimeScope)
         {
             _log = log;
-            _container = container;
             _scheduler = scheduler;
+            _lifetimeScope = lifetimeScope;
         }
 
+        [Obsolete("Shouldn't be in this class")]
         public IDialogBuilder<Answer> DialogBuilder()
         {
-            return _container.Resolve<IDialogBuilder<Answer>>();
+            return _lifetimeScope.Resolve<IDialogBuilder<Answer>>();
         }
 
+        [Obsolete("Shouldn't be in this class")]
         public IDialogBuilder<T> DialogBuilder<T>()
         {
-            return _container.Resolve<IDialogBuilder<T>>();
+            return _lifetimeScope.Resolve<IDialogBuilder<T>>();
         }
 
+        [Obsolete("Shouldn't be in this class")]
         public IStandardDialogBuilder StandardDialogBuilder()
         {
-            return _container.Resolve<IStandardDialogBuilder>();
+            return _lifetimeScope.Resolve<IStandardDialogBuilder>();
         }
 
         public void ShowModal(IViewModel viewModel)
@@ -156,7 +157,7 @@ namespace Naru.WPF.MVVM
             return view;
         }
 
-        public static TViewModel CreateViewModel<TViewModel>(IUnityContainer container)
+        public static TViewModel CreateViewModel<TViewModel>(ILifetimeScope container)
             where TViewModel : IViewModel
         {
             return container.Resolve<TViewModel>();
@@ -166,11 +167,6 @@ namespace Naru.WPF.MVVM
             where TViewModel : IViewModel
         {
             view.DataContext = viewModel;
-        }
-
-        public static IUnityContainer GetContainer(IUnityContainer container, bool scoped)
-        {
-            return scoped ? container.CreateChildContainer() : container;
         }
     }
 }

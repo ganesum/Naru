@@ -1,6 +1,6 @@
 ﻿using Common.Logging;
 
-using Naru.Tests.UnityAutoMockContainer;
+using Naru.Tests;
 using Naru.WPF.MVVM;
 using Naru.WPF.Scheduler;
 using Naru.WPF.Tests.Scheduler;
@@ -24,14 +24,15 @@ namespace Naru.WPF.Tests.ViewModel
         [Test]
         public void when_parent_is_activated_child_is_activated()
         {
-            var container = new UnityAutoMockContainer();
+            var container = AutoMock.GetLoose();
 
-            container.RegisterInstance<ISchedulerProvider>(new TestSchedulerProvider());
-            var parent = container.Resolve<WorkspaceViewModel>() as ISupportActivationState;
+            container.Provide<ISchedulerProvider>(new TestSchedulerProvider());
+
+            var parent = container.Create<WorkspaceViewModel>() as ISupportActivationState;
             parent.DeActivate();
             Assert.That(parent.IsActive, Is.False);
 
-            var child = container.Resolve<WorkspaceViewModel>() as ISupportActivationState;
+            var child = container.Create<WorkspaceViewModel>() as ISupportActivationState;
             child.DeActivate();
             Assert.That(child.IsActive, Is.False);
 
@@ -46,14 +47,15 @@ namespace Naru.WPF.Tests.ViewModel
         [Test]
         public void when_parent_is_deactivated_child_is_activated()
         {
-            var container = new UnityAutoMockContainer();
+            var container = AutoMock.GetLoose();
 
-            container.RegisterInstance<ISchedulerProvider>(new TestSchedulerProvider());
-            var parent = container.Resolve<WorkspaceViewModel>() as ISupportActivationState;
+            container.Provide<ISchedulerProvider>(new TestSchedulerProvider());
+
+            var parent = container.Create<WorkspaceViewModel>() as ISupportActivationState;
             parent.Activate();
             Assert.That(parent.IsActive, Is.True);
 
-            var child = container.Resolve<WorkspaceViewModel>() as ISupportActivationState;
+            var child = container.Create<WorkspaceViewModel>() as ISupportActivationState;
             child.Activate();
             Assert.That(child.IsActive, Is.True);
 

@@ -28,9 +28,9 @@ namespace Naru.WPF.Menu
 
         public BindableCollection<IMenuItem> Items { get; private set; }
 
-        public MenuGroupItem(BindableCollectionFactory bindableCollectionFactory)
+        public MenuGroupItem(BindableCollection<IMenuItem> itemsCollection)
         {
-            Items = bindableCollectionFactory.Get<IMenuItem>();
+            Items = itemsCollection;
 
             IsVisible = true;
         }

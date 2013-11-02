@@ -12,7 +12,7 @@ namespace Naru.WPF.Menu
 
         public BindableCollection<IMenuItem> Items { get; private set; }
 
-        public MenuService(BindableCollectionFactory bindableCollectionFactory,
+        public MenuService(BindableCollection<IMenuItem> itemsCollection,
                            Func<MenuButtonItem> menuButtonItemFactory,
                            Func<MenuGroupItem> menuGroupItemFactory,
                            Func<MenuSeperatorItem> menuSeperatorItemFactory)
@@ -20,7 +20,7 @@ namespace Naru.WPF.Menu
             _menuButtonItemFactory = menuButtonItemFactory;
             _menuGroupItemFactory = menuGroupItemFactory;
             _menuSeperatorItemFactory = menuSeperatorItemFactory;
-            Items = bindableCollectionFactory.Get<IMenuItem>();
+            Items = itemsCollection;
         }
 
         public MenuButtonItem CreateMenuButtonItem()

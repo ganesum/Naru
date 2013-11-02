@@ -32,9 +32,9 @@ namespace Naru.WPF.ViewModel
 
         #endregion
 
-        public ReactiveSingleSelectCollection(BindableCollectionFactory bindableCollectionFactory)
+        public ReactiveSingleSelectCollection(BindableCollection<T> itemsCollection)
         {
-            Items = bindableCollectionFactory.Get<T>();
+            Items = itemsCollection;
         }
     }
 }

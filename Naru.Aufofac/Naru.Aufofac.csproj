@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{1D9CA7E1-B622-4C2C-B0CC-B317404C8F45}</ProjectGuid>
+    <ProjectGuid>{15981272-C201-438A-AEEF-CE3CACD97179}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Naru.Agatha</RootNamespace>
-    <AssemblyName>Naru.Agatha</AssemblyName>
+    <RootNamespace>Naru.Aufofac</RootNamespace>
+    <AssemblyName>Naru.Aufofac</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
@@ -46,7 +46,6 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -54,28 +53,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AgathaClientModule.cs" />
-    <Compile Include="AgathaKnownTypeRegistration.cs" />
-    <Compile Include="AgathaServerModule.cs" />
-    <Compile Include="Handler.cs" />
-    <Compile Include="IRequestTask.cs" />
+    <Compile Include="Agatha\AutofacExtensions.cs" />
+    <Compile Include="Agatha\Container.cs" />
+    <Compile Include="log4Net\LogInjectionModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Request.cs" />
-    <Compile Include="RequestException.cs" />
-    <Compile Include="RequestTask.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Naru.Aufofac\Naru.Aufofac.csproj">
-      <Project>{15981272-c201-438a-aeef-ce3cacd97179}</Project>
-      <Name>Naru.Aufofac</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Naru.Core\Naru.Core.csproj">
-      <Project>{17EA4111-2679-4155-A6E5-FE45E171AC2B}</Project>
-      <Name>Naru.Core</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

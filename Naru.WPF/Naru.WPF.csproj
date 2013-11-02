@@ -37,16 +37,11 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Autofac">
+      <HintPath>..\packages\Autofac.3.1.5\lib\net40\Autofac.dll</HintPath>
+    </Reference>
     <Reference Include="Common.Logging">
       <HintPath>..\packages\Common.Logging.2.1.2\lib\net40\Common.Logging.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Practices.Unity, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Unity.3.0.1304.1\lib\Net45\Microsoft.Practices.Unity.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Practices.Unity.Configuration, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Unity.3.0.1304.1\lib\Net45\Microsoft.Practices.Unity.Configuration.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -79,7 +74,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Bootstrapper.cs" />
+    <Compile Include="WPFStartable.cs" />
     <Compile Include="Command\DelegateCommand.cs" />
     <Compile Include="Command\ObservableCommand.cs" />
     <Compile Include="ContextMenu\ContextMenuGroupItem.cs" />
@@ -87,11 +82,16 @@
     <Compile Include="ContextMenu\ContextMenuItemTemplateSelector.cs" />
     <Compile Include="ContextMenu\ContextMenuSeperatorItem.cs" />
     <Compile Include="ContextMenu\IContextMenuItem.cs" />
+    <Compile Include="TabControl\TabControlItemSourceBehaviour.cs" />
     <Compile Include="Scheduler\IDispatcherService.cs" />
     <Compile Include="Scheduler\IRXSchedulerProvider.cs" />
     <Compile Include="Scheduler\ISchedulerProvider.cs" />
     <Compile Include="Scheduler\ITPLSchedulerProvider.cs" />
     <Compile Include="Scheduler\TPLSchedulerProvider.cs" />
+    <Compile Include="TabControl\TabControlHeaderView.xaml.cs">
+      <DependentUpon>TabControlHeaderView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="TabControl\TabControlHeaderViewModel.cs" />
     <Compile Include="ViewModel\IReactiveMultiSelect.cs" />
     <Compile Include="ViewModel\IReactiveSingleSelect.cs" />
     <Compile Include="ViewModel\NotifyPropertyChanged.cs" />
@@ -101,7 +101,6 @@
     <Compile Include="Scheduler\DispatcherService.cs" />
     <Compile Include="Scheduler\RxSchedulerProvider.cs" />
     <Compile Include="MVVM\BindableCollection.cs" />
-    <Compile Include="MVVM\BindableCollectionFactory.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="ViewModel\BusyViewModel.cs" />
     <Compile Include="Core\CompositeDisposable.cs" />
@@ -165,10 +164,12 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Scheduler\SynchronizationContextTaskScheduler.cs" />
+    <Compile Include="WPFModule.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="app.config" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -196,12 +197,20 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="TabControl\TabControlHeaderView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="ToolBar\ToolBarItemTemplates.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Naru.Aufofac\Naru.Aufofac.csproj">
+      <Project>{15981272-c201-438a-aeef-ce3cacd97179}</Project>
+      <Name>Naru.Aufofac</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Naru.Core\Naru.Core.csproj">
       <Project>{17ea4111-2679-4155-a6e5-fe45e171ac2b}</Project>
       <Name>Naru.Core</Name>
@@ -209,10 +218,6 @@
     <ProjectReference Include="..\Naru.TPL\Naru.TPL.csproj">
       <Project>{2bbca269-6fdf-446d-9651-32717907afa8}</Project>
       <Name>Naru.TPL</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Naru.Unity\Naru.Unity.csproj">
-      <Project>{50893d70-53a5-4435-89da-5705ee16c206}</Project>
-      <Name>Naru.Unity</Name>
     </ProjectReference>
     <ProjectReference Include="..\Naru.WPF.ModernUI\Naru.WPF.ModernUI.csproj">
       <Project>{ca857197-fc3d-4185-a4ca-cb8b78828b48}</Project>

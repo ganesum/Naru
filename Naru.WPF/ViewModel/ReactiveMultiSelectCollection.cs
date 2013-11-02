@@ -33,9 +33,9 @@ namespace Naru.WPF.ViewModel
 
         public IObservable<IEnumerable<T>> SelectedItemsChanged { get { return _selectedItemChanged.AsObservable(); } }
 
-        public ReactiveMultiSelectCollection(BindableCollectionFactory bindableCollectionFactory)
+        public ReactiveMultiSelectCollection(BindableCollection<T> itemsCollection)
         {
-            Items = bindableCollectionFactory.Get<T>();
+            Items = itemsCollection;
         }
     }
 }
