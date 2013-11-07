@@ -20,15 +20,13 @@ namespace Naru.Agatha
             _requestDispatcher = requestDispatcher;
         }
 
-        public Task<TResponse> Get<TRequest, TResponse>(TRequest request)
-            where TRequest : Request<TResponse>
+        public Task<TResponse> Get<TResponse>(Request request) 
             where TResponse : Response
         {
-            return Task.Factory.StartNew(() => Execute<TRequest, TResponse>(request));
+            return Task.Factory.StartNew(() => Execute<TResponse>(request));
         }
 
-        private TResponse Execute<TRequest, TResponse>(TRequest request)
-            where TRequest : Request<TResponse>
+        private TResponse Execute<TResponse>(Request request) 
             where TResponse : Response
         {
             using (var performanceTester = new PerformanceTester())
