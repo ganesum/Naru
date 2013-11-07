@@ -20,20 +20,20 @@ namespace Naru.Agatha
             _requestDispatcher = requestDispatcher;
         }
 
-        public Task<TResponse> Get<TResponse>(Request request) 
+        public Task<TResponse> Get<TResponse>(Request<TResponse> request) 
             where TResponse : Response
         {
-            return Task.Factory.StartNew(() => Execute<TResponse>(request));
+            return Task.Factory.StartNew(() => Execute(request));
         }
 
-        private TResponse Execute<TResponse>(Request request) 
+        private TResponse Execute<TResponse>(Request<TResponse> request)
             where TResponse : Response
         {
             using (var performanceTester = new PerformanceTester())
             {
                 request.Id = Guid.NewGuid().ToString();
 
-                _log.Debug(string.Format("Start RequestTask {0}, Id - {1}", typeof(TRequest), request.Id));
+                _log.Debug(string.Format("Start RequestTask {0}, Id - {1}", request.GetType(), request.Id));
 
                 using (var requestDispatcher = _requestDispatcher())
                 {
@@ -43,7 +43,7 @@ namespace Naru.Agatha
                         throw new RequestException(response.Exception.Message);
     
                     _log.Debug(string.Format("Finished RequestTask {0}, Id - {1}. Duration {2}",
-                        typeof(TRequest),
+                        request.GetType(),
                         request.Id,
                         performanceTester.Result.Milliseconds));
     

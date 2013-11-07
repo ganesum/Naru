@@ -6,7 +6,7 @@ namespace Naru.Agatha
 {
     public interface IRequestTask
     {
-        Task<TResponse> Get<TResponse>(Request request) 
+        Task<TResponse> Get<TResponse>(Request<TResponse> request)
             where TResponse : Response;
     }
 }
