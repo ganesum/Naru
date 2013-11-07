@@ -37,17 +37,20 @@ namespace Naru.Agatha
 
                 _log.Debug(string.Format("Start RequestTask {0}, Id - {1}", typeof(TRequest), request.Id));
 
-                var response = _requestDispatcher().Get<TResponse>(request);
-
-                if (response.Exception != null)
-                    throw new RequestException(response.Exception.Message);
-
-                _log.Debug(string.Format("Finished RequestTask {0}, Id - {1}. Duration {2}",
-                    typeof(TRequest),
-                    request.Id,
-                    performanceTester.Result.Milliseconds));
-
-                return response;
+                using (var requestDispatcher = _requestDispatcher())
+                {
+                    var response = requestDispatcher.Get<TResponse>(request);
+    
+                    if (response.Exception != null)
+                        throw new RequestException(response.Exception.Message);
+    
+                    _log.Debug(string.Format("Finished RequestTask {0}, Id - {1}. Duration {2}",
+                        typeof(TRequest),
+                        request.Id,
+                        performanceTester.Result.Milliseconds));
+    
+                    return response;
+                }
             }
         }
     }
