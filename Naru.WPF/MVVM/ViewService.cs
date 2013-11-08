@@ -38,7 +38,7 @@ namespace Naru.WPF.MVVM
         }
 
         [Obsolete("Shouldn't be in this class")]
-        public IStandardDialogBuilder StandardDialogBuilder()
+        public IStandardDialogBuilder StandardDialog()
         {
             return _lifetimeScope.Resolve<IStandardDialogBuilder>();
         }

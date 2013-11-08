@@ -108,7 +108,7 @@ namespace Naru.WPF.ViewModel
                 }, Scheduler.TPL.Task)
                 .LogException(Log)
                 .CatchAndHandle(ex => ViewService
-                    .StandardDialogBuilder()
+                    .StandardDialog()
                     .Error("Error", string.Format("Exception in OnInitialise() call. {0}", ex.Message)), Scheduler.TPL.Task)
                 .Finally(BusyViewModel.InActive, Scheduler.TPL.Task);
         }

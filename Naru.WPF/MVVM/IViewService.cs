@@ -15,6 +15,6 @@ namespace Naru.WPF.MVVM
 
         Task ShowModalAsync(IViewModel viewModel);
 
-        IStandardDialogBuilder StandardDialogBuilder();
+        IStandardDialogBuilder StandardDialog();
     }
 }
