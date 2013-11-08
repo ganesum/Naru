@@ -381,7 +381,7 @@ namespace Naru.WPF.Tests.Scheduler
                     task2HasRun = true;
 
                     return CompletedTask<int>.Default;
-                })
+                }, taskScheduler)
                 .Finally(() => autoResetEvent.Set(), taskScheduler);
 
             autoResetEvent.WaitOne();
@@ -416,7 +416,7 @@ namespace Naru.WPF.Tests.Scheduler
                     task2HasRun = true;
 
                     return CompletedTask<int>.Default;
-                })
+                }, taskScheduler)
                 .Finally(() => autoResetEvent.Set(), taskScheduler);
 
             autoResetEvent.WaitOne();
@@ -451,7 +451,7 @@ namespace Naru.WPF.Tests.Scheduler
                     task2HasRun = true;
 
                     return CompletedTask<int>.Default;
-                })
+                }, taskScheduler)
                 .Finally(() => autoResetEvent.Set(), taskScheduler);
 
             autoResetEvent.WaitOne();
@@ -486,7 +486,7 @@ namespace Naru.WPF.Tests.Scheduler
                     task2HasRun = true;
 
                     return CompletedTask.Default;
-                })
+                }, taskScheduler)
                 .Finally(() => autoResetEvent.Set(), taskScheduler);
 
             autoResetEvent.WaitOne();
@@ -519,7 +519,7 @@ namespace Naru.WPF.Tests.Scheduler
                     Assert.That(task2HasRun, Is.False);
 
                     task2HasRun = true;
-                })
+                }, taskScheduler)
                 .Finally(() => autoResetEvent.Set(), taskScheduler);
 
             autoResetEvent.WaitOne();
@@ -554,7 +554,7 @@ namespace Naru.WPF.Tests.Scheduler
                     task2HasRun = true;
 
                     return CompletedTask.Default;
-                })
+                }, taskScheduler)
                 .Finally(() => autoResetEvent.Set(), taskScheduler);
 
             autoResetEvent.WaitOne();

@@ -174,7 +174,7 @@ namespace Naru.TPL
             return tcs.Task;
         }
 
-        public static Task<T1> Do<T1>(this Task<T1> first, Action next)
+        public static Task<T1> Do<T1>(this Task<T1> first, Action next, TaskScheduler scheduler)
         {
             if (first == null) throw new ArgumentNullException("first");
             if (next == null) throw new ArgumentNullException("next");
@@ -202,12 +202,12 @@ namespace Naru.TPL
                         tcs.TrySetException(exc);
                     }
                 }
-            }, TaskContinuationOptions.ExecuteSynchronously);
+            }, CancellationToken.None, TaskContinuationOptions.ExecuteSynchronously, scheduler);
 
             return tcs.Task;
         }
 
-        public static Task<T1> Do<T1>(this Task<T1> first, Action<T1> next)
+        public static Task<T1> Do<T1>(this Task<T1> first, Action<T1> next, TaskScheduler scheduler)
         {
             if (first == null) throw new ArgumentNullException("first");
             if (next == null) throw new ArgumentNullException("next");
@@ -236,12 +236,12 @@ namespace Naru.TPL
                         tcs.TrySetException(exc);
                     }
                 }
-            }, TaskContinuationOptions.ExecuteSynchronously);
+            }, CancellationToken.None, TaskContinuationOptions.ExecuteSynchronously, scheduler);
 
             return tcs.Task;
         }
 
-        public static Task<T1> Do<T1>(this Task<T1> first, Func<Task> next)
+        public static Task<T1> Do<T1>(this Task<T1> first, Func<Task> next, TaskScheduler scheduler)
         {
             if (first == null) throw new ArgumentNullException("first");
             if (next == null) throw new ArgumentNullException("next");
@@ -261,19 +261,19 @@ namespace Naru.TPL
                 {
                     try
                     {
-                        next().Then(() => tcs.TrySetResult(first.Result));
+                        next().Then(() => tcs.TrySetResult(first.Result), scheduler);
                     }
                     catch (Exception exc)
                     {
                         tcs.TrySetException(exc);
                     }
                 }
-            }, TaskContinuationOptions.ExecuteSynchronously);
+            }, CancellationToken.None, TaskContinuationOptions.ExecuteSynchronously, scheduler);
 
             return tcs.Task;
         }
 
-        public static Task<T1> Do<T1>(this Task<T1> first, Func<T1, Task> next)
+        public static Task<T1> Do<T1>(this Task<T1> first, Func<T1, Task> next, TaskScheduler scheduler)
         {
             if (first == null) throw new ArgumentNullException("first");
             if (next == null) throw new ArgumentNullException("next");
@@ -293,14 +293,14 @@ namespace Naru.TPL
                 {
                     try
                     {
-                        next(first.Result).Then(() => tcs.TrySetResult(first.Result));
+                        next(first.Result).Then(() => tcs.TrySetResult(first.Result), scheduler);
                     }
                     catch (Exception exc)
                     {
                         tcs.TrySetException(exc);
                     }
                 }
-            }, TaskContinuationOptions.ExecuteSynchronously);
+            }, CancellationToken.None, TaskContinuationOptions.ExecuteSynchronously, scheduler);
 
             return tcs.Task;
         }
@@ -577,71 +577,7 @@ namespace Naru.TPL
         /// <typeparam name="T2"></typeparam>
         /// <param name="first"></param>
         /// <param name="next"></param>
-        /// <returns></returns>
-        public static Task<T2> Then<T1, T2>(this Task<T1> first, Func<T1, Task<T2>> next)
-        {
-            // http://blogs.msdn.com/b/pfxteam/archive/2010/11/21/10094564.aspx?Redirected=true
-
-            if (first == null) throw new ArgumentNullException("first");
-            if (next == null) throw new ArgumentNullException("next");
-
-            var tcs = new TaskCompletionSource<T2>();
-            first.ContinueWith(_ =>
-            {
-                if (first.IsFaulted)
-                {
-                    tcs.TrySetException(first.Exception.InnerExceptions);
-                }
-                else if (first.IsCanceled)
-                {
-                    tcs.TrySetCanceled();
-                }
-                else
-                {
-                    try
-                    {
-                        var t = next(first.Result);
-                        if (t == null)
-                        {
-                            tcs.TrySetCanceled();
-                        }
-                        else
-                        {
-                            t.ContinueWith(__ =>
-                            {
-                                if (t.IsFaulted)
-                                {
-                                    tcs.TrySetException(t.Exception.InnerExceptions);
-                                }
-                                else if (t.IsCanceled)
-                                {
-                                    tcs.TrySetCanceled();
-                                }
-                                else
-                                {
-                                    tcs.TrySetResult(t.Result);
-                                }
-                            }, TaskContinuationOptions.ExecuteSynchronously);
-                        }
-                    }
-                    catch (Exception exc)
-                    {
-                        tcs.TrySetException(exc);
-                    }
-                }
-            }, TaskContinuationOptions.ExecuteSynchronously);
-
-            return tcs.Task;
-        }
-
-        /// <summary>
-        /// When first completes, pass the results to next.
-        /// next is only called if first completed successfully.
-        /// </summary>
-        /// <typeparam name="T1"></typeparam>
-        /// <typeparam name="T2"></typeparam>
-        /// <param name="first"></param>
-        /// <param name="next"></param>
+        /// <param name="scheduler"></param>
         /// <returns></returns>
         public static Task<T2> Then<T1, T2>(this Task<T1> first, Func<T1, Task<T2>> next, TaskScheduler scheduler)
         {
@@ -706,70 +642,7 @@ namespace Naru.TPL
         /// <typeparam name="T1"></typeparam>
         /// <param name="first"></param>
         /// <param name="next"></param>
-        /// <returns></returns>
-        public static Task<T1> Then<T1>(this Task first, Func<Task<T1>> next)
-        {
-            // http://blogs.msdn.com/b/pfxteam/archive/2010/11/21/10094564.aspx?Redirected=true
-
-            if (first == null) throw new ArgumentNullException("first");
-            if (next == null) throw new ArgumentNullException("next");
-
-            var tcs = new TaskCompletionSource<T1>();
-            first.ContinueWith(_ =>
-            {
-                if (first.IsFaulted)
-                {
-                    tcs.TrySetException(first.Exception.InnerExceptions);
-                }
-                else if (first.IsCanceled)
-                {
-                    tcs.TrySetCanceled();
-                }
-                else
-                {
-                    try
-                    {
-                        var t = next();
-                        if (t == null)
-                        {
-                            tcs.TrySetCanceled();
-                        }
-                        else
-                        {
-                            t.ContinueWith(__ =>
-                            {
-                                if (t.IsFaulted)
-                                {
-                                    tcs.TrySetException(t.Exception.InnerExceptions);
-                                }
-                                else if (t.IsCanceled)
-                                {
-                                    tcs.TrySetCanceled();
-                                }
-                                else
-                                {
-                                    tcs.TrySetResult(t.Result);
-                                }
-                            }, TaskContinuationOptions.ExecuteSynchronously);
-                        }
-                    }
-                    catch (Exception exc)
-                    {
-                        tcs.TrySetException(exc);
-                    }
-                }
-            }, TaskContinuationOptions.ExecuteSynchronously);
-
-            return tcs.Task;
-        }
-
-        /// <summary>
-        /// When first completes.
-        /// next is only called if first completed successfully.
-        /// </summary>
-        /// <typeparam name="T1"></typeparam>
-        /// <param name="first"></param>
-        /// <param name="next"></param>
+        /// <param name="scheduler"></param>
         /// <returns></returns>
         public static Task<T1> Then<T1>(this Task first, Func<Task<T1>> next, TaskScheduler scheduler)
         {
@@ -834,69 +707,7 @@ namespace Naru.TPL
         /// <typeparam name="T1"></typeparam>
         /// <param name="first"></param>
         /// <param name="next"></param>
-        /// <returns></returns>
-        public static Task Then<T1>(this Task<T1> first, Func<T1, Task> next)
-        {
-            // http://blogs.msdn.com/b/pfxteam/archive/2010/11/21/10094564.aspx?Redirected=true
-
-            if (first == null) throw new ArgumentNullException("first");
-            if (next == null) throw new ArgumentNullException("next");
-
-            var tcs = new TaskCompletionSource<object>();
-            first.ContinueWith(_ =>
-            {
-                if (first.IsFaulted)
-                {
-                    tcs.TrySetException(first.Exception.InnerExceptions);
-                }
-                else if (first.IsCanceled)
-                {
-                    tcs.TrySetCanceled();
-                }
-                else
-                {
-                    try
-                    {
-                        var t = next(first.Result);
-                        if (t == null)
-                        {
-                            tcs.TrySetCanceled();
-                        }
-                        else
-                        {
-                            t.ContinueWith(__ =>
-                            {
-                                if (t.IsFaulted)
-                                {
-                                    tcs.TrySetException(t.Exception.InnerExceptions);
-                                }
-                                else if (t.IsCanceled)
-                                {
-                                    tcs.TrySetCanceled();
-                                }
-                                else
-                                {
-                                    tcs.TrySetResult(null);
-                                }
-                            }, TaskContinuationOptions.ExecuteSynchronously);
-                        }
-                    }
-                    catch (Exception exc)
-                    {
-                        tcs.TrySetException(exc);
-                    }
-                }
-            }, TaskContinuationOptions.ExecuteSynchronously);
-
-            return tcs.Task;
-        }
-        /// <summary>
-        /// When first completes, pass the results to next.
-        /// next is only called if first completed successfully.
-        /// </summary>
-        /// <typeparam name="T1"></typeparam>
-        /// <param name="first"></param>
-        /// <param name="next"></param>
+        /// <param name="scheduler"></param>
         /// <returns></returns>
         public static Task Then<T1>(this Task<T1> first, Func<T1, Task> next, TaskScheduler scheduler)
         {
@@ -959,51 +770,10 @@ namespace Naru.TPL
         /// next is only called if first completed successfully.
         /// </summary>
         /// <typeparam name="T1"></typeparam>
-        /// <param name="first"></param>
-        /// <param name="next"></param>
-        /// <returns></returns>
-        public static Task Then<T1>(this Task<T1> first, Action<T1> next)
-        {
-            if (first == null) throw new ArgumentNullException("first");
-            if (next == null) throw new ArgumentNullException("next");
-
-            var tcs = new TaskCompletionSource<object>();
-            first.ContinueWith(_ =>
-            {
-                if (first.IsFaulted)
-                {
-                    tcs.TrySetException(first.Exception.InnerExceptions);
-                }
-                else if (first.IsCanceled)
-                {
-                    tcs.TrySetCanceled();
-                }
-                else
-                {
-                    try
-                    {
-                        next(first.Result);
-
-                        tcs.TrySetResult(null);
-                    }
-                    catch (Exception exc)
-                    {
-                        tcs.TrySetException(exc);
-                    }
-                }
-            }, TaskContinuationOptions.ExecuteSynchronously);
-
-            return tcs.Task;
-        }
-
-        /// <summary>
-        /// Execute an Action, Task completes when it is finished.
-        /// next is only called if first completed successfully.
-        /// </summary>
-        /// <typeparam name="T1"></typeparam>
         /// <typeparam name="T2"></typeparam>
         /// <param name="first"></param>
         /// <param name="next"></param>
+        /// <param name="scheduler"></param>
         /// <returns></returns>
         public static Task<T2> Then<T1, T2>(this Task<T1> first, Func<T1, T2> next, TaskScheduler scheduler)
         {
@@ -1046,6 +816,7 @@ namespace Naru.TPL
         /// <typeparam name="T1"></typeparam>
         /// <param name="first"></param>
         /// <param name="next"></param>
+        /// <param name="scheduler"></param>
         /// <returns></returns>
         public static Task Then<T1>(this Task<T1> first, Action<T1> next, TaskScheduler scheduler)
         {
@@ -1086,46 +857,7 @@ namespace Naru.TPL
         /// </summary>
         /// <param name="first"></param>
         /// <param name="next"></param>
-        /// <returns></returns>
-        public static Task Then(this Task first, Action next)
-        {
-            if (first == null) throw new ArgumentNullException("first");
-            if (next == null) throw new ArgumentNullException("next");
-
-            var tcs = new TaskCompletionSource<object>();
-            first.ContinueWith(_ =>
-            {
-                if (first.IsFaulted)
-                {
-                    tcs.TrySetException(first.Exception.InnerExceptions);
-                }
-                else if (first.IsCanceled)
-                {
-                    tcs.TrySetCanceled();
-                }
-                else
-                {
-                    try
-                    {
-                        next();
-
-                        tcs.TrySetResult(null);
-                    }
-                    catch (Exception exc)
-                    {
-                        tcs.TrySetException(exc);
-                    }
-                }
-            }, TaskContinuationOptions.ExecuteSynchronously);
-
-            return tcs.Task;
-        }
-
-        /// <summary>
-        /// Execute an Action, Task completes when it is finished.
-        /// </summary>
-        /// <param name="first"></param>
-        /// <param name="next"></param>
+        /// <param name="scheduler"></param>
         /// <returns></returns>
         public static Task Then(this Task first, Action next, TaskScheduler scheduler)
         {
@@ -1157,50 +889,6 @@ namespace Naru.TPL
                     }
                 }
             }, CancellationToken.None, TaskContinuationOptions.ExecuteSynchronously, scheduler);
-
-            return tcs.Task;
-        }
-
-        /// <summary>
-        /// When first completes, pass the results to next.
-        /// next is only called if first completed successfully.
-        /// </summary>
-        /// <param name="first"></param>
-        /// <param name="next"></param>
-        /// <param name="scheduler"></param>
-        /// <returns></returns>
-        public static Task Then(this Task first, Func<Task> next)
-        {
-            // http://blogs.msdn.com/b/pfxteam/archive/2010/11/21/10094564.aspx?Redirected=true
-
-            if (first == null) throw new ArgumentNullException("first");
-            if (next == null) throw new ArgumentNullException("next");
-
-            var tcs = new TaskCompletionSource<object>();
-            first.ContinueWith(_ =>
-            {
-                if (first.IsFaulted) tcs.TrySetException(first.Exception.InnerExceptions);
-                else if (first.IsCanceled) tcs.TrySetCanceled();
-                else
-                {
-                    try
-                    {
-                        var t = next();
-                        if (t == null) tcs.TrySetCanceled();
-                        else
-                            t.ContinueWith(__ =>
-                            {
-                                if (t.IsFaulted) tcs.TrySetException(t.Exception.InnerExceptions);
-                                else if (t.IsCanceled) tcs.TrySetCanceled();
-                                else tcs.TrySetResult(null);
-                            }, TaskContinuationOptions.ExecuteSynchronously);
-                    }
-                    catch (Exception exc)
-                    {
-                        tcs.TrySetException(exc);
-                    }
-                }
-            }, TaskContinuationOptions.ExecuteSynchronously);
 
             return tcs.Task;
         }
@@ -1259,6 +947,11 @@ namespace Naru.TPL
         public static Task<T1> StartNew<T1>(this TaskFactory taskFactory, Func<T1> action, TaskScheduler scheduler)
         {
             return taskFactory.StartNew(action, CancellationToken.None, TaskCreationOptions.None, scheduler);
+        }
+
+        public static Task<T1> StartNew<T1>(this TaskFactory taskFactory, Func<object, T1> action, T1 state, TaskScheduler scheduler)
+        {
+            return taskFactory.StartNew<T1>(action, state, CancellationToken.None, TaskCreationOptions.None, scheduler);
         }
 
         #region Timeouts
