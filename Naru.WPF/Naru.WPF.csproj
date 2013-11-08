@@ -74,6 +74,8 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Debug\DebugConverter.cs" />
+    <Compile Include="UnhandledExceptionHandler.cs" />
     <Compile Include="WPFStartable.cs" />
     <Compile Include="Command\DelegateCommand.cs" />
     <Compile Include="Command\ObservableCommand.cs" />
