@@ -13,7 +13,7 @@ namespace Naru.WPF
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<SchedulerProvider>().As<ISchedulerProvider>();
+            builder.RegisterType<SchedulerProvider>().As<ISchedulerProvider>().SingleInstance();
 
             builder.RegisterType<ViewService>().As<IViewService>();
 
