@@ -12,12 +12,12 @@ namespace Naru.Agatha
     public class RequestTask : IRequestTask
     {
         private readonly ILog _log;
-        private readonly Func<IRequestDispatcher> _requestDispatcher;
+        private readonly Func<IRequestDispatcher> _requestDispatcherFactory;
 
-        public RequestTask(ILog log, Func<IRequestDispatcher> requestDispatcher)
+        public RequestTask(ILog log, Func<IRequestDispatcher> requestDispatcherFactory)
         {
             _log = log;
-            _requestDispatcher = requestDispatcher;
+            _requestDispatcherFactory = requestDispatcherFactory;
         }
 
         public Task<TResponse> Get<TResponse>(Request<TResponse> request) 
@@ -35,7 +35,7 @@ namespace Naru.Agatha
 
                 _log.Debug(string.Format("Start RequestTask {0}, Id - {1}", request.GetType(), request.Id));
 
-                using (var requestDispatcher = _requestDispatcher())
+                using (var requestDispatcher = _requestDispatcherFactory())
                 {
                     var response = requestDispatcher.Get<TResponse>(request);
     
