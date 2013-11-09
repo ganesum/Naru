@@ -29,6 +29,11 @@ namespace Naru.WPF.TabControl
             }
 
             behavior.ItemsSource.CollectionChanged += behavior.items_CollectionChanged;
+
+            foreach (var viewModel in behavior.ItemsSource)
+            {
+                behavior.AddViewModel(viewModel);
+            }
         }
 
         public ObservableCollection<IViewModel> ItemsSource
@@ -57,19 +62,8 @@ namespace Naru.WPF.TabControl
             {
                 foreach (IViewModel viewModel in e.NewItems)
                 {
-                    if (viewModel == null) continue;
-
-                    var view = ViewService.CreateView(viewModel.GetType());
-                    ViewService.BindViewModel(view, viewModel);
-
-                    var tabItem = new TabItem { Content = view };
-
-                    SetupHeader(viewModel, tabItem);
-
-                    ConnectUpActivation(viewModel, AssociatedObject, tabItem);
-                    ConnectUpClosing(viewModel, AssociatedObject, tabItem);
-
-                    AssociatedObject.Items.Add(tabItem);
+                    if (AddViewModel(viewModel)) return;
+                    else continue;
                 }
             }
 
@@ -77,26 +71,59 @@ namespace Naru.WPF.TabControl
             {
                 foreach (var viewModel in e.OldItems)
                 {
-                    TabItem tabItem = null;
-
-                    foreach (TabItem item in AssociatedObject.Items)
-                    {
-                        if (viewModel == null) continue;
-
-                        var view = item.Content as FrameworkElement;
-                        if (view == null) continue;
-
-                        if (view.DataContext == viewModel)
-                        {
-                            tabItem = item;
-                        }
-                    }
-
-                    if (tabItem != null)
-                    {
-                        AssociatedObject.Items.Remove(tabItem);
-                    }
+                    RemoveViewModel(viewModel);
                 }
+            }
+        }
+
+        private bool AddViewModel(IViewModel viewModel)
+        {
+            if (viewModel == null) return true;
+
+            var view = ViewService.CreateView(viewModel.GetType());
+            ViewService.BindViewModel(view, viewModel);
+
+            var tabItem = new TabItem {Content = view};
+
+            SetupHeader(viewModel, tabItem);
+
+            ConnectUpActivation(viewModel, AssociatedObject, tabItem);
+            ConnectUpClosing(viewModel, AssociatedObject, tabItem);
+
+            AssociatedObject.Items.Add(tabItem);
+
+            // If it is currently active, sync with the TabControl
+            var supportActivationState = view.DataContext as ISupportActivationState;
+            if (supportActivationState == null) return true;
+
+            if (supportActivationState.IsActive)
+            {
+                Action action = () => AssociatedObject.SelectedItem = tabItem;
+                _dispatcher.BeginInvoke(action);
+            }
+            return false;
+        }
+
+        private void RemoveViewModel(object viewModel)
+        {
+            TabItem tabItem = null;
+
+            foreach (TabItem item in AssociatedObject.Items)
+            {
+                if (viewModel == null) continue;
+
+                var view = item.Content as FrameworkElement;
+                if (view == null) continue;
+
+                if (view.DataContext == viewModel)
+                {
+                    tabItem = item;
+                }
+            }
+
+            if (tabItem != null)
+            {
+                AssociatedObject.Items.Remove(tabItem);
             }
         }
 

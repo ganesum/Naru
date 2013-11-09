@@ -1,7 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Linq;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Threading.Tasks;
 
 using Naru.TPL;
@@ -12,6 +16,8 @@ namespace Naru.WPF.MVVM
     public class BindableCollection<T> : ObservableCollection<T>
     {
         private readonly ISchedulerProvider _scheduler;
+        private readonly Subject<List<T>> _addedItemsCollectionChangedSubject = new Subject<List<T>>();
+        private readonly Subject<List<T>> _removedItemsCollectionChangedSubject = new Subject<List<T>>();
 
         public BindableCollection(ISchedulerProvider scheduler)
         {
@@ -20,6 +26,22 @@ namespace Naru.WPF.MVVM
         }
 
         public bool IsNotifying { get; set; }
+
+        public IObservable<List<T>> AddedItemsCollectionChanged
+        {
+            get
+            {
+                return _addedItemsCollectionChangedSubject.AsObservable();
+            }
+        }
+
+        public IObservable<List<T>> RemovedItemsCollectionChanged
+        {
+            get
+            {
+                return _removedItemsCollectionChangedSubject.AsObservable();
+            }
+        }
 
         public virtual void NotifyOfPropertyChange(string propertyName)
         {
@@ -101,9 +123,50 @@ namespace Naru.WPF.MVVM
 
         protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
         {
-            if (IsNotifying)
+            if (!IsNotifying)
             {
-                base.OnCollectionChanged(e);
+                return;
+            }
+
+            base.OnCollectionChanged(e);
+
+            switch (e.Action)
+            {
+                case NotifyCollectionChangedAction.Add:
+                {
+                    if (e.NewItems != null && e.NewItems.OfType<T>().Any())
+                    {
+                        _addedItemsCollectionChangedSubject.OnNext(e.NewItems.OfType<T>().ToList());
+                    }
+
+                    break;
+                }
+                case NotifyCollectionChangedAction.Remove:
+                {
+                    if (e.OldItems != null && e.OldItems.OfType<T>().Any())
+                    {
+                        _removedItemsCollectionChangedSubject.OnNext(e.OldItems.OfType<T>().ToList());
+                    }
+
+                    break;
+                }
+                case NotifyCollectionChangedAction.Replace:
+                    break;
+                case NotifyCollectionChangedAction.Move:
+                    break;
+                case NotifyCollectionChangedAction.Reset:
+                {
+                    if (!this.Any())
+                    {
+                        return;
+                    }
+
+                    _addedItemsCollectionChangedSubject.OnNext(this.ToList());
+
+                    break;
+                }
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
 
