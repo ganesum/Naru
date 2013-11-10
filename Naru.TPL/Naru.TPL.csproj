@@ -50,10 +50,10 @@
     <Compile Include="IOCompletionPortTaskScheduler.cs" />
     <Compile Include="CompletedTask.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SynchronizationContextTaskScheduler.cs" />
     <Compile Include="TaskCompletionSourceExtensions.cs" />
     <Compile Include="TaskEx.cs" />
     <Compile Include="UnhandledExceptionHandler.cs" />
-    <Compile Include="Unit.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

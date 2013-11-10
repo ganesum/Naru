@@ -4,12 +4,12 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Naru.WPF.Scheduler
+namespace Naru.TPL
 {
     /// <summary>
     /// Provides a task scheduler that targets a specific SynchronizationContext.
     /// </summary>
-    public sealed class SynchronizationContextTaskScheduler : System.Threading.Tasks.TaskScheduler
+    public sealed class SynchronizationContextTaskScheduler : TaskScheduler
     {
         /// <summary>
         /// The queue of tasks to execute, maintained for debugging purposes.
