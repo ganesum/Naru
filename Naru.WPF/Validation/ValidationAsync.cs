@@ -67,13 +67,13 @@ namespace Naru.WPF.Validation
 
                                return ProcessValidationResults(propertyName, propertyErrors);
                            }, _scheduler.TPL.Dispatcher)
-                     .CatchAndHandle(exc =>
-                                     {
-                                         var errorMessage = string.Format("Error during validation : {0}", exc.Message);
-                                         _validationErrors[propertyName] = new[] { errorMessage };
+            .CatchAndHandle(exc =>
+                            {
+                                var errorMessage = string.Format("Error during validation : {0}", exc.Message);
+                                _validationErrors[propertyName] = new[] { errorMessage };
 
-                                         RaiseErrorsChanged(propertyName);
-                                     }, _scheduler.TPL.Dispatcher);
+                                RaiseErrorsChanged(propertyName);
+                            }, _scheduler.TPL.Dispatcher);
         }
 
         private Task ProcessValidationResults(string propertyName, IEnumerable<string> validationErrors)
