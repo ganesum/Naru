@@ -167,22 +167,28 @@
                         <Border x:Name="errorBorder"
                                 Background="#FFdc000c"
                                 Margin="8,0,0,0"
-                                Opacity="0"
+                                Opacity="1"
                                 CornerRadius="0"
                                 IsHitTestVisible="False"
                                 MinHeight="24">
-                            <TextBlock Text="{Binding ElementName=adorner, Path=AdornedElement.(Validation.Errors)[0].ErrorContent}"
-                                       Foreground="White"
-                                       Margin="8,2,8,3"
-                                       TextWrapping="Wrap"
-                                       VerticalAlignment="Center" />
+                            <ItemsControl ItemsSource="{Binding ElementName=adorner, Path=AdornedElement.(Validation.Errors)}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding ErrorContent}"
+                                                   Foreground="{DynamicResource InputText}"
+                                                   Margin="8,2,8,3"
+                                                   TextWrapping="Wrap"
+                                                   VerticalAlignment="Center" />
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
                         </Border>
                     </StackPanel>
                     <ControlTemplate.Triggers>
                         <DataTrigger Value="True">
                             <DataTrigger.Binding>
                                 <Binding ElementName="adorner"
-                                         Path="AdornedElement.IsKeyboardFocused" />
+                                         Path="AdornedElement.(Validation.HasError)" />
                             </DataTrigger.Binding>
                             <DataTrigger.EnterActions>
                                 <BeginStoryboard x:Name="fadeInStoryboard">
