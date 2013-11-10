@@ -79,7 +79,8 @@
   <ItemGroup>
     <Compile Include="Debug\DebugConverter.cs" />
     <Compile Include="UnhandledExceptionHandler.cs" />
-    <Compile Include="Validation\IViewModelWithValidation.cs" />
+    <Compile Include="Validation\ISupportValidation.cs" />
+    <Compile Include="Validation\ISupportValidationAsync.cs" />
     <Compile Include="Validation\ModelWithValidation.cs" />
     <Compile Include="Validation\ValidationExtensions.cs" />
     <Compile Include="ViewModel\INavigationCommands.cs" />
