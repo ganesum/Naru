@@ -41,35 +41,43 @@ namespace Naru.WPF.Validation
             return columnResults != null ? columnResults.ErrorMessage : string.Empty;
         }
 
-        public static ValidationResult Validate<TValidation, T>(this T model)
+        public static ValidationResult Validate<T, TValidation>(this T instance)
             where T : ISupportValidation<T, TValidation>
             where TValidation : AbstractValidator<T>, new()
         {
             IValidator<T> validator = new TValidation();
-            return validator.Validate(model);
+            return validator.Validate(instance);
         }
 
-        public static Task<ValidationResult> ValidateAsync<TValidation, T>(this T model,
+        public static Task<ValidationResult> ValidateAsync<T, TValidation>(this T instance,
                                                                            ISchedulerProvider schedulerProvider)
-            where T : ISupportValidation<T, TValidation>
+            where T : ISupportValidationAsync<T, TValidation>
             where TValidation : AbstractValidator<T>, new()
         {
-            return Task.Factory.StartNew(() => Validate<TValidation, T>(model), schedulerProvider.TPL.Task);
+            return Task.Factory.StartNew(() =>
+                                         {
+                                             IValidator<T> validator = new TValidation();
+                                             return validator.Validate(instance);
+                                         }, schedulerProvider.TPL.Task);
         }
 
-        public static bool IsValid<TValidation, T>(this T model)
+        public static bool IsValid<T, TValidation>(this T instance)
             where T : ISupportValidation<T, TValidation>
             where TValidation : AbstractValidator<T>, new()
         {
             IValidator<T> validator = new TValidation();
-            return validator.Validate(model) != null;
+            return validator.Validate(instance) != null;
         }
 
-        public static Task<bool> IsValidAsync<TValidation, T>(this T model, ISchedulerProvider schedulerProvider)
-            where T : ISupportValidation<T, TValidation>
+        public static Task<bool> IsValidAsync<T, TValidation>(this T instance, ISchedulerProvider schedulerProvider)
+            where T : ISupportValidationAsync<T, TValidation>
             where TValidation : AbstractValidator<T>, new()
         {
-            return Task.Factory.StartNew(() => IsValid<TValidation, T>(model), schedulerProvider.TPL.Task);
+            return Task.Factory.StartNew(() =>
+                                         {
+                                             IValidator<T> validator = new TValidation();
+                                             return validator.Validate(instance) != null;
+                                         }, schedulerProvider.TPL.Task);
         }
     }
 }

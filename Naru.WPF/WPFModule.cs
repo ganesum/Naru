@@ -5,6 +5,7 @@ using Naru.WPF.Menu;
 using Naru.WPF.MVVM;
 using Naru.WPF.Scheduler;
 using Naru.WPF.ToolBar;
+using Naru.WPF.Validation;
 using Naru.WPF.ViewModel;
 
 namespace Naru.WPF
@@ -36,6 +37,9 @@ namespace Naru.WPF
             builder.RegisterGeneric(typeof(BindableCollection<>)).AsSelf().InstancePerDependency();
             builder.RegisterGeneric(typeof(ReactiveSingleSelectCollection<>)).AsSelf().InstancePerDependency();
             builder.RegisterGeneric(typeof(ReactiveMultiSelectCollection<>)).AsSelf().InstancePerDependency();
+
+            // Validation
+            builder.RegisterGeneric(typeof (ValidationAsync<,>)).AsSelf().InstancePerDependency();
         }
     }
 }
