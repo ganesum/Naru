@@ -2,13 +2,9 @@
 
 namespace Naru.WPF.ViewModel
 {
-    public interface INavigation
+    public interface INavigationCommands
     {
-        bool CanGoBack { get; }
-
         DelegateCommand GoBackCommand { get; }
-
-        bool CanGoForward { get; }
 
         DelegateCommand GoForwardCommand { get; }
     }

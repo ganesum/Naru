@@ -11,13 +11,27 @@ namespace Naru.WPF.Wizard
     {
         public int Ordinal { get; set; }
 
-        public abstract string Name { get; }
+        #region Context
 
-        public TContext Context { set; get; }
+        private TContext _context;
+
+        public TContext Context
+        {
+            protected get { return _context; }
+            set
+            {
+                _context = value;
+                LoadFromContext(Context);
+            }
+        }
+
+        #endregion
 
         protected WizardStepViewModel(ILog log, ISchedulerProvider scheduler, IViewService viewService) 
             : base(log, scheduler, viewService)
         {
         }
+
+        protected abstract void LoadFromContext(TContext context);
     }
 }

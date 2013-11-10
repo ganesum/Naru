@@ -43,6 +43,9 @@
     <Reference Include="Common.Logging">
       <HintPath>..\packages\Common.Logging.2.1.2\lib\net40\Common.Logging.dll</HintPath>
     </Reference>
+    <Reference Include="FluentValidation">
+      <HintPath>..\..\Blitz\packages\FluentValidation.5.0.0.1\lib\Net40\FluentValidation.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Reactive.Core">
@@ -76,11 +79,13 @@
   <ItemGroup>
     <Compile Include="Debug\DebugConverter.cs" />
     <Compile Include="UnhandledExceptionHandler.cs" />
-    <Compile Include="ViewModel\INavigation.cs" />
+    <Compile Include="Validation\IViewModelWithValidation.cs" />
+    <Compile Include="Validation\ModelWithValidation.cs" />
+    <Compile Include="Validation\ValidationExtensions.cs" />
+    <Compile Include="ViewModel\INavigationCommands.cs" />
     <Compile Include="Wizard\IWizardContext.cs" />
     <Compile Include="Wizard\IWizardStepViewModel.cs" />
     <Compile Include="Wizard\WizardContext.cs" />
-    <Compile Include="Wizard\WizardStepIdentifier.cs" />
     <Compile Include="Wizard\WizardStepViewModel.cs" />
     <Compile Include="Wizard\WizardView.xaml.cs">
       <DependentUpon>WizardView.xaml</DependentUpon>

@@ -7,8 +7,6 @@ namespace Naru.WPF.Wizard
     {
         int Ordinal { get; set; }
 
-        string Name { get; }
-
         TContext Context { set; }
 
         BusyViewModel BusyViewModel { get; }

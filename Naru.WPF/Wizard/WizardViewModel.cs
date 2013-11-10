@@ -14,11 +14,11 @@ using Naru.WPF.ViewModel;
 
 namespace Naru.WPF.Wizard
 {
-    public abstract class WizardViewModel<TContext> : Workspace, INavigation
+    public abstract class WizardViewModel<TContext> : Workspace, INavigationCommands
         where TContext : IWizardContext, new()
     {
         private readonly TContext _context = new TContext();
-        private readonly Dictionary<WizardStepIdentifier, IWizardStepViewModel<TContext>> _steps = new Dictionary<WizardStepIdentifier, IWizardStepViewModel<TContext>>();
+        private readonly List<IWizardStepViewModel<TContext>> _steps = new List<IWizardStepViewModel<TContext>>();
 
         private bool _canBeFinished;
 
@@ -34,6 +34,8 @@ namespace Naru.WPF.Wizard
                 _currentStep = value;
                 RaisePropertyChanged(() => CurrentStep);
 
+                CurrentStep.Context = Context;
+
                 GoBackCommand.RaiseCanExecuteChanged();
                 GoForwardCommand.RaiseCanExecuteChanged();
                 FinishCommand.RaiseCanExecuteChanged();
@@ -42,11 +44,7 @@ namespace Naru.WPF.Wizard
 
         #endregion
 
-        public bool CanGoBack { get; private set; }
-
         public DelegateCommand GoBackCommand { get; private set; }
-
-        public bool CanGoForward { get; private set; }
 
         public DelegateCommand GoForwardCommand { get; private set; }
 
@@ -83,7 +81,7 @@ namespace Naru.WPF.Wizard
         {
             var index = CurrentStep.Ordinal;
 
-            CurrentStep = _steps.Single(x => x.Key.Ordinal == index + 1).Value;
+            CurrentStep = _steps.Single(x => x.Ordinal == index + 1);
 
             var supportActivation = CurrentStep as ISupportActivationState;
             if (supportActivation != null)
@@ -96,7 +94,7 @@ namespace Naru.WPF.Wizard
         {
             var index = CurrentStep.Ordinal;
 
-            CurrentStep = _steps.Single(x => x.Key.Ordinal == index - 1).Value;
+            CurrentStep = _steps.Single(x => x.Ordinal == index - 1);
 
             var supportActivation = CurrentStep as ISupportActivationState;
             if (supportActivation != null)
@@ -121,12 +119,13 @@ namespace Naru.WPF.Wizard
                                   Disposables.Add(this.SyncViewModelActivationStates(step));
                                   Disposables.Add(BusyViewModel.SyncViewModelBusy(step.BusyViewModel));
 
-                                  _steps.Add(new WizardStepIdentifier(step.Ordinal, step.Name), step);
+                                  _steps.Add(step);
 
                                   index++;
                               }
 
-                              CurrentStep = _steps.First().Value;
+                              CurrentStep = _steps.First();
+
                               GoBackCommand.RaiseCanExecuteChanged();
                               GoForwardCommand.RaiseCanExecuteChanged();
                           }, Scheduler.TPL.Task);
