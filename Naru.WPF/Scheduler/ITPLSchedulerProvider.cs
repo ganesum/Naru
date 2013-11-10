@@ -7,5 +7,7 @@ namespace Naru.WPF.Scheduler
         TaskScheduler Task { get; }
 
         TaskScheduler Dispatcher { get; }
+
+        TaskScheduler IOCompletion { get; }
     }
 }

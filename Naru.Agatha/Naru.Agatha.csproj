@@ -41,8 +41,9 @@
     <Reference Include="Autofac">
       <HintPath>..\packages\Autofac.3.1.5\lib\net40\Autofac.dll</HintPath>
     </Reference>
-    <Reference Include="Common.Logging">
-      <HintPath>..\packages\Agatha-rrsl.1.2.0\lib\35\Common.Logging.dll</HintPath>
+    <Reference Include="Common.Logging, Version=2.1.2.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Common.Logging.2.1.2\lib\net40\Common.Logging.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -75,6 +76,14 @@
     <ProjectReference Include="..\Naru.Core\Naru.Core.csproj">
       <Project>{17EA4111-2679-4155-A6E5-FE45E171AC2B}</Project>
       <Name>Naru.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Naru.TPL\Naru.TPL.csproj">
+      <Project>{2BBCA269-6FDF-446D-9651-32717907AFA8}</Project>
+      <Name>Naru.TPL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Naru.WPF\Naru.WPF.csproj">
+      <Project>{6DA2B9AD-0810-4C8C-A886-EDBD8130C89B}</Project>
+      <Name>Naru.WPF</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -10,10 +10,13 @@ namespace Naru.WPF.Tests.Scheduler
 
         public TaskScheduler Dispatcher { get; private set; }
 
+        public TaskScheduler IOCompletion { get; private set; }
+
         public TestTPLScheduler()
         {
             Task = new CurrentThreadTaskScheduler();
             Dispatcher = new CurrentThreadTaskScheduler();
+            IOCompletion = new CurrentThreadTaskScheduler();
         }
     }
 }

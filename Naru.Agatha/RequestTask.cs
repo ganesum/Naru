@@ -6,6 +6,8 @@ using Agatha.Common;
 using Common.Logging;
 
 using Naru.Core;
+using Naru.TPL;
+using Naru.WPF.Scheduler;
 
 namespace Naru.Agatha
 {
@@ -13,17 +15,19 @@ namespace Naru.Agatha
     {
         private readonly ILog _log;
         private readonly Func<IRequestDispatcher> _requestDispatcherFactory;
+        private readonly ISchedulerProvider _schedulerProvider;
 
-        public RequestTask(ILog log, Func<IRequestDispatcher> requestDispatcherFactory)
+        public RequestTask(ILog log, Func<IRequestDispatcher> requestDispatcherFactory, ISchedulerProvider schedulerProvider)
         {
             _log = log;
             _requestDispatcherFactory = requestDispatcherFactory;
+            _schedulerProvider = schedulerProvider;
         }
 
         public Task<TResponse> Get<TResponse>(Request<TResponse> request) 
             where TResponse : Response
         {
-            return Task.Factory.StartNew(() => Execute(request));
+            return Task.Factory.StartNew(() => Execute(request), _schedulerProvider.TPL.IOCompletion);
         }
 
         private TResponse Execute<TResponse>(Request<TResponse> request)
