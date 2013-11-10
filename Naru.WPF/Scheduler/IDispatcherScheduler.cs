@@ -2,7 +2,7 @@
 
 namespace Naru.WPF.Scheduler
 {
-    public interface IDispatcherService
+    public interface IDispatcherScheduler : ITPLScheduler, IRXScheduler
     {
         void ExecuteSync(Action action);
     }

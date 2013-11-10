@@ -88,8 +88,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Converters\BooleanToVisibilityConverterTests.cs" />
-    <Compile Include="Scheduler\TestDispatcherService.cs" />
+    <Compile Include="Scheduler\TestCurrentScheduler.cs" />
+    <Compile Include="Scheduler\TestDispatcherScheduler.cs" />
+    <Compile Include="Scheduler\TestImmediateScheduler.cs" />
+    <Compile Include="Scheduler\TestIOCompletionScheduler.cs" />
+    <Compile Include="Scheduler\TestNewThreadScheduler.cs" />
     <Compile Include="Scheduler\TestSchedulerProvider.cs" />
+    <Compile Include="Scheduler\TestTaskScheduler.cs" />
+    <Compile Include="Scheduler\TestThreadPoolScheduler.cs" />
     <Compile Include="Validation\ValidationAsyncTests.cs" />
     <Compile Include="ViewModel\BusyViewModelTests.cs" />
     <Compile Include="Core\CompositeDisposableTests.cs" />
@@ -111,8 +117,6 @@
     </Compile>
     <Compile Include="Scheduler\CurrentThreadTaskScheduler.cs" />
     <Compile Include="Scheduler\TaskExTests.cs" />
-    <Compile Include="Scheduler\TestRXSchedulerProvider.cs" />
-    <Compile Include="Scheduler\TestTPLScheduler.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

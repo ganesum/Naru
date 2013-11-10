@@ -128,7 +128,7 @@ namespace Naru.WPF.Wizard
 
                               GoBackCommand.RaiseCanExecuteChanged();
                               GoForwardCommand.RaiseCanExecuteChanged();
-                          }, Scheduler.TPL.Task);
+                          }, Scheduler.Task.TPL);
         }
 
         protected abstract IEnumerable<IWizardStepViewModel<TContext>> GetSteps();

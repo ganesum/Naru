@@ -56,7 +56,7 @@ namespace Naru.WPF.MVVM
 
         public Task RefreshAsync()
         {
-            return Task.Factory.StartNew(RefreshInternal, _scheduler.TPL.Dispatcher);
+            return Task.Factory.StartNew(RefreshInternal, _scheduler.Dispatcher.TPL);
         }
 
         private void RefreshInternal()
@@ -108,7 +108,7 @@ namespace Naru.WPF.MVVM
 
         public Task ClearAsync()
         {
-            return Task.Factory.StartNew(Clear, _scheduler.TPL.Dispatcher);
+            return Task.Factory.StartNew(Clear, _scheduler.Dispatcher.TPL);
         }
 
         protected override sealed void ClearItems()
@@ -191,8 +191,8 @@ namespace Naru.WPF.MVVM
         public Task AddRangeAsync(IEnumerable<T> items)
         {
             return Task.Factory
-                .StartNew(() => AddRangeInternal(items), _scheduler.TPL.Dispatcher)
-                .Then(() => RefreshAsync(), _scheduler.TPL.Dispatcher);
+                .StartNew(() => AddRangeInternal(items), _scheduler.Dispatcher.TPL)
+                .Then(() => RefreshAsync(), _scheduler.Dispatcher.TPL);
         }
 
         private void AddRangeInternal(IEnumerable<T> items)
@@ -221,8 +221,8 @@ namespace Naru.WPF.MVVM
         public Task RemoveRangeAsync(IEnumerable<T> items)
         {
             return Task.Factory
-                .StartNew(() => RemoveRangeInternal(items), _scheduler.TPL.Dispatcher)
-                .Then(() => RefreshAsync(), _scheduler.TPL.Dispatcher);
+                .StartNew(() => RemoveRangeInternal(items), _scheduler.Dispatcher.TPL)
+                .Then(() => RefreshAsync(), _scheduler.Dispatcher.TPL);
         }
 
         private void RemoveRangeInternal(IEnumerable<T> items)

@@ -58,7 +58,7 @@ namespace Naru.WPF.Validation
                                          {
                                              IValidator<T> validator = new TValidation();
                                              return validator.Validate(instance);
-                                         }, schedulerProvider.TPL.Task);
+                                         }, schedulerProvider.Task.TPL);
         }
 
         public static bool IsValid<T, TValidation>(this T instance)
@@ -77,7 +77,7 @@ namespace Naru.WPF.Validation
                                          {
                                              IValidator<T> validator = new TValidation();
                                              return validator.Validate(instance) != null;
-                                         }, schedulerProvider.TPL.Task);
+                                         }, schedulerProvider.Task.TPL);
         }
     }
 }

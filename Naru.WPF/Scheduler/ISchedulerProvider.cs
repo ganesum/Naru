@@ -2,10 +2,18 @@
 {
     public interface ISchedulerProvider
     {
-        ITPLSchedulerProvider TPL { get; }
+        IDispatcherScheduler Dispatcher { get; }
 
-        IRXSchedulerProvider RX { get; }
+        ITaskScheduler Task { get; }
 
-        IDispatcherService Dispatcher { get; }
+        IIOCompletionScheduler IOCompletion { get; }
+
+        ICurrentScheduler Current { get; }
+
+        IImmediateScheduler Immediate { get; }
+
+        INewThreadScheduler NewThread { get; }
+
+        IThreadPoolScheduler ThreadPool { get; }
     }
 }

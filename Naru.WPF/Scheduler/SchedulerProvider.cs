@@ -4,17 +4,29 @@ namespace Naru.WPF.Scheduler
 {
     public class SchedulerProvider : ISchedulerProvider
     {
-        public ITPLSchedulerProvider TPL { get; private set; }
+        public IDispatcherScheduler Dispatcher { get; private set; }
 
-        public IRXSchedulerProvider RX { get; private set; }
+        public ITaskScheduler Task { get; private set; }
 
-        public IDispatcherService Dispatcher { get; private set; }
+        public IIOCompletionScheduler IOCompletion { get; private set; }
+
+        public ICurrentScheduler Current { get; private set; }
+
+        public IImmediateScheduler Immediate { get; private set; }
+
+        public INewThreadScheduler NewThread { get; private set; }
+
+        public IThreadPoolScheduler ThreadPool { get; private set; }
 
         public SchedulerProvider()
         {
-            TPL = new TPLSchedulerProvider();
-            RX = new RxSchedulerProvider();
-            Dispatcher = new DispatcherService(Application.Current.Dispatcher);
+            Dispatcher = new DispatcherScheduler(Application.Current.Dispatcher);
+            Task = new TaskScheduler();
+            IOCompletion = new IOCompletionScheduler();
+            Current = new CurrentScheduler();
+            Immediate = new ImmediateScheduler();
+            NewThread = new NewThreadScheduler();
+            ThreadPool = new ThreadPoolScheduler();
         }
     }
 }

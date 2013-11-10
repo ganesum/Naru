@@ -27,7 +27,7 @@ namespace Naru.Agatha
         public Task<TResponse> Get<TResponse>(Request<TResponse> request) 
             where TResponse : Response
         {
-            return Task.Factory.StartNew(() => Execute(request), _schedulerProvider.TPL.IOCompletion);
+            return Task.Factory.StartNew(() => Execute(request), _schedulerProvider.IOCompletion.TPL);
         }
 
         private TResponse Execute<TResponse>(Request<TResponse> request)

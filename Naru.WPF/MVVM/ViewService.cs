@@ -50,7 +50,7 @@ namespace Naru.WPF.MVVM
 
         public Task ShowModalAsync(IViewModel viewModel)
         {
-            return Task.Factory.StartNew(() => ShowModalInternal(viewModel), _scheduler.TPL.Dispatcher);
+            return Task.Factory.StartNew(() => ShowModalInternal(viewModel), _scheduler.Dispatcher.TPL);
         }
 
         private void ShowModalInternal(IViewModel viewModel)

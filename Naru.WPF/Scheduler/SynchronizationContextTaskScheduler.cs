@@ -9,7 +9,7 @@ namespace Naru.WPF.Scheduler
     /// <summary>
     /// Provides a task scheduler that targets a specific SynchronizationContext.
     /// </summary>
-    public sealed class SynchronizationContextTaskScheduler : TaskScheduler
+    public sealed class SynchronizationContextTaskScheduler : System.Threading.Tasks.TaskScheduler
     {
         /// <summary>
         /// The queue of tasks to execute, maintained for debugging purposes.

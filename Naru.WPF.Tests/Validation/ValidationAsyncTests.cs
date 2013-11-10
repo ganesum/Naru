@@ -6,6 +6,8 @@ using System.Reactive.Linq;
 
 using FluentValidation;
 
+using Microsoft.Reactive.Testing;
+
 using Naru.WPF.Tests.Scheduler;
 using Naru.WPF.Validation;
 
@@ -66,7 +68,7 @@ namespace Naru.WPF.Tests.Validation
         public void when_ValidateProperty_is_called_then_ErrorsChanged_pumps()
         {
             var testSchedulerProvider = new TestSchedulerProvider();
-            var rxTestSchedulerProvider = testSchedulerProvider.RX as TestRXSchedulerProvider;
+            var rxTestScheduler = testSchedulerProvider.Current.RX as TestScheduler;
 
             var errorChangedPumped = false;
 
@@ -76,14 +78,14 @@ namespace Naru.WPF.Tests.Validation
             sut.Initialise(validatingObject);
 
             sut.ErrorsChanged
-               .ObserveOn(rxTestSchedulerProvider.CurrentThread)
+               .ObserveOn(rxTestScheduler)
                .Subscribe(_ => errorChangedPumped = true);
 
             Assert.That(errorChangedPumped, Is.False);
 
             sut.ValidateProperty(() => validatingObject.Name);
 
-            rxTestSchedulerProvider.CurrentThread.AdvanceBy(1);
+            rxTestScheduler.AdvanceBy(1);
 
             Assert.That(errorChangedPumped, Is.True);
         }

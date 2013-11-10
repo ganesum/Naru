@@ -105,12 +105,12 @@ namespace Naru.WPF.ViewModel
 
                     Initialised.SafeInvoke(this);
                     _onInitialiseHasBeenCalled = true;
-                }, Scheduler.TPL.Task)
+                }, Scheduler.Task.TPL)
                 .LogException(Log)
                 .CatchAndHandle(ex => ViewService
                     .StandardDialog()
-                    .Error("Error", string.Format("Exception in OnInitialise() call. {0}", ex.Message)), Scheduler.TPL.Task)
-                .Finally(BusyViewModel.InActive, Scheduler.TPL.Task);
+                    .Error("Error", string.Format("Exception in OnInitialise() call. {0}", ex.Message)), Scheduler.Task.TPL)
+                .Finally(BusyViewModel.InActive, Scheduler.Task.TPL);
         }
 
         void ISupportActivationState.DeActivate()
