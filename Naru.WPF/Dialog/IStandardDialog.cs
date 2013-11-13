@@ -2,7 +2,7 @@
 
 namespace Naru.WPF.Dialog
 {
-    public interface IStandardDialogBuilder
+    public interface IStandardDialog
     {
         Answer Question(string title, string message);
         Task<Answer> QuestionAsync(string title, string message);

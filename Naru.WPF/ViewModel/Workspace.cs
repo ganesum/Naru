@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
@@ -9,17 +10,15 @@ using Naru.Core;
 using Naru.TPL;
 using Naru.WPF.Command;
 using Naru.WPF.Core;
-using Naru.WPF.MVVM;
+using Naru.WPF.Dialog;
 using Naru.WPF.Scheduler;
-
-using Unit = System.Reactive.Unit;
 
 namespace Naru.WPF.ViewModel
 {
     public abstract class Workspace : ViewModel, ISupportClosing, ISupportActivationState, ISupportVisibility, ISupportHeader, ISupportInitialisation
     {
         protected readonly ISchedulerProvider Scheduler;
-        protected readonly IViewService ViewService;
+        protected readonly IStandardDialog StandardDialog;
         protected readonly CompositeDisposable Disposables;
 
         private readonly Subject<bool> _activationStateChanged = new Subject<bool>();
@@ -28,11 +27,11 @@ namespace Naru.WPF.ViewModel
 
         public BusyViewModel BusyViewModel { get; private set; }
 
-        protected Workspace(ILog log, ISchedulerProvider scheduler, IViewService viewService) 
+        protected Workspace(ILog log, ISchedulerProvider scheduler, IStandardDialog standardDialog) 
             : base(log)
         {
             Scheduler = scheduler;
-            ViewService = viewService;
+            StandardDialog = standardDialog;
 
             BusyViewModel = new BusyViewModel(log, scheduler);
 
@@ -107,9 +106,7 @@ namespace Naru.WPF.ViewModel
                     _onInitialiseHasBeenCalled = true;
                 }, Scheduler.Task.TPL)
                 .LogException(Log)
-                .CatchAndHandle(ex => ViewService
-                    .StandardDialog()
-                    .Error("Error", string.Format("Exception in OnInitialise() call. {0}", ex.Message)), Scheduler.Task.TPL)
+                .CatchAndHandle(ex => StandardDialog.Error("Error", string.Format("Exception in OnInitialise() call. {0}", ex.Message)), Scheduler.Task.TPL)
                 .Finally(BusyViewModel.InActive, Scheduler.Task.TPL);
         }
 

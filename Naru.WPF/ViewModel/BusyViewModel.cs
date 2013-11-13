@@ -78,13 +78,13 @@ namespace Naru.WPF.ViewModel
         public Task<Unit> ActiveAsync(string message)
         {
             return Task.Factory.StartNew(() => Active(message), _scheduler.Dispatcher.TPL)
-                .Select(() => Unit.Default);
+                .Select(() => Unit.Default, _scheduler.Dispatcher.TPL);
         }
 
         public Task<Unit> InActiveAsync()
         {
             return Task.Factory.StartNew(() => InActive(), _scheduler.Dispatcher.TPL)
-                .Select(() => Unit.Default);
+                .Select(() => Unit.Default, _scheduler.Dispatcher.TPL);
         }
     }
 }

@@ -178,6 +178,7 @@ namespace Naru.TPL
         {
             if (first == null) throw new ArgumentNullException("first");
             if (next == null) throw new ArgumentNullException("next");
+            if (scheduler == null) throw new ArgumentNullException("scheduler");
 
             var tcs = new TaskCompletionSource<T1>();
             first.ContinueWith(_ =>
@@ -211,6 +212,7 @@ namespace Naru.TPL
         {
             if (first == null) throw new ArgumentNullException("first");
             if (next == null) throw new ArgumentNullException("next");
+            if (scheduler == null) throw new ArgumentNullException("scheduler");
 
             var tcs = new TaskCompletionSource<T1>();
             first.ContinueWith(_ =>
@@ -245,6 +247,7 @@ namespace Naru.TPL
         {
             if (first == null) throw new ArgumentNullException("first");
             if (next == null) throw new ArgumentNullException("next");
+            if (scheduler == null) throw new ArgumentNullException("scheduler");
 
             var tcs = new TaskCompletionSource<T1>();
             first.ContinueWith(_ =>
@@ -277,6 +280,7 @@ namespace Naru.TPL
         {
             if (first == null) throw new ArgumentNullException("first");
             if (next == null) throw new ArgumentNullException("next");
+            if (scheduler == null) throw new ArgumentNullException("scheduler");
 
             var tcs = new TaskCompletionSource<T1>();
             first.ContinueWith(_ =>
@@ -315,6 +319,7 @@ namespace Naru.TPL
         public static Task Finally(this Task task, Action action, TaskScheduler scheduler)
         {
             if (action == null) throw new ArgumentNullException("action");
+            if (scheduler == null) throw new ArgumentNullException("scheduler");
 
             var tcs = new TaskCompletionSource<object>();
             task.ContinueWith(t =>
@@ -370,6 +375,7 @@ namespace Naru.TPL
             if (innerKeySelector == null) throw new ArgumentNullException("innerKeySelector");
             if (resultSelector == null) throw new ArgumentNullException("resultSelector");
             if (comparer == null) throw new ArgumentNullException("comparer");
+            if (scheduler == null) throw new ArgumentNullException("scheduler");
 
             // First continue off of the outer and then off of the inner.  Two separate
             // continuations are used so that each may be canceled easily using the NotOnCanceled option.
@@ -473,6 +479,7 @@ namespace Naru.TPL
             if (innerKeySelector == null) throw new ArgumentNullException("innerKeySelector");
             if (resultSelector == null) throw new ArgumentNullException("resultSelector");
             if (comparer == null) throw new ArgumentNullException("comparer");
+            if (scheduler == null) throw new ArgumentNullException("scheduler");
 
             // First continue off of the outer and then off of the inner.  Two separate
             // continuations are used so that each may be canceled easily using the NotOnCanceled option.
@@ -547,24 +554,26 @@ namespace Naru.TPL
             return tcs.Task;
         }
 
-        public static Task<TResult> Select<TSource, TResult>(this Task<TSource> source, Func<TSource, TResult> selector)
+        public static Task<TResult> Select<TSource, TResult>(this Task<TSource> source, Func<TSource, TResult> selector, TaskScheduler scheduler)
         {
             // Validate arguments
             if (source == null) throw new ArgumentNullException("source");
             if (selector == null) throw new ArgumentNullException("selector");
+            if (scheduler == null) throw new ArgumentNullException("scheduler");
 
             // Use a continuation to run the selector function
-            return source.ContinueWith(t => selector(t.Result), TaskContinuationOptions.NotOnCanceled);
+            return source.ContinueWith(t => selector(t.Result), CancellationToken.None, TaskContinuationOptions.NotOnCanceled, scheduler);
         }
 
-        public static Task<TResult> Select<TResult>(this Task source, Func<TResult> selector)
+        public static Task<TResult> Select<TResult>(this Task source, Func<TResult> selector, TaskScheduler scheduler)
         {
             // Validate arguments
             if (source == null) throw new ArgumentNullException("source");
             if (selector == null) throw new ArgumentNullException("selector");
+            if (scheduler == null) throw new ArgumentNullException("scheduler");
 
             // Use a continuation to run the selector function
-            return source.ContinueWith(t => selector(), TaskContinuationOptions.NotOnCanceled);
+            return source.ContinueWith(t => selector(), CancellationToken.None, TaskContinuationOptions.NotOnCanceled, scheduler);
         }
 
         #region Then
@@ -585,6 +594,7 @@ namespace Naru.TPL
 
             if (first == null) throw new ArgumentNullException("first");
             if (next == null) throw new ArgumentNullException("next");
+            if (scheduler == null) throw new ArgumentNullException("scheduler");
 
             var tcs = new TaskCompletionSource<T2>();
             first.ContinueWith(_ =>
@@ -622,7 +632,7 @@ namespace Naru.TPL
                                 {
                                     tcs.TrySetResult(t.Result);
                                 }
-                            }, TaskContinuationOptions.ExecuteSynchronously);
+                            }, CancellationToken.None, TaskContinuationOptions.ExecuteSynchronously, scheduler);
                         }
                     }
                     catch (Exception exc)
@@ -650,6 +660,7 @@ namespace Naru.TPL
 
             if (first == null) throw new ArgumentNullException("first");
             if (next == null) throw new ArgumentNullException("next");
+            if (scheduler == null) throw new ArgumentNullException("scheduler");
 
             var tcs = new TaskCompletionSource<T1>();
             first.ContinueWith(_ =>
@@ -687,7 +698,7 @@ namespace Naru.TPL
                                 {
                                     tcs.TrySetResult(t.Result);
                                 }
-                            }, TaskContinuationOptions.ExecuteSynchronously);
+                            }, CancellationToken.None, TaskContinuationOptions.ExecuteSynchronously, scheduler);
                         }
                     }
                     catch (Exception exc)
@@ -715,6 +726,7 @@ namespace Naru.TPL
 
             if (first == null) throw new ArgumentNullException("first");
             if (next == null) throw new ArgumentNullException("next");
+            if (scheduler == null) throw new ArgumentNullException("scheduler");
 
             var tcs = new TaskCompletionSource<object>();
             first.ContinueWith(_ =>
@@ -752,7 +764,7 @@ namespace Naru.TPL
                                 {
                                     tcs.TrySetResult(null);
                                 }
-                            }, TaskContinuationOptions.ExecuteSynchronously);
+                            }, CancellationToken.None, TaskContinuationOptions.ExecuteSynchronously, scheduler);
                         }
                     }
                     catch (Exception exc)
@@ -779,6 +791,7 @@ namespace Naru.TPL
         {
             if (first == null) throw new ArgumentNullException("first");
             if (next == null) throw new ArgumentNullException("next");
+            if (scheduler == null) throw new ArgumentNullException("scheduler");
 
             var tcs = new TaskCompletionSource<T2>();
             first.ContinueWith(_ =>
@@ -822,6 +835,7 @@ namespace Naru.TPL
         {
             if (first == null) throw new ArgumentNullException("first");
             if (next == null) throw new ArgumentNullException("next");
+            if (scheduler == null) throw new ArgumentNullException("scheduler");
 
             var tcs = new TaskCompletionSource<object>();
             first.ContinueWith(_ =>
@@ -863,6 +877,7 @@ namespace Naru.TPL
         {
             if (first == null) throw new ArgumentNullException("first");
             if (next == null) throw new ArgumentNullException("next");
+            if (scheduler == null) throw new ArgumentNullException("scheduler");
 
             var tcs = new TaskCompletionSource<object>();
             first.ContinueWith(_ =>
@@ -907,6 +922,7 @@ namespace Naru.TPL
 
             if (first == null) throw new ArgumentNullException("first");
             if (next == null) throw new ArgumentNullException("next");
+            if (scheduler == null) throw new ArgumentNullException("scheduler");
 
             var tcs = new TaskCompletionSource<object>();
             first.ContinueWith(_ =>
@@ -925,7 +941,7 @@ namespace Naru.TPL
                                 if (t.IsFaulted) tcs.TrySetException(t.Exception.InnerExceptions);
                                 else if (t.IsCanceled) tcs.TrySetCanceled();
                                 else tcs.TrySetResult(null);
-                            }, TaskContinuationOptions.ExecuteSynchronously);
+                            }, CancellationToken.None, TaskContinuationOptions.ExecuteSynchronously, scheduler);
                     }
                     catch (Exception exc)
                     {
@@ -941,16 +957,25 @@ namespace Naru.TPL
 
         public static Task StartNew(this TaskFactory taskFactory, Action action, TaskScheduler scheduler)
         {
+            if (action == null) throw new ArgumentNullException("action");
+            if (scheduler == null) throw new ArgumentNullException("scheduler");
+
             return taskFactory.StartNew(action, CancellationToken.None, TaskCreationOptions.None, scheduler);
         }
 
         public static Task<T1> StartNew<T1>(this TaskFactory taskFactory, Func<T1> action, TaskScheduler scheduler)
         {
+            if (action == null) throw new ArgumentNullException("action");
+            if (scheduler == null) throw new ArgumentNullException("scheduler");
+
             return taskFactory.StartNew(action, CancellationToken.None, TaskCreationOptions.None, scheduler);
         }
 
         public static Task<T1> StartNew<T1>(this TaskFactory taskFactory, Func<object, T1> action, T1 state, TaskScheduler scheduler)
         {
+            if (action == null) throw new ArgumentNullException("action");
+            if (scheduler == null) throw new ArgumentNullException("scheduler");
+
             return taskFactory.StartNew<T1>(action, state, CancellationToken.None, TaskCreationOptions.None, scheduler);
         }
 

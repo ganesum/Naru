@@ -80,8 +80,7 @@ namespace Naru.WPF.TabControl
         {
             if (viewModel == null) return true;
 
-            var view = ViewService.CreateView(viewModel.GetType());
-            ViewService.BindViewModel(view, viewModel);
+            var view = viewModel.GetViewAndBind();
 
             var tabItem = new TabItem {Content = view};
 
@@ -210,8 +209,7 @@ namespace Naru.WPF.TabControl
             if (headerViewModel == null) return;
 
             var tabControlHeaderViewModel = new TabControlHeaderViewModel(supportHeader);
-            var tabControlHeaderView = ViewService.CreateView(tabControlHeaderViewModel.GetType());
-            ViewService.BindViewModel(tabControlHeaderView, tabControlHeaderViewModel);
+            var tabControlHeaderView = tabControlHeaderViewModel.GetViewAndBind();
 
             tabItem.Header = tabControlHeaderView;
         }

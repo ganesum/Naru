@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using Common.Logging;
 
 using Naru.Tests;
+using Naru.WPF.Dialog;
 using Naru.WPF.MVVM;
 using Naru.WPF.Scheduler;
 using Naru.WPF.ViewModel;
@@ -20,8 +21,8 @@ namespace Naru.WPF.Tests.MVVM
 
         public class StubViewModel : Workspace
         {
-            public StubViewModel(ILog log, ISchedulerProvider scheduler, IViewService viewService) 
-                : base(log, scheduler, viewService)
+            public StubViewModel(ILog log, ISchedulerProvider scheduler, IStandardDialog standardDialog) 
+                : base(log, scheduler, standardDialog)
             {
             }
         }
@@ -32,8 +33,8 @@ namespace Naru.WPF.Tests.MVVM
         [UseView(typeof(StubViewNameNotMatchingView))]
         public class StubViewModelWithUseViewAttribute : Workspace
         {
-            public StubViewModelWithUseViewAttribute(ILog log, ISchedulerProvider scheduler, IViewService viewService)
-                : base(log, scheduler, viewService)
+            public StubViewModelWithUseViewAttribute(ILog log, ISchedulerProvider scheduler, IStandardDialog standardDialog)
+                : base(log, scheduler, standardDialog)
             {
             }
         }

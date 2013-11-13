@@ -1,7 +1,7 @@
 ﻿using Common.Logging;
 
 using Naru.Tests;
-using Naru.WPF.MVVM;
+using Naru.WPF.Dialog;
 using Naru.WPF.Scheduler;
 using Naru.WPF.Tests.Scheduler;
 using Naru.WPF.ViewModel;
@@ -15,8 +15,8 @@ namespace Naru.WPF.Tests.ViewModel
     {
         public class WorkspaceViewModel : Workspace
         {
-            public WorkspaceViewModel(ILog log, ISchedulerProvider scheduler, IViewService viewService) 
-                : base(log, scheduler, viewService)
+            public WorkspaceViewModel(ILog log, ISchedulerProvider scheduler, IStandardDialog standardDialog) 
+                : base(log, scheduler, standardDialog)
             {
             }
         }

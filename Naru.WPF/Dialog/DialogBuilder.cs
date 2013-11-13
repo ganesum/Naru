@@ -3,11 +3,13 @@ using System.Threading.Tasks;
 
 using Naru.TPL;
 using Naru.WPF.MVVM;
+using Naru.WPF.Scheduler;
 
 namespace Naru.WPF.Dialog
 {
     public class DialogBuilder<T> : IDialogBuilder<T>
     {
+        private readonly ISchedulerProvider _scheduler;
         private readonly IViewService _viewService;
         private readonly DialogViewModel<T> _dialogViewModel;
         private readonly List<T> _answers = new List<T>();
@@ -16,8 +18,9 @@ namespace Naru.WPF.Dialog
         private string _title;
         private string _message;
 
-        public DialogBuilder(IViewService viewService, DialogViewModel<T> dialogViewModel)
+        public DialogBuilder(ISchedulerProvider scheduler, IViewService viewService, DialogViewModel<T> dialogViewModel)
         {
+            _scheduler = scheduler;
             _viewService = viewService;
             _dialogViewModel = dialogViewModel;
         }
@@ -53,10 +56,16 @@ namespace Naru.WPF.Dialog
             return this;
         }
 
-        public T Show()
+        public DialogViewModel<T> Build()
         {
             var viewModel = _dialogViewModel;
             viewModel.Initialise(_dialogType, _answers, _title, _message);
+            return viewModel;
+        }
+
+        public T Show()
+        {
+            var viewModel = Build();
             _viewService.ShowModal(viewModel);
 
             return viewModel.SelectedAnswer;
@@ -64,9 +73,8 @@ namespace Naru.WPF.Dialog
 
         public Task<T> ShowAsync()
         {
-            var viewModel = _dialogViewModel;
-            viewModel.Initialise(_dialogType, _answers, _title, _message);
-            return _viewService.ShowModalAsync(viewModel).Select(() => viewModel.SelectedAnswer);
+            var viewModel = Build();
+            return _viewService.ShowModalAsync(viewModel).Select(() => viewModel.SelectedAnswer, _scheduler.Dispatcher.TPL);
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using Common.Logging;
 
-using Naru.WPF.MVVM;
+using Naru.WPF.Dialog;
 using Naru.WPF.Scheduler;
 using Naru.WPF.ViewModel;
 
@@ -27,8 +27,8 @@ namespace Naru.WPF.Wizard
 
         #endregion
 
-        protected WizardStepViewModel(ILog log, ISchedulerProvider scheduler, IViewService viewService) 
-            : base(log, scheduler, viewService)
+        protected WizardStepViewModel(ILog log, ISchedulerProvider scheduler, IStandardDialog standardDialog) 
+            : base(log, scheduler, standardDialog)
         {
         }
 

@@ -12,6 +12,8 @@ namespace Naru.WPF.Dialog
 
         IDialogBuilder<T> WithMessage(string message);
 
+        DialogViewModel<T> Build();
+        
         T Show();
 
         Task<T> ShowAsync();

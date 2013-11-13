@@ -1,14 +1,18 @@
 ﻿using System.Threading.Tasks;
 
+using Naru.Core;
+
 namespace Naru.WPF.Dialog
 {
-    public class StandardDialogBuilder : IStandardDialogBuilder
+    public class StandardDialog : IStandardDialog
     {
         private readonly IDialogBuilder<Answer> _dialogBuilder;
+        private readonly IEventStream _eventStream;
 
-        public StandardDialogBuilder(IDialogBuilder<Answer> dialogBuilder)
+        public StandardDialog(IDialogBuilder<Answer> dialogBuilder, IEventStream eventStream)
         {
             _dialogBuilder = dialogBuilder;
+            _eventStream = eventStream;
         }
 
         public Answer Question(string title, string message)

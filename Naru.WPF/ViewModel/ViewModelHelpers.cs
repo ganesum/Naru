@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows;
 
 using Naru.WPF.MVVM;
 using Naru.WPF.ToolBar;
@@ -86,6 +87,16 @@ namespace Naru.WPF.ViewModel
                                                  supportClosingClosed.Dispose();
                                              }
                                          });
+        }
+
+        public static FrameworkElement GetViewAndBind<TViewModel>(this TViewModel viewModel)
+            where TViewModel : IViewModel
+        {
+            var view = ViewService.CreateView(typeof (TViewModel));
+
+            ViewService.BindViewModel(view, viewModel);
+
+            return view;
         }
     }
 }

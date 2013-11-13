@@ -21,9 +21,9 @@ namespace Naru.WPF.Dialog
 
         public DelegateCommand<DialogItemViewModel<T>> ExecuteCommand { get; private set; }
 
-        public DialogViewModel(ILog log, ISchedulerProvider scheduler, IViewService viewService,
+        public DialogViewModel(ILog log, ISchedulerProvider scheduler, IStandardDialog standardDialog,
                                BindableCollection<DialogItemViewModel<T>> answersCollection)
-            : base(log, scheduler, viewService)
+            : base(log, scheduler, standardDialog)
         {
             Answers = answersCollection;
 

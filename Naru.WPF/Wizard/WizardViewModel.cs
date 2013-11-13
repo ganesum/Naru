@@ -8,7 +8,7 @@ using Common.Logging;
 
 using Naru.TPL;
 using Naru.WPF.Command;
-using Naru.WPF.MVVM;
+using Naru.WPF.Dialog;
 using Naru.WPF.Scheduler;
 using Naru.WPF.ViewModel;
 
@@ -55,8 +55,8 @@ namespace Naru.WPF.Wizard
             get { return _context; }
         }
 
-        protected WizardViewModel(ILog log, ISchedulerProvider scheduler, IViewService viewService)
-            : base(log, scheduler, viewService)
+        protected WizardViewModel(ILog log, ISchedulerProvider scheduler, IStandardDialog standardDialog)
+            : base(log, scheduler, standardDialog)
         {
 
             GoBackCommand = new DelegateCommand(() => GoBack(),

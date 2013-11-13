@@ -39,8 +39,7 @@ namespace Naru.WPF.MVVM
                 return;
             }
 
-            var view = ViewService.CreateView(viewModel.GetType());
-            ViewService.BindViewModel(view, viewModel);
+            var view = viewModel.GetViewAndBind();
 
             AssociatedObject.Content = view;
         }

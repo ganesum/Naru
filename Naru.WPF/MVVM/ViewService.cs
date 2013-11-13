@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Windows;
-using Autofac;
 using Common.Logging;
 
 using Naru.TPL;
-using Naru.WPF.Dialog;
 using Naru.WPF.ModernUI.Windows.Controls;
 using Naru.WPF.Scheduler;
 using Naru.WPF.ViewModel;
@@ -16,31 +14,11 @@ namespace Naru.WPF.MVVM
     {
         private readonly ILog _log;
         private readonly ISchedulerProvider _scheduler;
-        private readonly ILifetimeScope _lifetimeScope;
 
-        public ViewService(ILog log, ISchedulerProvider scheduler, ILifetimeScope lifetimeScope)
+        public ViewService(ILog log, ISchedulerProvider scheduler)
         {
             _log = log;
             _scheduler = scheduler;
-            _lifetimeScope = lifetimeScope;
-        }
-
-        [Obsolete("Shouldn't be in this class")]
-        public IDialogBuilder<Answer> DialogBuilder()
-        {
-            return _lifetimeScope.Resolve<IDialogBuilder<Answer>>();
-        }
-
-        [Obsolete("Shouldn't be in this class")]
-        public IDialogBuilder<T> DialogBuilder<T>()
-        {
-            return _lifetimeScope.Resolve<IDialogBuilder<T>>();
-        }
-
-        [Obsolete("Shouldn't be in this class")]
-        public IStandardDialogBuilder StandardDialog()
-        {
-            return _lifetimeScope.Resolve<IStandardDialogBuilder>();
         }
 
         public void ShowModal(IViewModel viewModel)
@@ -55,15 +33,14 @@ namespace Naru.WPF.MVVM
 
         private void ShowModalInternal(IViewModel viewModel)
         {
-            _log.Debug(string.Format("Creating View for ViewModel - {0}", viewModel.GetType().FullName));
-            var view = CreateView(viewModel.GetType());
+            _log.Debug(string.Format("Creating View and Bind for ViewModel - {0}", viewModel.GetType().FullName));
 
-            _log.Debug(string.Format("Binding View and ViewModel - {0}", viewModel.GetType().FullName));
-            BindViewModel(view, viewModel);
+            var view = viewModel.GetViewAndBind();
 
             var window = view as Window;
             if (window != null)
             {
+                ConnectUpActivation(viewModel, window);
                 ConnectUpClosing(viewModel, window);
 
                 window.Owner = Application.Current.MainWindow;
@@ -155,12 +132,6 @@ namespace Naru.WPF.MVVM
             var view = (FrameworkElement)Activator.CreateInstance(viewType);
 
             return view;
-        }
-
-        public static TViewModel CreateViewModel<TViewModel>(ILifetimeScope container)
-            where TViewModel : IViewModel
-        {
-            return container.Resolve<TViewModel>();
         }
 
         public static void BindViewModel<TViewModel>(FrameworkElement view, TViewModel viewModel)

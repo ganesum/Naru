@@ -143,8 +143,8 @@
     </Compile>
     <Compile Include="Dialog\DialogViewModel.cs" />
     <Compile Include="Dialog\IDialogBuilder.cs" />
-    <Compile Include="Dialog\IStandardDialogBuilder.cs" />
-    <Compile Include="Dialog\StandardDialogBuilder.cs" />
+    <Compile Include="Dialog\IStandardDialog.cs" />
+    <Compile Include="Dialog\StandardDialog.cs" />
     <Compile Include="MVVM\HeaderView.xaml.cs">
       <DependentUpon>HeaderView.xaml</DependentUpon>
     </Compile>
