@@ -29,6 +29,18 @@ namespace Naru.WPF.UserInteractionHost
 
         #endregion
 
+        #region ShowClose
+
+        private bool _showClose;
+
+        public bool ShowClose
+        {
+            get { return _showClose; }
+            private set { _showClose = value; }
+        }
+
+        #endregion
+
         public UserInteractionHostViewModel(ILog log, ISchedulerProvider scheduler, IStandardDialog standardDialog)
             : base(log, scheduler, standardDialog)
         {
@@ -37,6 +49,12 @@ namespace Naru.WPF.UserInteractionHost
         public void Initialise(IViewModel viewModel)
         {
             ViewModel = viewModel;
+            
+            var supportClosing = ViewModel as ISupportClosing;
+            if (supportClosing != null)
+            {
+                ShowClose = true;
+            }
         }
 
         protected override void CleanUp()
