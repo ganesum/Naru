@@ -1,4 +1,6 @@
-﻿using Common.Logging;
+﻿using System;
+
+using Common.Logging;
 
 using Naru.WPF.Dialog;
 using Naru.WPF.Scheduler;
@@ -13,6 +15,8 @@ namespace Naru.WPF.UserInteractionHost
 
     public class UserInteractionHostViewModel : Workspace, IUserInteractionHostViewModel
     {
+        private bool _viewModelIsClosed;
+
         #region ViewModel
 
         private IViewModel _viewModel;
@@ -54,6 +58,22 @@ namespace Naru.WPF.UserInteractionHost
             if (supportClosing != null)
             {
                 ShowClose = true;
+
+                IDisposable closing = null;
+                closing = supportClosing.Closed
+                                        .Subscribe(x =>
+                                                   {
+                                                       if (!_viewModelIsClosed)
+                                                       {
+                                                           _viewModelIsClosed = true;
+                                                           Close();
+                                                       }
+
+                                                       if (closing != null)
+                                                       {
+                                                           closing.Dispose();
+                                                       }
+                                                   });
             }
         }
 
@@ -65,7 +85,11 @@ namespace Naru.WPF.UserInteractionHost
                 return;
             }
 
-            supportClosing.Close();
+            if (!_viewModelIsClosed)
+            {
+                _viewModelIsClosed = true;
+                supportClosing.Close();
+            }
         }
     }
 }
