@@ -5,6 +5,7 @@ using Naru.WPF.Menu;
 using Naru.WPF.MVVM;
 using Naru.WPF.Scheduler;
 using Naru.WPF.ToolBar;
+using Naru.WPF.UserInteractionHost;
 using Naru.WPF.Validation;
 using Naru.WPF.ViewModel;
 
@@ -22,6 +23,10 @@ namespace Naru.WPF
             builder.RegisterGeneric(typeof(DialogBuilder<>)).As(typeof(IDialogBuilder<>)).InstancePerDependency();
             builder.RegisterGeneric(typeof(DialogViewModel<>)).AsSelf().InstancePerDependency();
             builder.RegisterType<StandardDialog>().As<IStandardDialog>().InstancePerDependency();
+
+            // UserInteraction
+            builder.RegisterType<UserInteraction>().As<IUserInteraction>().SingleInstance();
+            builder.RegisterType<UserInteractionHostViewModel>().As<IUserInteractionHostViewModel>();
 
             // ToolBar
             builder.RegisterType<ToolBarService>().As<IToolBarService>().SingleInstance();

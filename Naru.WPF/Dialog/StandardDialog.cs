@@ -1,178 +1,140 @@
 ﻿using System.Threading.Tasks;
 
-using Naru.Core;
+using Naru.TPL;
+using Naru.WPF.MVVM;
+using Naru.WPF.Scheduler;
 
 namespace Naru.WPF.Dialog
 {
     public class StandardDialog : IStandardDialog
     {
         private readonly IDialogBuilder<Answer> _dialogBuilder;
-        private readonly IEventStream _eventStream;
+        private readonly IUserInteraction _userInteraction;
+        private readonly ISchedulerProvider _scheduler;
 
-        public StandardDialog(IDialogBuilder<Answer> dialogBuilder, IEventStream eventStream)
+        public StandardDialog(IDialogBuilder<Answer> dialogBuilder, IUserInteraction userInteraction, ISchedulerProvider scheduler)
         {
             _dialogBuilder = dialogBuilder;
-            _eventStream = eventStream;
-        }
-
-        public Answer Question(string title, string message)
-        {
-            return _dialogBuilder
-                .WithDialogType(DialogType.Question)
-                .WithAnswers(Answer.Yes, Answer.No)
-                .WithTitle(title)
-                .WithMessage(message)
-                .Show();
+            _userInteraction = userInteraction;
+            _scheduler = scheduler;
         }
 
         public Task<Answer> QuestionAsync(string title, string message)
         {
-            return _dialogBuilder
+            var viewModel = _dialogBuilder
                 .WithDialogType(DialogType.Question)
                 .WithAnswers(Answer.Yes, Answer.No)
                 .WithTitle(title)
                 .WithMessage(message)
-                .ShowAsync();
-        }
+                .Build();
 
-        public Answer Question(string title, string message, params Answer[] possibleResponens)
-        {
-            return _dialogBuilder
-                .WithDialogType(DialogType.Question)
-                .WithAnswers(possibleResponens)
-                .WithTitle(title)
-                .WithMessage(message)
-                .Show();
+            return _userInteraction.ShowModalAsync(viewModel)
+                                   .Select(() => viewModel.SelectedAnswer, _scheduler.Dispatcher.TPL);
         }
 
         public Task<Answer> QuestionAsync(string title, string message, params Answer[] possibleResponens)
         {
-            return _dialogBuilder
+            var viewModel = _dialogBuilder
                 .WithDialogType(DialogType.Question)
                 .WithAnswers(possibleResponens)
                 .WithTitle(title)
                 .WithMessage(message)
-                .ShowAsync();
-        }
+                .Build();
 
-        public Answer Warning(string title, string message)
-        {
-            return _dialogBuilder
-                .WithDialogType(DialogType.Warning)
-                .WithAnswers(Answer.Ok)
-                .WithTitle(title)
-                .WithMessage(message)
-                .Show();
+            return _userInteraction.ShowModalAsync(viewModel)
+                                   .Select(() => viewModel.SelectedAnswer, _scheduler.Dispatcher.TPL);
         }
 
         public Task<Answer> WarningAsync(string title, string message)
         {
-            return _dialogBuilder
+            var viewModel = _dialogBuilder
                 .WithDialogType(DialogType.Warning)
                 .WithAnswers(Answer.Ok)
                 .WithTitle(title)
                 .WithMessage(message)
-                .ShowAsync();
-        }
+                .Build();
 
-        public Answer Warning(string title, string message, params Answer[] possibleResponens)
-        {
-            return _dialogBuilder
-                .WithDialogType(DialogType.Warning)
-                .WithAnswers(possibleResponens)
-                .WithTitle(title)
-                .WithMessage(message)
-                .Show();
+            return _userInteraction.ShowModalAsync(viewModel)
+                                   .Select(() => viewModel.SelectedAnswer, _scheduler.Dispatcher.TPL);
         }
 
         public Task<Answer> WarningAsync(string title, string message, params Answer[] possibleResponens)
         {
-            return _dialogBuilder
+            var viewModel = _dialogBuilder
                 .WithDialogType(DialogType.Warning)
                 .WithAnswers(possibleResponens)
                 .WithTitle(title)
                 .WithMessage(message)
-                .ShowAsync();
-        }
+                .Build();
 
-        public Answer Information(string title, string message)
-        {
-            return _dialogBuilder
-                .WithDialogType(DialogType.Information)
-                .WithAnswers(Answer.Ok)
-                .WithTitle(title)
-                .WithMessage(message)
-                .Show();
+            return _userInteraction.ShowModalAsync(viewModel)
+                                   .Select(() => viewModel.SelectedAnswer, _scheduler.Dispatcher.TPL);
         }
 
         public Task<Answer> InformationAsync(string title, string message)
         {
-            return _dialogBuilder
+            var viewModel = _dialogBuilder
                 .WithDialogType(DialogType.Information)
                 .WithAnswers(Answer.Ok)
                 .WithTitle(title)
                 .WithMessage(message)
-                .ShowAsync();
-        }
+                .Build();
 
-        public Answer Information(string title, string message, params Answer[] possibleResponens)
-        {
-            return _dialogBuilder
-                .WithDialogType(DialogType.Information)
-                .WithAnswers(possibleResponens)
-                .WithTitle(title)
-                .WithMessage(message)
-                .Show();
+            return _userInteraction.ShowModalAsync(viewModel)
+                                   .Select(() => viewModel.SelectedAnswer, _scheduler.Dispatcher.TPL);
         }
 
         public Task<Answer> InformationAsync(string title, string message, params Answer[] possibleResponens)
         {
-            return _dialogBuilder
+            var viewModel = _dialogBuilder
                 .WithDialogType(DialogType.Information)
                 .WithAnswers(possibleResponens)
                 .WithTitle(title)
                 .WithMessage(message)
-                .ShowAsync();
+                .Build();
+
+            return _userInteraction.ShowModalAsync(viewModel)
+                                   .Select(() => viewModel.SelectedAnswer, _scheduler.Dispatcher.TPL);
         }
 
         public Answer Error(string title, string message)
         {
-            return _dialogBuilder
+            var viewModel = _dialogBuilder
                 .WithDialogType(DialogType.Error)
                 .WithAnswers(Answer.Ok)
                 .WithTitle(title)
                 .WithMessage(message)
-                .Show();
+                .Build();
+
+            return _userInteraction.ShowModalAsync(viewModel)
+                                   .Select(() => viewModel.SelectedAnswer, _scheduler.Dispatcher.TPL)
+                                   .Result;
         }
 
         public Task<Answer> ErrorAsync(string title, string message)
         {
-            return _dialogBuilder
+            var viewModel = _dialogBuilder
                 .WithDialogType(DialogType.Error)
                 .WithAnswers(Answer.Ok)
                 .WithTitle(title)
                 .WithMessage(message)
-                .ShowAsync();
-        }
+                .Build();
 
-        public Answer Error(string title, string message, params Answer[] possibleResponens)
-        {
-            return _dialogBuilder
-                .WithDialogType(DialogType.Error)
-                .WithAnswers(possibleResponens)
-                .WithTitle(title)
-                .WithMessage(message)
-                .Show();
+            return _userInteraction.ShowModalAsync(viewModel)
+                                   .Select(() => viewModel.SelectedAnswer, _scheduler.Dispatcher.TPL);
         }
 
         public Task<Answer> ErrorAsync(string title, string message, params Answer[] possibleResponens)
         {
-            return _dialogBuilder
+            var viewModel = _dialogBuilder
                 .WithDialogType(DialogType.Error)
                 .WithAnswers(possibleResponens)
                 .WithTitle(title)
                 .WithMessage(message)
-                .ShowAsync();
+                .Build();
+
+            return _userInteraction.ShowModalAsync(viewModel)
+                                   .Select(() => viewModel.SelectedAnswer, _scheduler.Dispatcher.TPL);
         }
     }
 }

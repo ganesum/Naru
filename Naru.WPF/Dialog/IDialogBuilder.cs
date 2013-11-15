@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-
-namespace Naru.WPF.Dialog
+﻿namespace Naru.WPF.Dialog
 {
     public interface IDialogBuilder<T>
     {
@@ -13,9 +11,5 @@ namespace Naru.WPF.Dialog
         IDialogBuilder<T> WithMessage(string message);
 
         DialogViewModel<T> Build();
-        
-        T Show();
-
-        Task<T> ShowAsync();
     }
 }

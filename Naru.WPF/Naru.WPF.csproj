@@ -78,6 +78,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Debug\DebugConverter.cs" />
+    <Compile Include="MVVM\IUserInteraction.cs" />
+    <Compile Include="MVVM\IUserInteractionViewModel.cs" />
+    <Compile Include="MVVM\UserInteraction.cs" />
     <Compile Include="Scheduler\CurrentScheduler.cs" />
     <Compile Include="Scheduler\DispatcherScheduler.cs" />
     <Compile Include="Scheduler\ICurrentScheduler.cs" />
@@ -96,6 +99,10 @@
     <Compile Include="Scheduler\TaskScheduler.cs" />
     <Compile Include="Scheduler\ThreadPoolScheduler.cs" />
     <Compile Include="UnhandledExceptionHandler.cs" />
+    <Compile Include="UserInteractionHost\UserInteractionHostView.xaml.cs">
+      <DependentUpon>UserInteractionHostView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserInteractionHost\UserInteractionHostViewModel.cs" />
     <Compile Include="Validation\ISupportValidation.cs" />
     <Compile Include="Validation\ISupportValidationAsync.cs" />
     <Compile Include="Validation\ModelWithValidation.cs" />
@@ -232,6 +239,10 @@
     <Page Include="ToolBar\ToolBarItemTemplates.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserInteractionHost\UserInteractionHostView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Wizard\WizardView.xaml">
       <SubType>Designer</SubType>

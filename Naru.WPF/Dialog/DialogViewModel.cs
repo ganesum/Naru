@@ -11,7 +11,7 @@ using Naru.WPF.ViewModel;
 namespace Naru.WPF.Dialog
 {
     [UseView(typeof(DialogView))]
-    public class DialogViewModel<T> : Workspace
+    public class DialogViewModel<T> : Workspace, IUserInteractionViewModel
     {
         public BindableCollection<DialogItemViewModel<T>> Answers { get; private set; }
 
