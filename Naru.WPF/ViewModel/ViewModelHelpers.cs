@@ -92,9 +92,9 @@ namespace Naru.WPF.ViewModel
         public static FrameworkElement GetViewAndBind<TViewModel>(this TViewModel viewModel)
             where TViewModel : IViewModel
         {
-            var view = ViewService.CreateView(viewModel.GetType());
+            var view = ViewServiceHelper.CreateView(viewModel.GetType());
 
-            ViewService.BindViewModel(view, viewModel);
+            ViewServiceHelper.BindViewModel(view, viewModel);
 
             return view;
         }

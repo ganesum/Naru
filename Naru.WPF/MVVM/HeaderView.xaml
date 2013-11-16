@@ -4,8 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mvvm="clr-namespace:Naru.WPF.MVVM"
-             xmlns:converters="clr-namespace:Naru.WPF.ModernUI.Windows.Converters;assembly=Naru.WPF.ModernUI"
-             xmlns:icons="clr-namespace:Naru.WPF.ModernUI.Assets.Icons;assembly=Naru.WPF.ModernUI"
+             xmlns:converters="clr-namespace:Naru.WPF.Converters"
              mc:Ignorable="d"
              d:DesignHeight="300"
              d:DesignWidth="300"
@@ -13,7 +12,7 @@
 
     <UserControl.Resources>
 
-        <icons:IconNameToImageConverter x:Key="IconNameToImageConverter" />
+        <converters:IconNameToImageConverter x:Key="IconNameToImageConverter" />
 
         <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
 

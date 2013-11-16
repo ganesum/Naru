@@ -6,9 +6,9 @@ using System.Windows.Data;
 namespace Naru.WPF.Converters
 {
     /// <summary>
-    /// Converts boolean to visibility values.
+    /// Converts a null or empty string value to Visibility.Visible and any other value to Visibility.Collapsed
     /// </summary>
-    public class BooleanToVisibilityConverter
+    public class NullOrEmptyStringToVisibilityConverter
         : IValueConverter
     {
         /// <summary>
@@ -23,16 +23,11 @@ namespace Naru.WPF.Converters
         /// </returns>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            bool flag = false;
-            if (value is bool) {
-                flag = (bool)value;
+            var flag = value == null;
+            if (value is string) {
+                flag = string.IsNullOrEmpty((string)value);
             }
-            else if (value is bool?) {
-                bool? nullable = (bool?)value;
-                flag = nullable.HasValue ? nullable.Value : false;
-            }
-
-            bool inverse = (parameter as string) == "inverse";
+            var inverse = (parameter as string) == "inverse";
 
             if (inverse) {
                 return (flag ? Visibility.Collapsed : Visibility.Visible);

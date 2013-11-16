@@ -6,7 +6,7 @@
              xmlns:userInteractionHost="clr-namespace:Naru.WPF.UserInteractionHost"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:mvvm="clr-namespace:Naru.WPF.MVVM"
-             xmlns:controls="clr-namespace:Naru.WPF.ModernUI.Windows.Controls;assembly=Naru.WPF.ModernUI"
+             xmlns:controls="clr-namespace:Naru.WPF.Windows.Controls"
              xmlns:converters="clr-namespace:Naru.WPF.Converters"
              mc:Ignorable="d"
              d:DesignHeight="300"

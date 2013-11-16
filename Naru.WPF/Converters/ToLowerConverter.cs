@@ -1,14 +1,13 @@
 ﻿using System;
-using System.Globalization;
-using System.Windows;
+using System.Diagnostics.CodeAnalysis;
 using System.Windows.Data;
 
 namespace Naru.WPF.Converters
 {
     /// <summary>
-    /// Converts boolean to visibility values.
+    /// Converts string values to lower case.
     /// </summary>
-    public class BooleanToVisibilityConverter
+    public class ToLowerConverter
         : IValueConverter
     {
         /// <summary>
@@ -21,25 +20,16 @@ namespace Naru.WPF.Converters
         /// <returns>
         /// A converted value. If the method returns null, the valid null value is used.
         /// </returns>
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        [SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase")]
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            bool flag = false;
-            if (value is bool) {
-                flag = (bool)value;
-            }
-            else if (value is bool?) {
-                bool? nullable = (bool?)value;
-                flag = nullable.HasValue ? nullable.Value : false;
-            }
+            if (value != null) {
+                var strValue = value.ToString();
 
-            bool inverse = (parameter as string) == "inverse";
-
-            if (inverse) {
-                return (flag ? Visibility.Collapsed : Visibility.Visible);
+                
+                return strValue.ToLowerInvariant();
             }
-            else {
-                return (flag ? Visibility.Visible : Visibility.Collapsed);
-            }
+            return null;
         }
 
         /// <summary>
@@ -52,7 +42,7 @@ namespace Naru.WPF.Converters
         /// <returns>
         /// A converted value. If the method returns null, the valid null value is used.
         /// </returns>
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             throw new NotSupportedException();
         }

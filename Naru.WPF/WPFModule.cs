@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Autofac.Builder;
 
 using Naru.WPF.Dialog;
 using Naru.WPF.Menu;
@@ -26,7 +27,7 @@ namespace Naru.WPF
 
             // UserInteraction
             builder.RegisterType<UserInteraction>().As<IUserInteraction>().SingleInstance();
-            builder.RegisterType<UserInteractionHostViewModel>().As<IUserInteractionHostViewModel>();
+            builder.RegisterType<UserInteractionHostViewModel>().As<IUserInteractionHostViewModel>().InstancePerDependency();
 
             // ToolBar
             builder.RegisterType<ToolBarService>().As<IToolBarService>().SingleInstance();

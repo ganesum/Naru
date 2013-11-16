@@ -1,14 +1,13 @@
 ﻿using System;
-using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 
 namespace Naru.WPF.Converters
 {
     /// <summary>
-    /// Converts boolean to visibility values.
+    /// Converts a boolean value to a font weight (false: normal, true: bold)
     /// </summary>
-    public class BooleanToVisibilityConverter
+    public class BooleanToFontWeightConverter
         : IValueConverter
     {
         /// <summary>
@@ -21,25 +20,15 @@ namespace Naru.WPF.Converters
         /// <returns>
         /// A converted value. If the method returns null, the valid null value is used.
         /// </returns>
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            bool flag = false;
-            if (value is bool) {
-                flag = (bool)value;
-            }
-            else if (value is bool?) {
-                bool? nullable = (bool?)value;
-                flag = nullable.HasValue ? nullable.Value : false;
-            }
-
             bool inverse = (parameter as string) == "inverse";
 
-            if (inverse) {
-                return (flag ? Visibility.Collapsed : Visibility.Visible);
+            var bold = value as bool?;
+            if (bold.HasValue && bold.Value) {
+                return inverse ? FontWeights.Normal : FontWeights.Bold;
             }
-            else {
-                return (flag ? Visibility.Visible : Visibility.Collapsed);
-            }
+            return inverse ? FontWeights.Bold : FontWeights.Normal;
         }
 
         /// <summary>
@@ -52,7 +41,7 @@ namespace Naru.WPF.Converters
         /// <returns>
         /// A converted value. If the method returns null, the valid null value is used.
         /// </returns>
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             throw new NotSupportedException();
         }

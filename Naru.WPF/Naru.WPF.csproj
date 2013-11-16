@@ -46,6 +46,10 @@
     <Reference Include="FluentValidation">
       <HintPath>..\..\Blitz\packages\FluentValidation.5.0.0.1\lib\Net40\FluentValidation.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Windows.Shell">
+      <HintPath>..\..\..\Play\Naru\Naru\lib\Microsoft.Windows.Shell.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationFramework.Aero" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Reactive.Core">
@@ -77,10 +81,21 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Icons\IconNames.cs" />
+    <Compile Include="Converters\BooleanToFontWeightConverter.cs" />
+    <Compile Include="Converters\IconNameToImageConverter.cs" />
+    <Compile Include="Converters\NullOrEmptyStringToVisibilityConverter.cs" />
+    <Compile Include="Converters\NullToVisibilityConverter.cs" />
+    <Compile Include="Converters\ToLowerConverter.cs" />
+    <Compile Include="Converters\ToUpperConverter.cs" />
     <Compile Include="Debug\DebugConverter.cs" />
     <Compile Include="MVVM\IUserInteraction.cs" />
     <Compile Include="MVVM\IUserInteractionViewModel.cs" />
     <Compile Include="MVVM\UserInteraction.cs" />
+    <Compile Include="MVVM\ViewServiceHelper.cs" />
+    <Compile Include="Presentation\AppearanceManager.cs" />
+    <Compile Include="Presentation\FontSize.cs" />
+    <Compile Include="Presentation\Link.cs" />
     <Compile Include="Scheduler\CurrentScheduler.cs" />
     <Compile Include="Scheduler\DispatcherScheduler.cs" />
     <Compile Include="Scheduler\ICurrentScheduler.cs" />
@@ -109,6 +124,13 @@
     <Compile Include="Validation\ValidationAsync.cs" />
     <Compile Include="Validation\ValidationExtensions.cs" />
     <Compile Include="ViewModel\INavigationCommands.cs" />
+    <Compile Include="Windows\Controls\IWindowViewModel.cs" />
+    <Compile Include="Windows\Controls\ModernButton.cs" />
+    <Compile Include="Windows\Controls\ModernWindow.cs" />
+    <Compile Include="Windows\Controls\RelativeAnimatingContentControl.cs" />
+    <Compile Include="Windows\Controls\SourceEventArgs.cs" />
+    <Compile Include="Windows\Controls\TransitioningContentControl.cs" />
+    <Compile Include="Windows\Media\VisualTreeHelperEx.cs" />
     <Compile Include="Wizard\IWizardContext.cs" />
     <Compile Include="Wizard\IWizardStepViewModel.cs" />
     <Compile Include="Wizard\WizardContext.cs" />
@@ -216,6 +238,134 @@
     <Resource Include="Dialog\[ReadMe].txt" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Assets\Button.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Assets\Calendar.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Assets\CheckBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Assets\ComboBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Assets\ContextMenu.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Assets\Converters.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Assets\DataGrid.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Assets\DatePicker.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Assets\Expander.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Assets\GridSplitter.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Assets\Hyperlink.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Assets\Icons\Icons.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Assets\Label.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Assets\ListBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Assets\ListView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Assets\Menu.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Assets\MenuItem.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Assets\ModernUI.Dark.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Assets\ModernUI.Light.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Assets\ModernUI.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Assets\ModernWindowEx.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Assets\PasswordBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Assets\ProgressBar.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Assets\RadioButton.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Assets\ScrollBar.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Assets\Slider.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Assets\TabControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Assets\TextBlock.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Assets\TextBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Assets\ToolBar.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Assets\ToolTip.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Assets\TreeView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="ContextMenu\ContextMenuItemTemplates.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -233,6 +383,22 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="TabControl\TabControlHeaderView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\ModernButton.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\ModernWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\TransitioningContentControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -261,10 +427,6 @@
     <ProjectReference Include="..\Naru.TPL\Naru.TPL.csproj">
       <Project>{2bbca269-6fdf-446d-9651-32717907afa8}</Project>
       <Name>Naru.TPL</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Naru.WPF.ModernUI\Naru.WPF.ModernUI.csproj">
-      <Project>{ca857197-fc3d-4185-a4ca-cb8b78828b48}</Project>
-      <Name>Naru.WPF.ModernUI</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -4,9 +4,9 @@ using System.Windows;
 using Common.Logging;
 
 using Naru.TPL;
-using Naru.WPF.ModernUI.Windows.Controls;
 using Naru.WPF.Scheduler;
 using Naru.WPF.ViewModel;
+using Naru.WPF.Windows.Controls;
 
 namespace Naru.WPF.MVVM
 {
