@@ -92,7 +92,7 @@ namespace Naru.WPF.TabControl
             AssociatedObject.Items.Add(tabItem);
 
             // If it is currently active, sync with the TabControl
-            var supportActivationState = view.DataContext as ISupportActivationState;
+            var supportActivationState = viewModel as ISupportActivationState;
             if (supportActivationState == null) return true;
 
             if (supportActivationState.IsActive)

@@ -7,7 +7,7 @@ namespace Naru.WPF.MVVM
 {
     public class ViewServiceHelper
     {
-        public static FrameworkElement CreateView(Type viewModelType)
+        public static object CreateView(Type viewModelType)
         {
             // Work out the view type from the ViewModel type 
             var viewTypeName = viewModelType.FullName.Replace("Model", "");
@@ -16,15 +16,17 @@ namespace Naru.WPF.MVVM
             var useViewAttribute = Attribute.GetCustomAttribute(viewModelType, typeof (UseViewAttribute), true) as UseViewAttribute;
             var viewType = useViewAttribute != null ? useViewAttribute.ViewType : viewModelType.Assembly.GetType(viewTypeName);
 
-            var view = (FrameworkElement)Activator.CreateInstance(viewType);
-
-            return view;
+            return viewType != null ? Activator.CreateInstance(viewType) : viewModelType.FullName;
         }
 
-        public static void BindViewModel<TViewModel>(FrameworkElement view, TViewModel viewModel)
+        public static void BindViewModel<TViewModel>(object view, TViewModel viewModel)
             where TViewModel : IViewModel
         {
-            view.DataContext = viewModel;
+            var frameworkElement = view as FrameworkElement;
+            if (frameworkElement != null)
+            {
+                frameworkElement.DataContext = viewModel;
+            }
         }
     }
 }

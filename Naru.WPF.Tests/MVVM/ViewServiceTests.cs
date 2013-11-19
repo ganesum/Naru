@@ -50,7 +50,7 @@ namespace Naru.WPF.Tests.MVVM
 
             var viewModel = container.Create<StubViewModel>();
 
-            ViewService.BindViewModel(view, viewModel);
+            ViewServiceHelper.BindViewModel(view, viewModel);
 
             Assert.That(view.DataContext, Is.EqualTo(viewModel));
         }
@@ -63,7 +63,7 @@ namespace Naru.WPF.Tests.MVVM
 
             var viewModel = container.Create<StubViewModel>();
 
-            var view = ViewService.CreateView(viewModel.GetType());
+            var view = ViewServiceHelper.CreateView(viewModel.GetType());
 
             Assert.That(view.GetType(), Is.EqualTo(typeof(StubView)));
         }
@@ -76,7 +76,7 @@ namespace Naru.WPF.Tests.MVVM
 
             var viewModel = container.Create<StubViewModelWithUseViewAttribute>();
 
-            var view = ViewService.CreateView(viewModel.GetType());
+            var view = ViewServiceHelper.CreateView(viewModel.GetType());
 
             Assert.That(view.GetType(), Is.EqualTo(typeof(StubViewNameNotMatchingView)));
         }
