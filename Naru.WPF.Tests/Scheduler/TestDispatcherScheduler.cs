@@ -3,6 +3,7 @@ using System.Reactive.Concurrency;
 
 using Microsoft.Reactive.Testing;
 
+using Naru.TPL;
 using Naru.WPF.Scheduler;
 
 using TaskScheduler = System.Threading.Tasks.TaskScheduler;

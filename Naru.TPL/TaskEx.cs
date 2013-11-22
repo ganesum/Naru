@@ -543,6 +543,49 @@ namespace Naru.TPL
             return task;
         }
 
+
+        /// <summary>
+        /// Returns a task which retries the task returned by the specified task provider.
+        /// http://gorodinski.com/blog/2012/03/22/retry-with-the-net-task-parallel-library-tpl/
+        /// </summary>
+        /// <typeparam name="TResult"></typeparam>
+        /// <param name="task"></param>
+        /// <param name="taskProvider"></param>
+        /// <param name="maxAttemps"></param>
+        /// <param name="shouldRetry"></param>
+        /// <param name="scheduler"></param>
+        /// <returns></returns>
+        public static Task<TResult> Retry<TResult>(this Task<TResult> task, Func<Task<TResult>> taskProvider,
+                                                   int maxAttemps, Func<Exception, bool> shouldRetry,
+                                                   TaskScheduler scheduler)
+        {
+            if (taskProvider == null) throw new ArgumentNullException("taskProvider");
+            if (scheduler == null) throw new ArgumentNullException("scheduler");
+            if (maxAttemps < 0) throw new ArgumentNullException("maxAttemps", "maxAttemps is a negative number.");
+
+            if (shouldRetry == null)
+            {
+                shouldRetry = _ => true;
+            }
+
+            if (!task.IsFaulted)
+            {
+                return task;
+            }
+
+            if (maxAttemps > 0 && shouldRetry(task.Exception.InnerException))
+            {
+                return taskProvider()
+                    .ContinueWith(retryTask =>
+                                  Retry(retryTask, taskProvider, --maxAttemps, shouldRetry, scheduler),
+                                  CancellationToken.None, TaskContinuationOptions.None, scheduler)
+                    .Result;
+            }
+
+            // will throw AggregateException
+            return task;
+        }
+
         /// <summary>
         /// Task that immediately return the value passed in.
         /// </summary>

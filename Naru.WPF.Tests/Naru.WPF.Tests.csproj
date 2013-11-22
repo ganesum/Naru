@@ -97,6 +97,7 @@
     <Compile Include="Scheduler\TestTaskScheduler.cs" />
     <Compile Include="Scheduler\TestThreadPoolScheduler.cs" />
     <Compile Include="Validation\ValidationAsyncTests.cs" />
+    <Compile Include="ViewModel\BusyLatchTests.cs" />
     <Compile Include="ViewModel\BusyViewModelTests.cs" />
     <Compile Include="Core\CompositeDisposableTests.cs" />
     <Compile Include="ViewModel\ViewModelHelpersTests.cs" />
@@ -115,7 +116,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="Scheduler\CurrentThreadTaskScheduler.cs" />
     <Compile Include="Scheduler\TaskExTests.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

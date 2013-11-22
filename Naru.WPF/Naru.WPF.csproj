@@ -123,6 +123,7 @@
     <Compile Include="Validation\ModelWithValidation.cs" />
     <Compile Include="Validation\ValidationAsync.cs" />
     <Compile Include="Validation\ValidationExtensions.cs" />
+    <Compile Include="ViewModel\BusyLatch.cs" />
     <Compile Include="ViewModel\INavigationCommands.cs" />
     <Compile Include="Windows\Controls\IWindowViewModel.cs" />
     <Compile Include="Windows\Controls\ModernButton.cs" />

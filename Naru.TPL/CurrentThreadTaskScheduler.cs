@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Naru.WPF.Tests.Scheduler
+namespace Naru.TPL
 {
     public class CurrentThreadTaskScheduler : TaskScheduler
     {

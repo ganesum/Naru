@@ -14,7 +14,8 @@ namespace Naru.WPF.ViewModel
     public class BusyViewModel : ViewModel, ISupportBusy
     {
         private readonly ISchedulerProvider _scheduler;
-        private readonly Subject<bool> _isActiveChanged = new Subject<bool>(); 
+        private readonly Subject<bool> _isActiveChanged = new Subject<bool>();
+        private readonly BusyLatch _busyLatch = new BusyLatch();
 
         #region IsActive
 
@@ -57,10 +58,19 @@ namespace Naru.WPF.ViewModel
 
         #endregion
 
+        public BusyLatch BusyLatch
+        {
+            get { return _busyLatch; }
+        }
+
         public BusyViewModel(ILog log, ISchedulerProvider scheduler) 
             : base(log)
         {
             _scheduler = scheduler;
+
+            _busyLatch.IsActive
+                      .ObserveOn(scheduler.Dispatcher.RX)
+                      .Subscribe(x => IsActive = x);
         }
 
         public void Active(string message)
