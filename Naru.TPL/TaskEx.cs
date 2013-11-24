@@ -815,7 +815,7 @@ namespace Naru.TPL
                         tcs.TrySetException(exc);
                     }
                 }
-            }, CancellationToken.None, TaskContinuationOptions.ExecuteSynchronously, scheduler);
+            }, scheduler);
 
             return tcs.Task;
         }
@@ -860,7 +860,7 @@ namespace Naru.TPL
                         tcs.TrySetException(exc);
                     }
                 }
-            }, CancellationToken.None, TaskContinuationOptions.ExecuteSynchronously, scheduler);
+            }, scheduler);
 
             return tcs.Task;
         }
@@ -904,7 +904,7 @@ namespace Naru.TPL
                         tcs.TrySetException(exc);
                     }
                 }
-            }, CancellationToken.None, TaskContinuationOptions.ExecuteSynchronously, scheduler);
+            }, scheduler);
 
             return tcs.Task;
         }
@@ -946,7 +946,7 @@ namespace Naru.TPL
                         tcs.TrySetException(exc);
                     }
                 }
-            }, CancellationToken.None, TaskContinuationOptions.ExecuteSynchronously, scheduler);
+            }, scheduler);
 
             return tcs.Task;
         }
@@ -991,7 +991,7 @@ namespace Naru.TPL
                         tcs.TrySetException(exc);
                     }
                 }
-            }, CancellationToken.None, TaskContinuationOptions.ExecuteSynchronously, scheduler);
+            }, scheduler);
 
             return tcs.Task;
         }
