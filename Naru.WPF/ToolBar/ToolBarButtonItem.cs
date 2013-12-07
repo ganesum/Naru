@@ -1,25 +1,22 @@
 ﻿using Naru.WPF.Command;
+using Naru.WPF.ContextMenu;
+using Naru.WPF.Scheduler;
 using Naru.WPF.ViewModel;
 
 namespace Naru.WPF.ToolBar
 {
-    public class ToolBarButtonItem : NotifyPropertyChanged, IToolBarItem
+    public class ToolBarButtonItem : ViewModel.ViewModel, IToolBarItem
     {
         public string DisplayName { get; set; }
 
         #region IsVisible
 
-        private bool _isVisible;
+        private readonly ObservableProperty<bool> _isVisible = new ObservableProperty<bool>();
 
         public bool IsVisible
         {
-            get { return _isVisible; }
-            set
-            {
-                if (value.Equals(_isVisible)) return;
-                _isVisible = value;
-                RaisePropertyChanged(() => IsVisible);
-            }
+            get { return _isVisible.Value; }
+            set { this.RaiseAndSetIfChanged(_isVisible, value); }
         }
 
         #endregion
@@ -28,8 +25,10 @@ namespace Naru.WPF.ToolBar
         
         public string ImageName { get; set; }
 
-        public ToolBarButtonItem()
+        public ToolBarButtonItem(ISchedulerProvider scheduler)
         {
+            _isVisible.ConnectINPCProperty(this, () => IsVisible, scheduler).AddDisposable(Disposables);
+
             IsVisible = true;
         }
     }

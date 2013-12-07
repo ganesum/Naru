@@ -6,7 +6,6 @@ namespace Naru.WPF.ViewModel
 {
     /// <summary>
     /// Base class for items that support property notification.
-    /// Taken from PRISM.
     /// </summary>
     /// 
     /// <remarks>
@@ -14,7 +13,7 @@ namespace Naru.WPF.ViewModel
     ///             marshalling execution to the UI thread.
     /// 
     /// </remarks>
-    public abstract class NotifyPropertyChanged : INotifyPropertyChanged
+    public abstract class NotifyPropertyChanged : INotifyPropertyChanged, INotifyPropertyChangedEx
     {
         /// <summary>
         /// Raised when a property on this object has a new value.
@@ -64,6 +63,11 @@ namespace Naru.WPF.ViewModel
         protected void RaisePropertyChanged<T>(Expression<Func<T>> propertyExpression)
         {
             RaisePropertyChanged(PropertyExtensions.ExtractPropertyName(propertyExpression));
+        }
+
+        void INotifyPropertyChangedEx.ConnectINPC(string propertyname)
+        {
+            RaisePropertyChanged(propertyname);
         }
     }
 }

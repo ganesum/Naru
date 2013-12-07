@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Reactive;
 using System.Reactive.Linq;
-using System.Reactive.Subjects;
 using System.Threading.Tasks;
 
 using Common.Logging;
 
 using Naru.TPL;
+using Naru.WPF.ContextMenu;
 using Naru.WPF.Scheduler;
 
 namespace Naru.WPF.ViewModel
@@ -14,46 +13,33 @@ namespace Naru.WPF.ViewModel
     public class BusyViewModel : ViewModel, ISupportBusy
     {
         private readonly ISchedulerProvider _scheduler;
-        private readonly Subject<bool> _isActiveChanged = new Subject<bool>();
         private readonly BusyLatch _busyLatch = new BusyLatch();
 
         #region IsActive
 
-        private bool _isActive;
+        private readonly ObservableProperty<bool> _isActive = new ObservableProperty<bool>();
 
         public bool IsActive
         {
-            get { return _isActive; }
-            private set
-            {
-                if (value.Equals(_isActive)) return;
-                _isActive = value;
-                RaisePropertyChanged(() => IsActive);
-
-                _isActiveChanged.OnNext(value);
-            }
+            get { return _isActive.Value; }
+            private set { this.RaiseAndSetIfChanged(_isActive, value); }
         }
 
         #endregion
 
         public IObservable<bool> IsActiveChanged
         {
-            get { return _isActiveChanged.AsObservable(); }
+            get { return _isActive.ValueChanged.DistinctUntilChanged(); }
         }
 
         #region Message
 
-        private string _message;
+        private readonly ObservableProperty<string> _message = new ObservableProperty<string>();
 
         public string Message
         {
-            get { return _message; }
-            private set
-            {
-                if (value == _message) return;
-                _message = value;
-                RaisePropertyChanged(() => Message);
-            }
+            get { return _message.Value; }
+            private set { this.RaiseAndSetIfChanged(_message, value); }
         }
 
         #endregion
@@ -63,14 +49,14 @@ namespace Naru.WPF.ViewModel
             get { return _busyLatch; }
         }
 
-        public BusyViewModel(ILog log, ISchedulerProvider scheduler) 
-            : base(log)
+        public BusyViewModel(ISchedulerProvider scheduler)
         {
             _scheduler = scheduler;
 
-            _busyLatch.IsActive
-                      .ObserveOn(scheduler.Dispatcher.RX)
-                      .Subscribe(x => IsActive = x);
+            _isActive.ConnectINPCProperty(this, () => IsActive, scheduler).AddDisposable(Disposables);
+            _message.ConnectINPCProperty(this, () => Message, scheduler).AddDisposable(Disposables);
+
+            _busyLatch.IsActive.Subscribe(x => IsActive = x);
         }
 
         public void Active(string message)

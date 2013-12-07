@@ -1,14 +1,9 @@
-﻿using Common.Logging;
+﻿using System.Reactive.Disposables;
 
 namespace Naru.WPF.ViewModel
 {
     public abstract class ViewModel : NotifyPropertyChanged, IViewModel
     {
-        protected readonly ILog Log;
-
-        protected ViewModel(ILog log)
-        {
-            Log = log;
-        }
+        protected readonly CompositeDisposable Disposables = new CompositeDisposable();
     }
 }

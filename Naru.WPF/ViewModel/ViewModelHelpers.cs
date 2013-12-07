@@ -1,16 +1,19 @@
 ﻿using System;
-using System.Windows;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using System.Reactive.Linq;
 
 using Naru.WPF.MVVM;
+using Naru.WPF.Scheduler;
 using Naru.WPF.ToolBar;
 
 namespace Naru.WPF.ViewModel
 {
     public static class ViewModelHelpers
     {
-        public static void SetupHeader(this ISupportHeader viewModel, string displayName = null, string uri = null)
+        public static void SetupHeader(this ISupportHeader viewModel, ISchedulerProvider scheduler, string displayName = null, string uri = null)
         {
-            var headerViewModel = new HeaderViewModel
+            var headerViewModel = new HeaderViewModel(scheduler)
             {
                 DisplayName = displayName,
                 ImageName = uri
@@ -97,6 +100,34 @@ namespace Naru.WPF.ViewModel
             ViewServiceHelper.BindViewModel(view, viewModel);
 
             return view;
+        }
+
+        public static IDisposable ConnectINPCProperty<T>(this ObservableProperty<T> observableProperty,
+                                                         INotifyPropertyChangedEx viewModel,
+                                                         Expression<Func<T>> propertyExpression,
+                                                         ISchedulerProvider scheduler)
+        {
+            var propertyName = PropertyExtensions.ExtractPropertyName(propertyExpression);
+            return observableProperty.ValueChanged
+                                     .ObserveOn(scheduler.Dispatcher.RX)
+                                     .Subscribe(x => viewModel.ConnectINPC(propertyName));
+        }
+
+        public static TValue RaiseAndSetIfChanged<TViewModel, TValue>(this TViewModel viewModel,
+                                                                      ObservableProperty<TValue> observableProperty,
+                                                                      TValue newValue)
+            where TViewModel : IViewModel
+        {
+            // Inspired by ReactiveUI
+
+            if (EqualityComparer<TValue>.Default.Equals(observableProperty.Value, newValue))
+            {
+                return newValue;
+            }
+
+            observableProperty.Value = newValue;
+
+            return newValue;
         }
     }
 }

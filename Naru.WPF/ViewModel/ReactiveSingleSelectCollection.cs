@@ -1,40 +1,34 @@
 ﻿using System;
-using System.Reactive.Linq;
-using System.Reactive.Subjects;
 
+using Naru.WPF.ContextMenu;
 using Naru.WPF.MVVM;
+using Naru.WPF.Scheduler;
 
 namespace Naru.WPF.ViewModel
 {
-    public class ReactiveSingleSelectCollection<T> : NotifyPropertyChanged, IReactiveSingleSelect<T>
+    public class ReactiveSingleSelectCollection<T> : ViewModel, IReactiveSingleSelect<T>
     {
-        private readonly Subject<T> _selectedItemChanged = new Subject<T>(); 
-
         public BindableCollection<T> Items { get; private set; }
 
         #region SelectedItem
 
-        private T _selectedItem;
+        private readonly ObservableProperty<T> _selectedItem = new ObservableProperty<T>();
 
         public T SelectedItem
         {
-            get { return _selectedItem; }
-            set
-            {
-                _selectedItem = value; 
-                RaisePropertyChanged(() => SelectedItem);
-
-                _selectedItemChanged.OnNext(value);
-            }
+            get { return _selectedItem.Value; }
+            set { _selectedItem.Value = value; }
         }
 
-        public IObservable<T> SelectedItemChanged { get { return _selectedItemChanged.AsObservable(); } }
+        public IObservable<T> SelectedItemChanged { get { return _selectedItem.ValueChanged; } }
 
         #endregion
 
-        public ReactiveSingleSelectCollection(BindableCollection<T> itemsCollection)
+        public ReactiveSingleSelectCollection(BindableCollection<T> itemsCollection, ISchedulerProvider scheduler)
         {
             Items = itemsCollection;
+
+            _selectedItem.ConnectINPCProperty(this, () => SelectedItem, scheduler).AddDisposable(Disposables);
         }
     }
 }

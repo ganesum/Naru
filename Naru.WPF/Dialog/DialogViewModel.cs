@@ -37,7 +37,7 @@ namespace Naru.WPF.Dialog
 
         public void Initialise(DialogType dialogType, List<T> answers, string title, string message)
         {
-            this.SetupHeader(string.Format("{0} - {1}", dialogType, title));
+            this.SetupHeader(Scheduler, string.Format("{0} - {1}", dialogType, title));
             Message = message;
 
             for (var index = 0; index < answers.Count; index++)

@@ -2,6 +2,7 @@
 
 using Common.Logging;
 
+using Naru.WPF.ContextMenu;
 using Naru.WPF.Dialog;
 using Naru.WPF.Scheduler;
 using Naru.WPF.ViewModel;
@@ -19,28 +20,24 @@ namespace Naru.WPF.UserInteractionHost
 
         #region ViewModel
 
-        private IViewModel _viewModel;
+        private readonly ObservableProperty<IViewModel> _viewModel = new ObservableProperty<IViewModel>();
 
         public IViewModel ViewModel
         {
-            get { return _viewModel; }
-            private set
-            {
-                _viewModel = value;
-                RaisePropertyChanged(() => ViewModel);
-            }
+            get { return _viewModel.Value; }
+            private set { this.RaiseAndSetIfChanged(_viewModel, value); }
         }
 
         #endregion
 
         #region ShowClose
 
-        private bool _showClose;
+        private readonly ObservableProperty<bool> _showClose = new ObservableProperty<bool>();
 
         public bool ShowClose
         {
-            get { return _showClose; }
-            private set { _showClose = value; }
+            get { return _showClose.Value; }
+            private set { this.RaiseAndSetIfChanged(_showClose, value); }
         }
 
         #endregion
@@ -48,6 +45,8 @@ namespace Naru.WPF.UserInteractionHost
         public UserInteractionHostViewModel(ILog log, ISchedulerProvider scheduler, IStandardDialog standardDialog)
             : base(log, scheduler, standardDialog)
         {
+            _viewModel.ConnectINPCProperty(this, () => ViewModel, scheduler).AddDisposable(Disposables);
+            _showClose.ConnectINPCProperty(this, () => ShowClose, scheduler).AddDisposable(Disposables);
         }
 
         public void Initialise(IViewModel viewModel)

@@ -9,7 +9,6 @@ using Common.Logging;
 using Naru.Core;
 using Naru.TPL;
 using Naru.WPF.Command;
-using Naru.WPF.Core;
 using Naru.WPF.Dialog;
 using Naru.WPF.Scheduler;
 
@@ -17,9 +16,9 @@ namespace Naru.WPF.ViewModel
 {
     public abstract class Workspace : ViewModel, ISupportClosing, ISupportActivationState, ISupportVisibility, ISupportHeader, ISupportInitialisation
     {
+        protected readonly ILog Log;
         protected readonly ISchedulerProvider Scheduler;
         protected readonly IStandardDialog StandardDialog;
-        protected readonly CompositeDisposable Disposables;
 
         private readonly Subject<bool> _activationStateChanged = new Subject<bool>();
         private readonly Subject<Unit> _closed = new Subject<Unit>();
@@ -27,15 +26,13 @@ namespace Naru.WPF.ViewModel
 
         public BusyViewModel BusyViewModel { get; private set; }
 
-        protected Workspace(ILog log, ISchedulerProvider scheduler, IStandardDialog standardDialog) 
-            : base(log)
+        protected Workspace(ILog log, ISchedulerProvider scheduler, IStandardDialog standardDialog)
         {
+            Log = log;
             Scheduler = scheduler;
             StandardDialog = standardDialog;
 
-            BusyViewModel = new BusyViewModel(log, scheduler);
-
-            Disposables = new CompositeDisposable();
+            BusyViewModel = new BusyViewModel(scheduler);
 
             CloseCommand = new DelegateCommand(Close);
 
