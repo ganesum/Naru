@@ -1,6 +1,8 @@
 ﻿using System;
 
 using Naru.Tests;
+using Naru.WPF.Scheduler;
+using Naru.WPF.Tests.Scheduler;
 using Naru.WPF.ViewModel;
 
 using NUnit.Framework;
@@ -17,6 +19,8 @@ namespace Naru.WPF.Tests.ViewModel
             {
                 var container = AutoMock.GetStrict();
 
+                container.Provide<ISchedulerProvider>(new TestSchedulerProvider());
+
                 var viewModel = container.Create<BusyViewModel>();
 
                 Assert.That(viewModel.IsActive, Is.False);
@@ -30,6 +34,8 @@ namespace Naru.WPF.Tests.ViewModel
             public void is_called_with_a_message_then_Message_is_set_to_the_message()
             {
                 var container = AutoMock.GetStrict();
+
+                container.Provide<ISchedulerProvider>(new TestSchedulerProvider());
 
                 var viewModel = container.Create<BusyViewModel>();
 
@@ -50,6 +56,8 @@ namespace Naru.WPF.Tests.ViewModel
             {
                 var container = AutoMock.GetStrict();
 
+                container.Provide<ISchedulerProvider>(new TestSchedulerProvider());
+
                 var viewModel = container.Create<BusyViewModel>();
                 viewModel.Active(string.Empty);
 
@@ -64,6 +72,8 @@ namespace Naru.WPF.Tests.ViewModel
             public void is_called_then_Message_is_set_to_empty_string()
             {
                 var container = AutoMock.GetStrict();
+
+                container.Provide<ISchedulerProvider>(new TestSchedulerProvider());
 
                 var viewModel = container.Create<BusyViewModel>();
 

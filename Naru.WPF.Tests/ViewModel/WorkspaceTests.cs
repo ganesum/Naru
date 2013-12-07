@@ -69,6 +69,8 @@ namespace Naru.WPF.Tests.ViewModel
                 {
                     var container = AutoMock.GetLoose();
 
+                    container.Provide<ISchedulerProvider>(new TestSchedulerProvider());
+
                     var eventWasFired = false;
 
                     var viewModel = container.Create<WorkspaceViewModel>();
@@ -86,6 +88,8 @@ namespace Naru.WPF.Tests.ViewModel
                 public void is_called_then_Disposables_are_disposed()
                 {
                     var container = AutoMock.GetLoose();
+
+                    container.Provide<ISchedulerProvider>(new TestSchedulerProvider());
 
                     var eventWasFired = false;
 
@@ -105,6 +109,8 @@ namespace Naru.WPF.Tests.ViewModel
                 {
                     var container = AutoMock.GetLoose();
 
+                    container.Provide<ISchedulerProvider>(new TestSchedulerProvider());
+
                     var eventWasFired = false;
 
                     var viewModel = container.Create<WorkspaceViewModel>();
@@ -123,6 +129,8 @@ namespace Naru.WPF.Tests.ViewModel
             public void when_CloseCommand_is_executed_then_OnClosed_event_is_fired()
             {
                 var container = AutoMock.GetLoose();
+
+                container.Provide<ISchedulerProvider>(new TestSchedulerProvider());
 
                 var eventWasFired = false;
 

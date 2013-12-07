@@ -8,8 +8,7 @@ namespace Naru.WPF.Converters
     /// <summary>
     /// Converts boolean to visibility values.
     /// </summary>
-    public class BooleanToVisibilityConverter
-        : IValueConverter
+    public class BooleanToVisibilityConverter : IValueConverter
     {
         /// <summary>
         /// Converts a value.
@@ -23,23 +22,25 @@ namespace Naru.WPF.Converters
         /// </returns>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            bool flag = false;
-            if (value is bool) {
-                flag = (bool)value;
+            var flag = false;
+            if (value is bool)
+            {
+                flag = (bool) value;
             }
-            else if (value is bool?) {
-                bool? nullable = (bool?)value;
+            else if (value is bool?)
+            {
+                var nullable = (bool?) value;
                 flag = nullable.HasValue ? nullable.Value : false;
             }
 
-            bool inverse = (parameter as string) == "inverse";
+            var inverse = (parameter as string) == "inverse";
 
-            if (inverse) {
+            if (inverse)
+            {
                 return (flag ? Visibility.Collapsed : Visibility.Visible);
             }
-            else {
-                return (flag ? Visibility.Visible : Visibility.Collapsed);
-            }
+
+            return (flag ? Visibility.Visible : Visibility.Collapsed);
         }
 
         /// <summary>

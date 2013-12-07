@@ -272,7 +272,7 @@ namespace Naru.WPF.Tests.Scheduler
 
                     return 0;
                 }, taskScheduler)
-                .Then(_ =>
+                .Do(_ =>
                 {
                     Assert.That(task1HasRun, Is.True);
                     Assert.That(task2HasRun, Is.False);
@@ -305,7 +305,7 @@ namespace Naru.WPF.Tests.Scheduler
 
                     task1HasRun = true;
                 }, taskScheduler)
-                .Then(() =>
+                .Do(() =>
                 {
                     Assert.That(task1HasRun, Is.True);
                     Assert.That(task2HasRun, Is.False);
@@ -514,7 +514,7 @@ namespace Naru.WPF.Tests.Scheduler
 
                     throw new Exception();
                 })
-                .Then(_ =>
+                .Do(_ =>
                 {
                     Assert.That(task2HasRun, Is.False);
 

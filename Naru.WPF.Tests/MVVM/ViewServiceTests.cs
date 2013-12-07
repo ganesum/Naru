@@ -7,6 +7,7 @@ using Naru.Tests;
 using Naru.WPF.Dialog;
 using Naru.WPF.MVVM;
 using Naru.WPF.Scheduler;
+using Naru.WPF.Tests.Scheduler;
 using Naru.WPF.ViewModel;
 
 using NUnit.Framework;
@@ -45,6 +46,8 @@ namespace Naru.WPF.Tests.MVVM
         {
             var container = AutoMock.GetStrict();
 
+            container.Provide<ISchedulerProvider>(new TestSchedulerProvider());
+
             var view = new UserControl();
             Assert.That(view.DataContext, Is.Null);
 
@@ -61,6 +64,8 @@ namespace Naru.WPF.Tests.MVVM
         {
             var container = AutoMock.GetStrict();
 
+            container.Provide<ISchedulerProvider>(new TestSchedulerProvider());
+
             var viewModel = container.Create<StubViewModel>();
 
             var view = ViewServiceHelper.CreateView(viewModel.GetType());
@@ -73,6 +78,8 @@ namespace Naru.WPF.Tests.MVVM
         public void check_that_the_correct_view_is_resolved_from_the_viewmodel_UseViewAttribute()
         {
             var container = AutoMock.GetStrict();
+
+            container.Provide<ISchedulerProvider>(new TestSchedulerProvider());
 
             var viewModel = container.Create<StubViewModelWithUseViewAttribute>();
 

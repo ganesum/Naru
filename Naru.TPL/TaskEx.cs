@@ -173,6 +173,40 @@ namespace Naru.TPL
 
             return tcs.Task;
         }
+        
+        public static Task Do(this Task first, Action next, TaskScheduler scheduler)
+        {
+            if (first == null) throw new ArgumentNullException("first");
+            if (next == null) throw new ArgumentNullException("next");
+            if (scheduler == null) throw new ArgumentNullException("scheduler");
+
+            var tcs = new TaskCompletionSource<object>();
+            first.ContinueWith(_ =>
+            {
+                if (first.IsFaulted)
+                {
+                    tcs.TrySetException(first.Exception.InnerExceptions);
+                }
+                else if (first.IsCanceled)
+                {
+                    tcs.TrySetCanceled();
+                }
+                else
+                {
+                    try
+                    {
+                        next();
+                        tcs.TrySetResult(null);
+                    }
+                    catch (Exception exc)
+                    {
+                        tcs.TrySetException(exc);
+                    }
+                }
+            }, CancellationToken.None, TaskContinuationOptions.None, scheduler);
+
+            return tcs.Task;
+        }
 
         public static Task<T1> Do<T1>(this Task<T1> first, Action next, TaskScheduler scheduler)
         {
@@ -203,7 +237,7 @@ namespace Naru.TPL
                         tcs.TrySetException(exc);
                     }
                 }
-            }, CancellationToken.None, TaskContinuationOptions.ExecuteSynchronously, scheduler);
+            }, CancellationToken.None, TaskContinuationOptions.None, scheduler);
 
             return tcs.Task;
         }
@@ -238,7 +272,7 @@ namespace Naru.TPL
                         tcs.TrySetException(exc);
                     }
                 }
-            }, CancellationToken.None, TaskContinuationOptions.ExecuteSynchronously, scheduler);
+            }, CancellationToken.None, TaskContinuationOptions.None, scheduler);
 
             return tcs.Task;
         }
@@ -264,14 +298,14 @@ namespace Naru.TPL
                 {
                     try
                     {
-                        next().Then(() => tcs.TrySetResult(first.Result), scheduler);
+                        next().Do(() => tcs.TrySetResult(first.Result), scheduler);
                     }
                     catch (Exception exc)
                     {
                         tcs.TrySetException(exc);
                     }
                 }
-            }, CancellationToken.None, TaskContinuationOptions.ExecuteSynchronously, scheduler);
+            }, CancellationToken.None, TaskContinuationOptions.None, scheduler);
 
             return tcs.Task;
         }
@@ -297,14 +331,14 @@ namespace Naru.TPL
                 {
                     try
                     {
-                        next(first.Result).Then(() => tcs.TrySetResult(first.Result), scheduler);
+                        next(first.Result).Do(() => tcs.TrySetResult(first.Result), scheduler);
                     }
                     catch (Exception exc)
                     {
                         tcs.TrySetException(exc);
                     }
                 }
-            }, CancellationToken.None, TaskContinuationOptions.ExecuteSynchronously, scheduler);
+            }, CancellationToken.None, TaskContinuationOptions.None, scheduler);
 
             return tcs.Task;
         }
@@ -675,7 +709,7 @@ namespace Naru.TPL
                                 {
                                     tcs.TrySetResult(t.Result);
                                 }
-                            }, CancellationToken.None, TaskContinuationOptions.ExecuteSynchronously, scheduler);
+                            }, CancellationToken.None, TaskContinuationOptions.None, scheduler);
                         }
                     }
                     catch (Exception exc)
@@ -683,7 +717,7 @@ namespace Naru.TPL
                         tcs.TrySetException(exc);
                     }
                 }
-            }, CancellationToken.None, TaskContinuationOptions.ExecuteSynchronously, scheduler);
+            }, CancellationToken.None, TaskContinuationOptions.None, scheduler);
 
             return tcs.Task;
         }
@@ -741,7 +775,7 @@ namespace Naru.TPL
                                 {
                                     tcs.TrySetResult(t.Result);
                                 }
-                            }, CancellationToken.None, TaskContinuationOptions.ExecuteSynchronously, scheduler);
+                            }, CancellationToken.None, TaskContinuationOptions.None, scheduler);
                         }
                     }
                     catch (Exception exc)
@@ -749,7 +783,7 @@ namespace Naru.TPL
                         tcs.TrySetException(exc);
                     }
                 }
-            }, CancellationToken.None, TaskContinuationOptions.ExecuteSynchronously, scheduler);
+            }, CancellationToken.None, TaskContinuationOptions.None, scheduler);
 
             return tcs.Task;
         }
@@ -807,7 +841,7 @@ namespace Naru.TPL
                                 {
                                     tcs.TrySetResult(null);
                                 }
-                            }, CancellationToken.None, TaskContinuationOptions.ExecuteSynchronously, scheduler);
+                            }, CancellationToken.None, TaskContinuationOptions.None, scheduler);
                         }
                     }
                     catch (Exception exc)
@@ -866,92 +900,6 @@ namespace Naru.TPL
         }
 
         /// <summary>
-        /// Execute an Action, Task completes when it is finished.
-        /// next is only called if first completed successfully.
-        /// </summary>
-        /// <typeparam name="T1"></typeparam>
-        /// <param name="first"></param>
-        /// <param name="next"></param>
-        /// <param name="scheduler"></param>
-        /// <returns></returns>
-        public static Task Then<T1>(this Task<T1> first, Action<T1> next, TaskScheduler scheduler)
-        {
-            if (first == null) throw new ArgumentNullException("first");
-            if (next == null) throw new ArgumentNullException("next");
-            if (scheduler == null) throw new ArgumentNullException("scheduler");
-
-            var tcs = new TaskCompletionSource<object>();
-            first.ContinueWith(_ =>
-            {
-                if (first.IsFaulted)
-                {
-                    tcs.TrySetException(first.Exception.InnerExceptions);
-                }
-                else if (first.IsCanceled)
-                {
-                    tcs.TrySetCanceled();
-                }
-                else
-                {
-                    try
-                    {
-                        next(first.Result);
-
-                        tcs.TrySetResult(null);
-                    }
-                    catch (Exception exc)
-                    {
-                        tcs.TrySetException(exc);
-                    }
-                }
-            }, scheduler);
-
-            return tcs.Task;
-        }
-
-        /// <summary>
-        /// Execute an Action, Task completes when it is finished.
-        /// </summary>
-        /// <param name="first"></param>
-        /// <param name="next"></param>
-        /// <param name="scheduler"></param>
-        /// <returns></returns>
-        public static Task Then(this Task first, Action next, TaskScheduler scheduler)
-        {
-            if (first == null) throw new ArgumentNullException("first");
-            if (next == null) throw new ArgumentNullException("next");
-            if (scheduler == null) throw new ArgumentNullException("scheduler");
-
-            var tcs = new TaskCompletionSource<object>();
-            first.ContinueWith(_ =>
-            {
-                if (first.IsFaulted)
-                {
-                    tcs.TrySetException(first.Exception.InnerExceptions);
-                }
-                else if (first.IsCanceled)
-                {
-                    tcs.TrySetCanceled();
-                }
-                else
-                {
-                    try
-                    {
-                        next();
-
-                        tcs.TrySetResult(null);
-                    }
-                    catch (Exception exc)
-                    {
-                        tcs.TrySetException(exc);
-                    }
-                }
-            }, scheduler);
-
-            return tcs.Task;
-        }
-
-        /// <summary>
         /// When first completes, pass the results to next.
         /// next is only called if first completed successfully.
         /// </summary>
@@ -984,7 +932,7 @@ namespace Naru.TPL
                                 if (t.IsFaulted) tcs.TrySetException(t.Exception.InnerExceptions);
                                 else if (t.IsCanceled) tcs.TrySetCanceled();
                                 else tcs.TrySetResult(null);
-                            }, CancellationToken.None, TaskContinuationOptions.ExecuteSynchronously, scheduler);
+                            }, CancellationToken.None, TaskContinuationOptions.None, scheduler);
                     }
                     catch (Exception exc)
                     {
