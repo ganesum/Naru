@@ -85,16 +85,14 @@ namespace Naru.WPF.ViewModel
             Message = string.Empty;
         }
 
-        public Task<Unit> ActiveAsync(string message)
+        public Task ActiveAsync(string message)
         {
-            return Task.Factory.StartNew(() => Active(message), _scheduler.Dispatcher.TPL)
-                .Select(() => Unit.Default, _scheduler.Dispatcher.TPL);
+            return Task.Factory.StartNew(() => Active(message), _scheduler.Dispatcher.TPL);
         }
 
-        public Task<Unit> InActiveAsync()
+        public Task InActiveAsync()
         {
-            return Task.Factory.StartNew(() => InActive(), _scheduler.Dispatcher.TPL)
-                .Select(() => Unit.Default, _scheduler.Dispatcher.TPL);
+            return Task.Factory.StartNew(() => InActive(), _scheduler.Dispatcher.TPL);
         }
     }
 }
