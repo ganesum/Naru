@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reactive;
 using System.Windows.Input;
 
 using Naru.Core;
@@ -13,7 +14,7 @@ namespace Naru.WPF.Command
         public DelegateCommand(Action action)
             : this(action, () => true)
         {
-            
+
         }
 
         public DelegateCommand(Action action, Func<bool> canExecute)
@@ -48,7 +49,6 @@ namespace Naru.WPF.Command
         public DelegateCommand(Action<T> action)
             : this(action, _ => true)
         {
-
         }
 
         public DelegateCommand(Action<T> action, Func<T, bool> canExecute)

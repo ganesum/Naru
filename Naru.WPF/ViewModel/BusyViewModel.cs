@@ -23,12 +23,12 @@ namespace Naru.WPF.ViewModel
             private set { this.RaiseAndSetIfChanged(_isActive, value); }
         }
 
-        #endregion
-
         public IObservable<bool> IsActiveChanged
         {
             get { return _isActive.ValueChanged.DistinctUntilChanged(); }
         }
+
+        #endregion
 
         #region Message
 
