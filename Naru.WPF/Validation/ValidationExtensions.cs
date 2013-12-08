@@ -76,7 +76,8 @@ namespace Naru.WPF.Validation
             return Task.Factory.StartNew(() =>
                                          {
                                              IValidator<T> validator = new TValidation();
-                                             return validator.Validate(instance) != null;
+                                             var validationResult = validator.Validate(instance);
+                                             return validationResult != null && !validationResult.Errors.Any();
                                          }, schedulerProvider.Task.TPL);
         }
     }

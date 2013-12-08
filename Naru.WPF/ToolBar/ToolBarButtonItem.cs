@@ -1,5 +1,6 @@
-﻿using Naru.RX;
-using Naru.WPF.Command;
+﻿using System.Windows.Input;
+
+using Naru.RX;
 using Naru.WPF.Scheduler;
 using Naru.WPF.ViewModel;
 
@@ -21,7 +22,7 @@ namespace Naru.WPF.ToolBar
 
         #endregion
 
-        public DelegateCommand Command { get; set; }
+        public ICommand Command { get; set; }
         
         public string ImageName { get; set; }
 

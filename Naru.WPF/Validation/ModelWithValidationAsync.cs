@@ -17,6 +17,7 @@ namespace Naru.WPF.Validation
         where TModel : ModelWithValidationAsync<TModel, TValidation>
         where TValidation : AbstractValidator<TModel>, new()
     {
+        private readonly ISchedulerProvider _scheduler;
         protected readonly ValidationAsync<TModel, TValidation> Validation;
 
         #region INotifyDataErrorInfo
@@ -35,14 +36,26 @@ namespace Naru.WPF.Validation
 
         #endregion
 
+        public IObservable<bool> IsValid
+        {
+            get
+            {
+                return Validation.ErrorsChanged
+                    .SelectMany(_ => ((TModel)this).IsValidAsync<TModel, TValidation>(_scheduler))
+                    .DistinctUntilChanged();
+            }
+        }
+
         protected ModelWithValidationAsync(ISchedulerProvider scheduler, ValidationAsync<TModel, TValidation> validation)
         {
+            _scheduler = scheduler;
+
             Validation = validation;
             Validation.Initialise((TModel) this);
             Validation.ErrorsChanged
-                       .ObserveOn(scheduler.Dispatcher.RX)
-                       .Subscribe(x => ErrorsChanged.SafeInvoke(this, new DataErrorsChangedEventArgs(x)))
-                       .AddDisposable(Disposables);
+                      .ObserveOn(scheduler.Dispatcher.RX)
+                      .Subscribe(x => ErrorsChanged.SafeInvoke(this, new DataErrorsChangedEventArgs(x)))
+                      .AddDisposable(Disposables);
         }
 
         public void Dispose()

@@ -1,16 +1,51 @@
 ﻿using System;
 using System.Reactive;
+using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Windows.Input;
 
 using Naru.Core;
+using Naru.WPF.ViewModel;
 
 namespace Naru.WPF.Command
 {
-    public class ObservableCommand : ICommand
+    public class ObservableCommand : ObservableCommand<Unit>
     {
-        private readonly Func<bool> _canExecute;
+        public ObservableCommand()
+            : base()
+        {
+        }
+
+        public ObservableCommand(IObservable<bool> canExecute)
+            : base(canExecute)
+        {
+        }
+    }
+
+    public class ObservableCommand<T> : ViewModel.ViewModel, ICommand
+    {
+        private bool _canExecute;
         private readonly Subject<Unit> _executed = new Subject<Unit>();
+
+        #region Parameter
+
+        private readonly ObservableProperty<T> _parameter = new ObservableProperty<T>();
+
+        public T Parameter
+        {
+            get { return _parameter.Value; }
+            set { this.RaiseAndSetIfChanged(_parameter, value); }
+        }
+
+        public IObservable<T> ParameterChanged
+        {
+            get
+            {
+                return _parameter.ValueChanged.AsObservable();
+            }
+        }
+
+        #endregion
 
         public IObservable<Unit> Executed
         {
@@ -18,18 +53,27 @@ namespace Naru.WPF.Command
         }
 
         public ObservableCommand()
-            : this(() => true)
         {
+            _canExecute = true;
         }
 
-        public ObservableCommand(Func<bool> canExecute)
+        public ObservableCommand(IObservable<bool> canExecute)
         {
-            _canExecute = canExecute;
+            canExecute
+                .DistinctUntilChanged()
+                .Subscribe(x =>
+                           {
+                               _canExecute = x;
+
+                               CanExecuteChanged.SafeInvoke(this);
+                           });
+
+            _canExecute = false;
         }
 
         public bool CanExecute(object parameter)
         {
-            return _canExecute();
+            return _canExecute;
         }
 
         public void Execute(object parameter)
@@ -38,48 +82,5 @@ namespace Naru.WPF.Command
         }
 
         public event EventHandler CanExecuteChanged;
-
-        public void RaiseCanExecuteChanged()
-        {
-            CanExecuteChanged.SafeInvoke(this);
-        }
-    }
-
-    public class ObservableCommand<T> : ICommand
-    {
-        private readonly Func<T, bool> _canExecute;
-        private readonly Subject<T> _executed = new Subject<T>();
-
-        public IObservable<T> Executed
-        {
-            get { return _executed; }
-        }
-
-        public ObservableCommand()
-            : this(_ => true)
-        {
-        }
-
-        public ObservableCommand(Func<T, bool> canExecute)
-        {
-            _canExecute = canExecute;
-        }
-
-        public bool CanExecute(object parameter)
-        {
-            return _canExecute((T)parameter);
-        }
-
-        public void Execute(object parameter)
-        {
-            _executed.OnNext((T)parameter);
-        }
-
-        public event EventHandler CanExecuteChanged;
-
-        public void RaiseCanExecuteChanged()
-        {
-            CanExecuteChanged.SafeInvoke(this);
-        }
     }
 }
