@@ -1,11 +1,12 @@
-﻿using FluentValidation;
+﻿using System;
 
-using Naru.WPF.ViewModel;
+using FluentValidation;
 
 namespace Naru.WPF.Validation
 {
-    public abstract class ModelWithValidation<TModel, TValidation> : NotifyPropertyChanged,
-                                                                     ISupportValidation<TModel, TValidation>
+    public abstract class ModelWithValidation<TModel, TValidation> : ViewModel.ViewModel,
+                                                                     ISupportValidation<TModel, TValidation>,
+                                                                     IDisposable
         where TModel : ModelWithValidation<TModel, TValidation>
         where TValidation : AbstractValidator<TModel>, new()
     {
@@ -28,5 +29,10 @@ namespace Naru.WPF.Validation
         }
 
         #endregion
+
+        public void Dispose()
+        {
+            Disposables.Dispose();
+        }
     }
 }

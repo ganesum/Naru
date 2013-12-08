@@ -21,8 +21,7 @@ namespace Naru.WPF.Validation
     {
         private readonly ISchedulerProvider _scheduler;
 
-        private readonly Dictionary<string, IEnumerable<string>> _validationErrors =
-            new Dictionary<string, IEnumerable<string>>();
+        private readonly Dictionary<string, IEnumerable<string>> _validationErrors = new Dictionary<string, IEnumerable<string>>();
 
         private readonly Subject<string> _errorsChangedSubject = new Subject<string>();
 
@@ -67,13 +66,13 @@ namespace Naru.WPF.Validation
 
                                return ProcessValidationResults(propertyName, propertyErrors);
                            }, _scheduler.Dispatcher.TPL)
-            .CatchAndHandle(exc =>
-                            {
-                                var errorMessage = string.Format("Error during validation : {0}", exc.Message);
-                                _validationErrors[propertyName] = new[] { errorMessage };
+                     .CatchAndHandle(exc =>
+                                     {
+                                         var errorMessage = string.Format("Error during validation : {0}", exc.Message);
+                                         _validationErrors[propertyName] = new[] {errorMessage};
 
-                                RaiseErrorsChanged(propertyName);
-                            }, _scheduler.Dispatcher.TPL);
+                                         RaiseErrorsChanged(propertyName);
+                                     }, _scheduler.Dispatcher.TPL);
         }
 
         private Task ProcessValidationResults(string propertyName, IEnumerable<string> validationErrors)
@@ -81,7 +80,7 @@ namespace Naru.WPF.Validation
             return Task.Factory
                        .StartNew(() =>
                                  {
-                                     if (validationErrors.Any())
+                                     if (validationErrors.Any(x => !string.IsNullOrEmpty(x)))
                                      {
                                          _validationErrors[propertyName] = validationErrors;
 

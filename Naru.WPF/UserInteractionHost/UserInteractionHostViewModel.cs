@@ -2,7 +2,7 @@
 
 using Common.Logging;
 
-using Naru.WPF.ContextMenu;
+using Naru.RX;
 using Naru.WPF.Dialog;
 using Naru.WPF.Scheduler;
 using Naru.WPF.ViewModel;

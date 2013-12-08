@@ -2,10 +2,8 @@
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 
-using Common.Logging;
-
+using Naru.RX;
 using Naru.TPL;
-using Naru.WPF.ContextMenu;
 using Naru.WPF.Scheduler;
 
 namespace Naru.WPF.ViewModel

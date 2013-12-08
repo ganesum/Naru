@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reactive.Disposables;
 
-namespace Naru.WPF.ContextMenu
+namespace Naru.RX
 {
     public static class DisposableEx
     {

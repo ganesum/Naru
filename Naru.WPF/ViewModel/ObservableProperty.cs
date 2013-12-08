@@ -26,7 +26,9 @@ namespace Naru.WPF.ViewModel
         }
 
         public ObservableProperty()
-        { }
+        {
+            Value = default(T);
+        }
 
         public ObservableProperty(T initialValue)
         {
