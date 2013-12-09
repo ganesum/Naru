@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 
 using Common.Logging;
+
+using Microsoft.Reactive.Testing;
 
 using Naru.Core;
 using Naru.Tests;
@@ -165,9 +168,9 @@ namespace Naru.WPF.Tests.ViewModel
 
                     viewModel.OnInitialiseWasCalled += (s, e) => eventWasFired++;
 
-                    ((ISupportActivationState)viewModel).Activate();
-                    ((ISupportActivationState)viewModel).DeActivate();
-                    ((ISupportActivationState)viewModel).Activate();
+                    viewModel.ActivationStateViewModel.Activate();
+                    viewModel.ActivationStateViewModel.DeActivate();
+                    viewModel.ActivationStateViewModel.Activate();
 
                     Assert.That(eventWasFired, Is.EqualTo(1));
                 }
@@ -179,16 +182,21 @@ namespace Naru.WPF.Tests.ViewModel
 
                     var eventWasFired = 0;
 
+                    var testScheduler = new TestScheduler();
                     container.Provide<ISchedulerProvider>(new TestSchedulerProvider());
                     var viewModel = container.Create<WorkspaceViewModel>();
 
                     Assert.That(eventWasFired, Is.EqualTo(0));
 
-                    viewModel.Initialised += (s, e) => eventWasFired++;
+                    viewModel.ActivationStateViewModel.OnInitialise
+                        .ObserveOn(testScheduler)
+                        .Subscribe(_ => eventWasFired++);
 
-                    ((ISupportActivationState)viewModel).Activate();
-                    ((ISupportActivationState)viewModel).DeActivate();
-                    ((ISupportActivationState)viewModel).Activate();
+                    viewModel.ActivationStateViewModel.Activate();
+                    viewModel.ActivationStateViewModel.DeActivate();
+                    viewModel.ActivationStateViewModel.Activate();
+
+                    testScheduler.AdvanceBy(1);
 
                     Assert.That(eventWasFired, Is.EqualTo(1));
                 }
@@ -201,11 +209,11 @@ namespace Naru.WPF.Tests.ViewModel
                     container.Provide<ISchedulerProvider>(new TestSchedulerProvider());
                     var viewModel = container.Create<WorkspaceViewModel>();
 
-                    Assert.That(viewModel.IsActive, Is.False);
+                    Assert.That(viewModel.ActivationStateViewModel.IsActive, Is.False);
 
-                    ((ISupportActivationState)viewModel).Activate();
+                    viewModel.ActivationStateViewModel.Activate();
 
-                    Assert.That(viewModel.IsActive, Is.True);
+                    Assert.That(viewModel.ActivationStateViewModel.IsActive, Is.True);
                 }
 
                 [Test]
@@ -220,10 +228,10 @@ namespace Naru.WPF.Tests.ViewModel
 
                     Assert.That(eventWasFired, Is.False);
 
-                    viewModel.ActivationStateChanged
+                    viewModel.ActivationStateViewModel.ActivationStateChanged
                              .Subscribe(_ => eventWasFired = true);
 
-                    ((ISupportActivationState)viewModel).Activate();
+                    viewModel.ActivationStateViewModel.Activate();
 
                     Assert.That(eventWasFired, Is.True);
                 }
@@ -235,14 +243,17 @@ namespace Naru.WPF.Tests.ViewModel
 
                     var eventWasFired = false;
 
-                    container.Provide<ISchedulerProvider>(new TestSchedulerProvider());
+                    var testSchedulerProvider = new TestSchedulerProvider();
+                    container.Provide<ISchedulerProvider>(testSchedulerProvider);
                     var viewModel = container.Create<WorkspaceViewModel>();
 
                     Assert.That(eventWasFired, Is.False);
 
                     viewModel.OnActivateWasCalled += (s, e) => eventWasFired = true;
 
-                    ((ISupportActivationState)viewModel).Activate();
+                    viewModel.ActivationStateViewModel.Activate();
+
+                    ((TestScheduler)testSchedulerProvider.Dispatcher.RX).AdvanceBy(1);
 
                     Assert.That(eventWasFired, Is.True);
                 }
@@ -259,15 +270,15 @@ namespace Naru.WPF.Tests.ViewModel
                     container.Provide<ISchedulerProvider>(new TestSchedulerProvider());
                     var viewModel = container.Create<WorkspaceViewModel>();
 
-                    Assert.That(viewModel.IsActive, Is.False);
+                    Assert.That(viewModel.ActivationStateViewModel.IsActive, Is.False);
 
-                    ((ISupportActivationState)viewModel).Activate();
+                    viewModel.ActivationStateViewModel.Activate();
 
-                    Assert.That(viewModel.IsActive, Is.True);
+                    Assert.That(viewModel.ActivationStateViewModel.IsActive, Is.True);
 
-                    ((ISupportActivationState)viewModel).DeActivate();
+                    viewModel.ActivationStateViewModel.DeActivate();
 
-                    Assert.That(viewModel.IsActive, Is.False);
+                    Assert.That(viewModel.ActivationStateViewModel.IsActive, Is.False);
                 }
 
                 [Test]
@@ -277,15 +288,21 @@ namespace Naru.WPF.Tests.ViewModel
 
                     var eventWasFired = false;
 
+                    var testScheduler = new TestScheduler();
                     container.Provide<ISchedulerProvider>(new TestSchedulerProvider());
                     var viewModel = container.Create<WorkspaceViewModel>();
 
+                    viewModel.ActivationStateViewModel.Activate();
+
                     Assert.That(eventWasFired, Is.False);
 
-                    viewModel.ActivationStateChanged
+                    viewModel.ActivationStateViewModel.ActivationStateChanged
+                             .ObserveOn(testScheduler)
                              .Subscribe(x => eventWasFired = true);
 
-                    ((ISupportActivationState)viewModel).DeActivate();
+                    viewModel.ActivationStateViewModel.DeActivate();
+
+                    testScheduler.AdvanceBy(1);
 
                     Assert.That(eventWasFired, Is.True);
                 }
@@ -297,14 +314,19 @@ namespace Naru.WPF.Tests.ViewModel
 
                     var eventWasFired = false;
 
-                    container.Provide<ISchedulerProvider>(new TestSchedulerProvider());
+                    var testSchedulerProvider = new TestSchedulerProvider();
+                    container.Provide<ISchedulerProvider>(testSchedulerProvider);
                     var viewModel = container.Create<WorkspaceViewModel>();
+
+                    viewModel.ActivationStateViewModel.Activate();
 
                     Assert.That(eventWasFired, Is.False);
 
                     viewModel.OnDeActivateWasCalled += (s, e) => eventWasFired = true;
 
-                    ((ISupportActivationState)viewModel).DeActivate();
+                    viewModel.ActivationStateViewModel.DeActivate();
+
+                    ((TestScheduler)testSchedulerProvider.Dispatcher.RX).AdvanceBy(2);
 
                     Assert.That(eventWasFired, Is.True);
                 }

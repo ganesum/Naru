@@ -80,7 +80,7 @@ namespace Naru.WPF.MVVM
             RoutedEventHandler windowOnLoaded = null;
             windowOnLoaded = (s, e) =>
             {
-                supportActivationState.Activate();
+                supportActivationState.ActivationStateViewModel.Activate();
 
                 if (windowOnLoaded != null)
                 {

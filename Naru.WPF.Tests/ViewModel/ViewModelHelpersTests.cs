@@ -29,19 +29,19 @@ namespace Naru.WPF.Tests.ViewModel
             container.Provide<ISchedulerProvider>(new TestSchedulerProvider());
 
             var parent = container.Create<WorkspaceViewModel>() as ISupportActivationState;
-            parent.DeActivate();
-            Assert.That(parent.IsActive, Is.False);
+            parent.ActivationStateViewModel.DeActivate();
+            Assert.That(parent.ActivationStateViewModel.IsActive, Is.False);
 
             var child = container.Create<WorkspaceViewModel>() as ISupportActivationState;
-            child.DeActivate();
-            Assert.That(child.IsActive, Is.False);
+            child.ActivationStateViewModel.DeActivate();
+            Assert.That(child.ActivationStateViewModel.IsActive, Is.False);
 
             parent.SyncViewModelActivationStates(child);
 
-            parent.Activate();
+            parent.ActivationStateViewModel.Activate();
 
-            Assert.That(parent.IsActive, Is.True);
-            Assert.That(child.IsActive, Is.True);
+            Assert.That(parent.ActivationStateViewModel.IsActive, Is.True);
+            Assert.That(child.ActivationStateViewModel.IsActive, Is.True);
         }
 
         [Test]
@@ -52,19 +52,19 @@ namespace Naru.WPF.Tests.ViewModel
             container.Provide<ISchedulerProvider>(new TestSchedulerProvider());
 
             var parent = container.Create<WorkspaceViewModel>() as ISupportActivationState;
-            parent.Activate();
-            Assert.That(parent.IsActive, Is.True);
+            parent.ActivationStateViewModel.Activate();
+            Assert.That(parent.ActivationStateViewModel.IsActive, Is.True);
 
             var child = container.Create<WorkspaceViewModel>() as ISupportActivationState;
-            child.Activate();
-            Assert.That(child.IsActive, Is.True);
+            child.ActivationStateViewModel.Activate();
+            Assert.That(child.ActivationStateViewModel.IsActive, Is.True);
 
             parent.SyncViewModelActivationStates(child);
 
-            parent.DeActivate();
+            parent.ActivationStateViewModel.DeActivate();
 
-            Assert.That(parent.IsActive, Is.False);
-            Assert.That(child.IsActive, Is.False);
+            Assert.That(parent.ActivationStateViewModel.IsActive, Is.False);
+            Assert.That(child.ActivationStateViewModel.IsActive, Is.False);
         }
     }
 }

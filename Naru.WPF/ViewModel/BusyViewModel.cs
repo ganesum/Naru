@@ -8,7 +8,7 @@ using Naru.WPF.Scheduler;
 
 namespace Naru.WPF.ViewModel
 {
-    public class BusyViewModel : ViewModel, ISupportBusy
+    public class BusyViewModel : ViewModel, IBusyViewModel
     {
         private readonly ISchedulerProvider _scheduler;
         private readonly BusyLatch _busyLatch = new BusyLatch();

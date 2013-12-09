@@ -2,13 +2,11 @@
 
 namespace Naru.WPF.Wizard
 {
-    public interface IWizardStepViewModel<TContext> : IViewModel, ISupportActivationState
+    public interface IWizardStepViewModel<TContext> : IViewModel, ISupportActivationState, ISupportBusy
         where TContext : IWizardContext
     {
         int Ordinal { get; set; }
 
         TContext Context { set; }
-
-        BusyViewModel BusyViewModel { get; }
     }
 }

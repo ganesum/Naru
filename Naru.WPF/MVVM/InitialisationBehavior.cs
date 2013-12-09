@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Interactivity;
 
 using Naru.WPF.ViewModel;
@@ -26,7 +25,7 @@ namespace Naru.WPF.MVVM
             var supportActivationState = viewModel as ISupportActivationState;
             if (supportActivationState == null) return;
 
-            supportActivationState.Activate();
+            supportActivationState.ActivationStateViewModel.Activate();
         }
     }
 }

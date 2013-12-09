@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 using Common.Logging;
 
+using Naru.RX;
 using Naru.TPL;
 using Naru.WPF.Command;
 using Naru.WPF.Dialog;
@@ -86,7 +87,7 @@ namespace Naru.WPF.Wizard
             var supportActivation = CurrentStep as ISupportActivationState;
             if (supportActivation != null)
             {
-                supportActivation.Activate();
+                supportActivation.ActivationStateViewModel.Activate();
             }
         }
 
@@ -99,7 +100,7 @@ namespace Naru.WPF.Wizard
             var supportActivation = CurrentStep as ISupportActivationState;
             if (supportActivation != null)
             {
-                supportActivation.Activate();
+                supportActivation.ActivationStateViewModel.Activate();
             }
         }
 
@@ -116,8 +117,8 @@ namespace Naru.WPF.Wizard
                                   step.Context = Context;
                                   step.Ordinal = index;
 
-                                  Disposables.Add(this.SyncViewModelActivationStates(step));
-                                  Disposables.Add(BusyViewModel.SyncViewModelBusy(step.BusyViewModel));
+                                  this.SyncViewModelActivationStates(step).AddDisposable(Disposables);
+                                  this.SyncViewModelBusy(step).AddDisposable(Disposables);
 
                                   _steps.Add(step);
 

@@ -124,7 +124,10 @@
     <Compile Include="Validation\ModelWithValidationAsync.cs" />
     <Compile Include="Validation\ValidationAsync.cs" />
     <Compile Include="Validation\ValidationExtensions.cs" />
+    <Compile Include="ViewModel\ActivationStateViewModel.cs" />
     <Compile Include="ViewModel\BusyLatch.cs" />
+    <Compile Include="ViewModel\IActivationStateViewModel.cs" />
+    <Compile Include="ViewModel\IBusyViewModel.cs" />
     <Compile Include="ViewModel\INavigationCommands.cs" />
     <Compile Include="ViewModel\INotifyPropertyChangedEx.cs" />
     <Compile Include="ViewModel\ObservableProperty.cs" />
@@ -183,7 +186,6 @@
     </Compile>
     <Compile Include="MVVM\HeaderViewModel.cs" />
     <Compile Include="MVVM\InitialisationBehavior.cs" />
-    <Compile Include="ViewModel\ISupportInitialisation.cs" />
     <Compile Include="ViewModel\IService.cs" />
     <Compile Include="ViewModel\ISupportActivationState.cs" />
     <Compile Include="ViewModel\ISupportBusy.cs" />

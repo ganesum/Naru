@@ -2,11 +2,11 @@
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using System.Reactive.Threading.Tasks;
 using System.Threading.Tasks;
 
 using Common.Logging;
 
-using Naru.Core;
 using Naru.TPL;
 using Naru.WPF.Command;
 using Naru.WPF.Dialog;
@@ -14,17 +14,18 @@ using Naru.WPF.Scheduler;
 
 namespace Naru.WPF.ViewModel
 {
-    public abstract class Workspace : ViewModel, ISupportClosing, ISupportActivationState, ISupportVisibility, ISupportHeader, ISupportInitialisation
+    public abstract class Workspace : ViewModel, ISupportClosing, ISupportVisibility, ISupportHeader, ISupportActivationState, ISupportBusy
     {
         protected readonly ILog Log;
         protected readonly ISchedulerProvider Scheduler;
         protected readonly IStandardDialog StandardDialog;
 
-        private readonly Subject<bool> _activationStateChanged = new Subject<bool>();
         private readonly Subject<Unit> _closed = new Subject<Unit>();
         private readonly Subject<bool> _isVisibleChanged = new Subject<bool>();
 
         public BusyViewModel BusyViewModel { get; private set; }
+
+        public IActivationStateViewModel ActivationStateViewModel { get; private set; }
 
         protected Workspace(ILog log, ISchedulerProvider scheduler, IStandardDialog standardDialog)
         {
@@ -33,6 +34,25 @@ namespace Naru.WPF.ViewModel
             StandardDialog = standardDialog;
 
             BusyViewModel = new BusyViewModel(scheduler);
+
+            ActivationStateViewModel = new ActivationStateViewModel(log, scheduler);
+            ActivationStateViewModel.OnInitialise
+                                    .SelectMany(_ => OnInitialise().ToObservable()
+                                                                   .TakeUntil(BusyViewModel.BusyLatch))
+                                    .TakeUntil(Closed)
+                                    .Subscribe(_ => { });
+
+            ActivationStateViewModel.ActivationStateChanged
+                                    .ObserveOn(scheduler.Dispatcher.RX)
+                                    .Where(isActive => isActive)
+                                    .TakeUntil(Closed)
+                                    .Subscribe(_ => OnActivate());
+
+            ActivationStateViewModel.ActivationStateChanged
+                                    .ObserveOn(scheduler.Dispatcher.RX)
+                                    .Where(isActive => !isActive)
+                                    .TakeUntil(Closed)
+                                    .Subscribe(_ => OnDeActivate());
 
             CloseCommand = new DelegateCommand(Close);
 
@@ -72,56 +92,6 @@ namespace Naru.WPF.ViewModel
         #endregion
 
         #region SupportActivationState
-
-        private bool _onInitialiseHasBeenCalled;
-
-        public bool IsActive { get; private set; }
-
-        void ISupportActivationState.Activate()
-        {
-            Log.Debug(string.Format("Activate called on {0} - {1}", GetType().FullName, Header));
-            Log.Debug(string.Format("Active value - {0}", IsActive));
-            if (IsActive) return;
-
-            IsActive = true;
-            Log.Debug(string.Format("Active value - {0}", IsActive));
-
-            _activationStateChanged.OnNext(IsActive);
-
-            OnActivate();
-
-            if (_onInitialiseHasBeenCalled) return;
-
-            Log.Debug(string.Format("Calling OnInitialise on {0} - {1}", GetType().FullName, Header));
-
-            BusyViewModel.ActiveAsync("... Initialising ...")
-                .Do(() =>
-                {
-                    OnInitialise();
-
-                    Initialised.SafeInvoke(this);
-                    _onInitialiseHasBeenCalled = true;
-                }, Scheduler.Task.TPL)
-                .LogException(Log)
-                .CatchAndHandle(ex => StandardDialog.Error("Error", string.Format("Exception in OnInitialise() call. {0}", ex.Message)), Scheduler.Task.TPL)
-                .Finally(BusyViewModel.InActive, Scheduler.Task.TPL);
-        }
-
-        void ISupportActivationState.DeActivate()
-        {
-            IsActive = false;
-
-            Log.Debug(string.Format("DeActivate called on {0} - {1}", GetType().FullName, Header));
-            Log.Debug(string.Format("DeActivate value - {0}", IsActive));
-
-            _activationStateChanged.OnNext(IsActive);
-
-            OnDeActivate();
-        }
-
-        public IObservable<bool> ActivationStateChanged{get { return _activationStateChanged.AsObservable(); }}
-
-        public event EventHandler Initialised;
 
         protected virtual Task OnInitialise()
         {
@@ -178,15 +148,6 @@ namespace Naru.WPF.ViewModel
         void ISupportHeader.SetupHeader(IViewModel headerViewModel)
         {
             Header = headerViewModel;
-        }
-
-        #endregion
-
-        #region SupportInitialisation
-
-        Task ISupportInitialisation.OnInitialise()
-        {
-            return OnInitialise();
         }
 
         #endregion

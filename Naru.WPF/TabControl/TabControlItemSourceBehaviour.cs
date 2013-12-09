@@ -6,7 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interactivity;
 using System.Windows.Threading;
-using Naru.WPF.MVVM;
+
 using Naru.WPF.ViewModel;
 
 namespace Naru.WPF.TabControl
@@ -95,7 +95,7 @@ namespace Naru.WPF.TabControl
             var supportActivationState = viewModel as ISupportActivationState;
             if (supportActivationState == null) return true;
 
-            if (supportActivationState.IsActive)
+            if (supportActivationState.ActivationStateViewModel.IsActive)
             {
                 Action action = () => AssociatedObject.SelectedItem = tabItem;
                 _dispatcher.BeginInvoke(action);
@@ -156,7 +156,7 @@ namespace Naru.WPF.TabControl
             var viewModel = view.DataContext as ISupportActivationState;
             if (viewModel == null) return;
 
-            viewModel.Activate();
+            viewModel.ActivationStateViewModel.Activate();
         }
 
         private static void DeActivate(object item)
@@ -167,7 +167,7 @@ namespace Naru.WPF.TabControl
             var viewModel = view.DataContext as ISupportActivationState;
             if (viewModel == null) return;
 
-            viewModel.DeActivate();
+            viewModel.ActivationStateViewModel.DeActivate();
         }
 
         private void ConnectUpClosing(IViewModel viewModel, System.Windows.Controls.TabControl tabControl, TabItem tabItem)
@@ -188,11 +188,11 @@ namespace Naru.WPF.TabControl
             var supportClosing = viewModel as ISupportClosing;
             if (supportClosing == null) return;
 
-            supportActivationState.ActivationStateChanged
+            supportActivationState.ActivationStateViewModel.ActivationStateChanged
                                   .TakeUntil(supportClosing.Closed)
                                   .Subscribe(x =>
                                   {
-                                      if (supportActivationState.IsActive)
+                                      if (supportActivationState.ActivationStateViewModel.IsActive)
                                       {
                                           Action action = () => tabControl.SelectedItem = tabItem;
                                           _dispatcher.BeginInvoke(action);

@@ -24,23 +24,23 @@ namespace Naru.WPF.ViewModel
 
         public static IDisposable SyncViewModelActivationStates(this ISupportActivationState source, ISupportActivationState viewModel)
         {
-            return source.ActivationStateChanged
+            return source.ActivationStateViewModel.ActivationStateChanged
                          .Subscribe(x =>
                          {
                              if (x)
-                                 viewModel.Activate();
+                                 viewModel.ActivationStateViewModel.Activate();
                              else
-                                 viewModel.DeActivate();
+                                 viewModel.ActivationStateViewModel.DeActivate();
                          });
         }
 
         public static IDisposable SyncViewModelDeActivation(this ISupportActivationState source, ISupportActivationState viewModel)
         {
-            return source.ActivationStateChanged
+            return source.ActivationStateViewModel.ActivationStateChanged
                          .Subscribe(x =>
                          {
                              if (!x)
-                                 viewModel.DeActivate();
+                                 viewModel.ActivationStateViewModel.DeActivate();
                          });
         }
 
@@ -48,10 +48,10 @@ namespace Naru.WPF.ViewModel
         {
             foreach (var toolBarItem in toolBarItems)
             {
-                toolBarItem.IsVisible = source.IsActive;
+                toolBarItem.IsVisible = source.ActivationStateViewModel.IsActive;
             }
 
-            return source.ActivationStateChanged
+            return source.ActivationStateViewModel.ActivationStateChanged
                          .Subscribe(x =>
                          {
                              foreach (var toolBarItem in toolBarItems)
@@ -63,18 +63,24 @@ namespace Naru.WPF.ViewModel
 
         public static IDisposable SyncViewModelBusy(this ISupportBusy destination, ISupportBusy source)
         {
-            return source.IsActiveChanged
+            return source.BusyViewModel.IsActiveChanged
                          .Subscribe(x =>
                          {
                              if (x)
                              {
-                                 destination.Active(source.Message);
+                                 destination.BusyViewModel.Active(source.BusyViewModel.Message);
                              }
                              else
                              {
-                                 destination.InActive();
+                                 destination.BusyViewModel.InActive();
                              }
                          });
+        }
+
+        public static IDisposable SyncViewModelClose(this ISupportClosing destination, ISupportClosing source)
+        {
+            return source.Closed
+                         .Subscribe(x => destination.Close());
         }
 
         public static void ExecuteOnClosed(this ISupportClosing source, Action action)
