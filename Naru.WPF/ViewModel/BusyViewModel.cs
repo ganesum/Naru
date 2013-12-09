@@ -54,6 +54,7 @@ namespace Naru.WPF.ViewModel
             _isActive.ConnectINPCProperty(this, () => IsActive, scheduler).AddDisposable(Disposables);
             _message.ConnectINPCProperty(this, () => Message, scheduler).AddDisposable(Disposables);
 
+            _busyLatch.AddDisposable(Disposables);
             _busyLatch.IsActive.Subscribe(x => IsActive = x);
         }
 
@@ -77,6 +78,11 @@ namespace Naru.WPF.ViewModel
         public Task InActiveAsync()
         {
             return Task.Factory.StartNew(() => InActive(), _scheduler.Dispatcher.TPL);
+        }
+
+        public void Dispose()
+        {
+            Disposables.Dispose();
         }
     }
 }

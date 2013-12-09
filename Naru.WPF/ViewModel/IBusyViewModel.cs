@@ -2,7 +2,7 @@
 
 namespace Naru.WPF.ViewModel
 {
-    public interface IBusyViewModel
+    public interface IBusyViewModel : IDisposable
     {
         IObservable<bool> IsActiveChanged { get; }
 

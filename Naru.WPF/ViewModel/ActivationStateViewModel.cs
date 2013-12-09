@@ -67,5 +67,10 @@ namespace Naru.WPF.ViewModel
 
             IsActive = false;
         }
+
+        public void Dispose()
+        {
+            Disposables.Dispose();
+        }
     }
 }

@@ -3,7 +3,7 @@ using System.Reactive;
 
 namespace Naru.WPF.ViewModel
 {
-    public interface IActivationStateViewModel
+    public interface IActivationStateViewModel : IDisposable
     {
         bool IsActive { get; }
 

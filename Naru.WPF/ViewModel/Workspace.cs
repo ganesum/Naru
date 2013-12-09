@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 using Common.Logging;
 
+using Naru.RX;
 using Naru.TPL;
 using Naru.WPF.Command;
 using Naru.WPF.Dialog;
@@ -34,8 +35,11 @@ namespace Naru.WPF.ViewModel
             StandardDialog = standardDialog;
 
             BusyViewModel = new BusyViewModel(scheduler);
+            BusyViewModel.AddDisposable(Disposables);
 
             ActivationStateViewModel = new ActivationStateViewModel(log, scheduler);
+            ActivationStateViewModel.AddDisposable(Disposables);
+
             ActivationStateViewModel.OnInitialise
                                     .SelectMany(_ => OnInitialise().ToObservable()
                                                                    .TakeUntil(BusyViewModel.BusyLatch))
