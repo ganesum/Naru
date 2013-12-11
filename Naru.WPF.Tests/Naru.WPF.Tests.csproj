@@ -88,6 +88,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Converters\BooleanToVisibilityConverterTests.cs" />
+    <Compile Include="MVVM\BindableCollectionTests.cs" />
     <Compile Include="Scheduler\TestCurrentScheduler.cs" />
     <Compile Include="Scheduler\TestDispatcherScheduler.cs" />
     <Compile Include="Scheduler\TestImmediateScheduler.cs" />
@@ -99,6 +100,12 @@
     <Compile Include="Validation\ValidationAsyncTests.cs" />
     <Compile Include="ViewModel\BusyLatchTests.cs" />
     <Compile Include="ViewModel\BusyViewModelTests.cs" />
+    <Compile Include="ViewModel\ClosingStrategyTests.cs" />
+    <Compile Include="ViewModel\ObservablePropertyExTests.cs" />
+    <Compile Include="ViewModel\ObservablePropertyTests.cs" />
+    <Compile Include="ViewModel\PropertyExtensionsTests.cs" />
+    <Compile Include="ViewModel\ReactiveMultiSelectCollectionTests.cs" />
+    <Compile Include="ViewModel\ReactiveSingleSelectCollectionTests.cs" />
     <Compile Include="ViewModel\ViewModelHelpersTests.cs" />
     <Compile Include="MVVM\ViewServiceTests.cs" />
     <Compile Include="ViewModel\WorkspaceTests.cs" />
@@ -132,6 +139,10 @@
     <ProjectReference Include="..\Naru.Core\Naru.Core.csproj">
       <Project>{17ea4111-2679-4155-a6e5-fe45e171ac2b}</Project>
       <Name>Naru.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Naru.RX\Naru.RX.csproj">
+      <Project>{9A778612-DF3E-417A-91F7-E354A1B3A412}</Project>
+      <Name>Naru.RX</Name>
     </ProjectReference>
     <ProjectReference Include="..\Naru.Tests\Naru.Tests.csproj">
       <Project>{28bff6b4-12e5-4f81-851f-ba40db9c900b}</Project>

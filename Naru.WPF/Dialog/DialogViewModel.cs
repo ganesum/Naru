@@ -31,7 +31,7 @@ namespace Naru.WPF.Dialog
                                                                          {
                                                                              SelectedAnswer = x.Response;
 
-                                                                             Close();
+                                                                             ClosingStrategy.Close();
                                                                          });
         }
 

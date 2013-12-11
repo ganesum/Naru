@@ -8,6 +8,7 @@ using System.Reactive.Subjects;
 using System.Threading.Tasks;
 
 using FluentValidation;
+using FluentValidation.Results;
 
 using Naru.TPL;
 using Naru.WPF.Scheduler;
@@ -15,9 +16,9 @@ using Naru.WPF.ViewModel;
 
 namespace Naru.WPF.Validation
 {
-    public class ValidationAsync<T, TValidation>
-        where T : ISupportValidationAsync<T, TValidation>
-        where TValidation : AbstractValidator<T>, new()
+    public class ValidationAsync<T, TValidator>
+        where T : ISupportValidationAsync<T, TValidator>
+        where TValidator : AbstractValidator<T>, new()
     {
         private readonly ISchedulerProvider _scheduler;
 
@@ -25,13 +26,20 @@ namespace Naru.WPF.Validation
 
         private readonly Subject<string> _errorsChangedSubject = new Subject<string>();
 
+        private readonly TValidator _validator;
+
         private T _instance;
 
-        public IObservable<string> ErrorsChanged{get { return _errorsChangedSubject.AsObservable(); }} 
+        public IObservable<string> ErrorsChanged
+        {
+            get { return _errorsChangedSubject.AsObservable(); }
+        }
 
         public ValidationAsync(ISchedulerProvider scheduler)
         {
             _scheduler = scheduler;
+
+            _validator = new TValidator();
         }
 
         public void Initialise(T instance)
@@ -54,25 +62,35 @@ namespace Naru.WPF.Validation
             get { return _validationErrors.Any(x => x.Value.Any(error => !string.IsNullOrEmpty(error))); }
         }
 
+        public Task<bool> IsValidAsync(T instance)
+        {
+            return Task.Factory.StartNew(() =>
+                                         {
+                                             IValidator<T> validator = new TValidator();
+                                             var validationResult = validator.Validate(instance);
+                                             return validationResult != null && !validationResult.Errors.Any();
+                                         }, _scheduler.Task.TPL);
+        }
+
         public void ValidateProperty<TProperty>(Expression<Func<TProperty>> propertyExpression)
         {
             var propertyName = PropertyExtensions.ExtractPropertyName(propertyExpression);
 
-            _instance.ValidateAsync<T, TValidation>(_scheduler)
-                     .Then(validationResults =>
-                           {
-                               var propertyErrors = validationResults.GetErrorForProperty(propertyName)
-                                                                     .Split('\n');
+            ValidateAsync()
+                .Then(validationResults =>
+                      {
+                          var propertyErrors = validationResults.GetErrorForProperty(propertyName)
+                                                                .Split('\n');
 
-                               return ProcessValidationResults(propertyName, propertyErrors);
-                           }, _scheduler.Dispatcher.TPL)
-                     .CatchAndHandle(exc =>
-                                     {
-                                         var errorMessage = string.Format("Error during validation : {0}", exc.Message);
-                                         _validationErrors[propertyName] = new[] {errorMessage};
+                          return ProcessValidationResults(propertyName, propertyErrors);
+                      }, _scheduler.Dispatcher.TPL)
+                .CatchAndHandle(exc =>
+                                {
+                                    var errorMessage = string.Format("Error during validation : {0}", exc.Message);
+                                    _validationErrors[propertyName] = new[] {errorMessage};
 
-                                         RaiseErrorsChanged(propertyName);
-                                     }, _scheduler.Dispatcher.TPL);
+                                    RaiseErrorsChanged(propertyName);
+                                }, _scheduler.Dispatcher.TPL);
         }
 
         private Task ProcessValidationResults(string propertyName, IEnumerable<string> validationErrors)
@@ -99,6 +117,11 @@ namespace Naru.WPF.Validation
         private void RaiseErrorsChanged(string propertyName)
         {
             _errorsChangedSubject.OnNext(propertyName);
+        }
+
+        private Task<ValidationResult> ValidateAsync()
+        {
+            return Task.Factory.StartNew(() => _validator.Validate(_instance), _scheduler.Task.TPL);
         }
     }
 }

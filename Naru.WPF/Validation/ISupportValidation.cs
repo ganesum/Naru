@@ -4,8 +4,8 @@ using FluentValidation;
 
 namespace Naru.WPF.Validation
 {
-    public interface ISupportValidation<T, TValidation> : IDataErrorInfo
-        where T : IDataErrorInfo, ISupportValidation<T, TValidation>
-        where TValidation : AbstractValidator<T>, new()
+    public interface ISupportValidation<T, TValidator> : IDataErrorInfo
+        where T : IDataErrorInfo, ISupportValidation<T, TValidator>
+        where TValidator : AbstractValidator<T>, new()
     { }
 }

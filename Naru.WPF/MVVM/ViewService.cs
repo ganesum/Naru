@@ -110,7 +110,7 @@ namespace Naru.WPF.MVVM
             EventHandler windowOnClosed = null;
             windowOnClosed = (s, e) =>
             {
-                supportClosing.Close();
+                supportClosing.ClosingStrategy.Close();
 
                 if (windowOnClosed != null)
                 {

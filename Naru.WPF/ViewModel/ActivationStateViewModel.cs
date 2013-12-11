@@ -24,7 +24,7 @@ namespace Naru.WPF.ViewModel
         public bool IsActive
         {
             get { return _isActive.Value; }
-            set { this.RaiseAndSetIfChanged(_isActive, value); }
+            set { _isActive.RaiseAndSetIfChanged(value); }
         }
 
         #endregion
@@ -43,6 +43,7 @@ namespace Naru.WPF.ViewModel
         {
             _log.Debug(string.Format("Activate called on {0}", GetType().FullName));
             _log.Debug(string.Format("Active value - {0}", IsActive));
+
             if (IsActive) return;
 
             IsActive = true;

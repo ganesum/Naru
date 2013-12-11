@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reactive.Linq;
 
@@ -30,16 +29,6 @@ namespace Naru.WPF.ViewModel
                              if (x)
                                  viewModel.ActivationStateViewModel.Activate();
                              else
-                                 viewModel.ActivationStateViewModel.DeActivate();
-                         });
-        }
-
-        public static IDisposable SyncViewModelDeActivation(this ISupportActivationState source, ISupportActivationState viewModel)
-        {
-            return source.ActivationStateViewModel.ActivationStateChanged
-                         .Subscribe(x =>
-                         {
-                             if (!x)
                                  viewModel.ActivationStateViewModel.DeActivate();
                          });
         }
@@ -79,14 +68,14 @@ namespace Naru.WPF.ViewModel
 
         public static IDisposable SyncViewModelClose(this ISupportClosing destination, ISupportClosing source)
         {
-            return source.Closed
-                         .Subscribe(x => destination.Close());
+            return source.ClosingStrategy.Closed
+                         .Subscribe(x => destination.ClosingStrategy.Close());
         }
 
         public static void ExecuteOnClosed(this ISupportClosing source, Action action)
         {
             IDisposable supportClosingClosed = null;
-            supportClosingClosed = source.Closed
+            supportClosingClosed = source.ClosingStrategy.Closed
                                          .Subscribe(x =>
                                          {
                                              action();
@@ -106,34 +95,6 @@ namespace Naru.WPF.ViewModel
             ViewServiceHelper.BindViewModel(view, viewModel);
 
             return view;
-        }
-
-        public static IDisposable ConnectINPCProperty<T>(this ObservableProperty<T> observableProperty,
-                                                         INotifyPropertyChangedEx viewModel,
-                                                         Expression<Func<T>> propertyExpression,
-                                                         ISchedulerProvider scheduler)
-        {
-            var propertyName = PropertyExtensions.ExtractPropertyName(propertyExpression);
-            return observableProperty.ValueChanged
-                                     .ObserveOn(scheduler.Dispatcher.RX)
-                                     .Subscribe(x => viewModel.ConnectINPC(propertyName));
-        }
-
-        public static TValue RaiseAndSetIfChanged<TViewModel, TValue>(this TViewModel viewModel,
-                                                                      ObservableProperty<TValue> observableProperty,
-                                                                      TValue newValue)
-            where TViewModel : IViewModel
-        {
-            // Inspired by ReactiveUI
-
-            if (EqualityComparer<TValue>.Default.Equals(observableProperty.Value, newValue))
-            {
-                return newValue;
-            }
-
-            observableProperty.Value = newValue;
-
-            return newValue;
         }
     }
 }

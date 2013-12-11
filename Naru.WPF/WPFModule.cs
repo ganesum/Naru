@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using Autofac.Builder;
 
 using Naru.WPF.Dialog;
 using Naru.WPF.Menu;

@@ -13,7 +13,7 @@ namespace Naru.WPF.MVVM
         public string DisplayName
         {
             get { return _displayName.Value; }
-            set { this.RaiseAndSetIfChanged(_displayName, value); }
+            set { _displayName.RaiseAndSetIfChanged(value); }
         }
 
         #endregion
@@ -25,7 +25,7 @@ namespace Naru.WPF.MVVM
         public string ImageName
         {
             get { return _imageName.Value; }
-            set { this.RaiseAndSetIfChanged(_imageName, value); }
+            set { _imageName.RaiseAndSetIfChanged(value); }
         }
 
         #endregion

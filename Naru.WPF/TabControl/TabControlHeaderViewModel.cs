@@ -18,8 +18,8 @@ namespace Naru.WPF.TabControl
             var supportClose = viewModel as ISupportClosing;
             if (supportClose == null) return;
 
-            CloseCommand = new DelegateCommand(() => supportClose.Close());
-            CanClose = supportClose.CanClose();
+            CloseCommand = new DelegateCommand(() => supportClose.ClosingStrategy.Close());
+            CanClose = supportClose.ClosingStrategy.CanClose();
         }
     }
 }

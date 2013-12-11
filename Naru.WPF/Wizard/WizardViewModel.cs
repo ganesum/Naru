@@ -70,7 +70,7 @@ namespace Naru.WPF.Wizard
                                                 () => _canBeFinished);
 
             Context.CanBeFinishedChanged
-                .TakeUntil(Closed)
+                .TakeUntil(ClosingStrategy.Closed)
                 .Subscribe(x =>
                            {
                                _canBeFinished = true;

@@ -126,8 +126,10 @@
     <Compile Include="Validation\ValidationExtensions.cs" />
     <Compile Include="ViewModel\ActivationStateViewModel.cs" />
     <Compile Include="ViewModel\BusyLatch.cs" />
+    <Compile Include="ViewModel\ClosingStrategy.cs" />
     <Compile Include="ViewModel\IActivationStateViewModel.cs" />
     <Compile Include="ViewModel\IBusyViewModel.cs" />
+    <Compile Include="ViewModel\IClosingStrategy.cs" />
     <Compile Include="ViewModel\INavigationCommands.cs" />
     <Compile Include="ViewModel\INotifyPropertyChangedEx.cs" />
     <Compile Include="ViewModel\ObservableProperty.cs" />

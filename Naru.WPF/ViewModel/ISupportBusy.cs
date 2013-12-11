@@ -2,6 +2,6 @@
 {
     public interface ISupportBusy
     {
-        BusyViewModel BusyViewModel { get; }
+        IBusyViewModel BusyViewModel { get; }
     }
 }

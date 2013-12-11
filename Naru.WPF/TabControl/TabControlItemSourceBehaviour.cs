@@ -189,7 +189,7 @@ namespace Naru.WPF.TabControl
             if (supportClosing == null) return;
 
             supportActivationState.ActivationStateViewModel.ActivationStateChanged
-                                  .TakeUntil(supportClosing.Closed)
+                                  .TakeUntil(supportClosing.ClosingStrategy.Closed)
                                   .Subscribe(x =>
                                   {
                                       if (supportActivationState.ActivationStateViewModel.IsActive)

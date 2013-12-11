@@ -1,9 +1,12 @@
 ﻿using Common.Logging;
+using Common.Logging.Simple;
 
 using Naru.Tests;
 using Naru.WPF.Dialog;
+using Naru.WPF.MVVM;
 using Naru.WPF.Scheduler;
 using Naru.WPF.Tests.Scheduler;
+using Naru.WPF.ToolBar;
 using Naru.WPF.ViewModel;
 
 using NUnit.Framework;
@@ -65,6 +68,149 @@ namespace Naru.WPF.Tests.ViewModel
 
             Assert.That(parent.ActivationStateViewModel.IsActive, Is.False);
             Assert.That(child.ActivationStateViewModel.IsActive, Is.False);
+        }
+
+        [Test]
+        public void when_header_is_created_the_properties_have_the_correct_values()
+        {
+            var container = AutoMock.GetLoose();
+
+            var testSchedulerProvider = new TestSchedulerProvider();
+            container.Provide<ISchedulerProvider>(testSchedulerProvider);
+
+            var workspace = container.Create<WorkspaceViewModel>();
+
+            var displayName = "DisplayName";
+            var imageuri = "ImageUri";
+
+            workspace.SetupHeader(testSchedulerProvider, displayName, imageuri);
+
+            var headerViewModel = workspace.Header as HeaderViewModel;
+
+            Assert.That(headerViewModel, Is.Not.Null);
+            Assert.That(headerViewModel.DisplayName, Is.EqualTo(displayName));
+            Assert.That(headerViewModel.ImageName, Is.EqualTo(imageuri));
+        }
+
+        public class SupportBusyViewModel : ISupportBusy
+        {
+            public IBusyViewModel BusyViewModel { get; private set; }
+
+            public SupportBusyViewModel(ISchedulerProvider scheduler)
+            {
+                BusyViewModel = new BusyViewModel(scheduler);
+            }
+        }
+
+        [Test]
+        public void when_child_isbusy_changes_then_the_parent_isbusy_changes()
+        {
+            var testSchedulerProvider = new TestSchedulerProvider();
+
+            var parent = new SupportBusyViewModel(testSchedulerProvider);
+            var child = new SupportBusyViewModel(testSchedulerProvider);
+
+            parent.SyncViewModelBusy(child);
+
+            Assert.That(parent.BusyViewModel.IsActive, Is.False);
+            Assert.That(child.BusyViewModel.IsActive, Is.False);
+
+            child.BusyViewModel.Active(string.Empty);
+
+            Assert.That(child.BusyViewModel.IsActive, Is.True);
+
+            Assert.That(parent.BusyViewModel.IsActive, Is.True);
+
+            child.BusyViewModel.InActive();
+
+            Assert.That(child.BusyViewModel.IsActive, Is.False);
+
+            Assert.That(parent.BusyViewModel.IsActive, Is.False);
+        }
+
+        public class SupportActivationState : ISupportActivationState
+        {
+            public IActivationStateViewModel ActivationStateViewModel { get; private set; }
+
+            public SupportActivationState(ISchedulerProvider scheduler)
+            {
+                ActivationStateViewModel = new ActivationStateViewModel(new NoOpLogger(), scheduler);
+            }
+        }
+
+        [Test]
+        public void when_parent_activation_state_changes_then_the_toolbaritem_activate_state_changes()
+        {
+            var testSchedulerProvider = new TestSchedulerProvider();
+
+            var toolBarItem1 = new ToolBarButtonItem(testSchedulerProvider);
+            var toolBarItem2 = new ToolBarButtonItem(testSchedulerProvider);
+
+            var viewModel = new SupportActivationState(testSchedulerProvider);
+            viewModel.ActivationStateViewModel.Activate();
+
+            viewModel.SyncToolBarItemWithViewModelActivationState(toolBarItem1, toolBarItem2);
+
+            Assert.That(viewModel.ActivationStateViewModel.IsActive, Is.True);
+
+            Assert.That(toolBarItem1.IsVisible, Is.True);
+            Assert.That(toolBarItem2.IsVisible, Is.True);
+
+            viewModel.ActivationStateViewModel.DeActivate();
+
+            Assert.That(viewModel.ActivationStateViewModel.IsActive, Is.False);
+
+            Assert.That(toolBarItem1.IsVisible, Is.False);
+            Assert.That(toolBarItem2.IsVisible, Is.False);
+
+            viewModel.ActivationStateViewModel.Activate();
+
+            Assert.That(viewModel.ActivationStateViewModel.IsActive, Is.True);
+
+            Assert.That(toolBarItem1.IsVisible, Is.True);
+            Assert.That(toolBarItem2.IsVisible, Is.True);
+        }
+
+        public class SupportClosing : ISupportClosing
+        {
+            public IClosingStrategy ClosingStrategy { get; private set; }
+
+            public SupportClosing()
+            {
+                ClosingStrategy = new ClosingStrategy(new NoOpLogger());
+            }
+        }
+
+        [Test]
+        public void when_closed_action_is_executed()
+        {
+            var supportClose = new SupportClosing();
+
+            var result = false;
+
+            supportClose.ExecuteOnClosed(() => result = true);
+
+            supportClose.ClosingStrategy.Close();
+
+            Assert.That(result, Is.True);
+        }
+
+        [Test]
+        public void when_parent_closes_then_the_child_closes()
+        {
+            var parent = new SupportClosing();
+
+            var child = new SupportClosing();
+
+            var result = false;
+
+            child.ExecuteOnClosed(() => result = true);
+
+            child.SyncViewModelClose(parent);
+
+            parent.ClosingStrategy.Close();
+
+            Assert.That(result, Is.True);
         }
     }
 }

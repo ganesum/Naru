@@ -16,7 +16,7 @@ namespace Naru.WPF.Menu
         public bool IsVisible
         {
             get { return _isVisible.Value; }
-            set { this.RaiseAndSetIfChanged(_isVisible, value); }
+            set { _isVisible.RaiseAndSetIfChanged(value); }
         }
 
         #endregion

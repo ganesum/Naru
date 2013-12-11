@@ -20,7 +20,7 @@ namespace Naru.WPF.ViewModel
         public bool IsActive
         {
             get { return _isActive.Value; }
-            private set { this.RaiseAndSetIfChanged(_isActive, value); }
+            private set { _isActive.RaiseAndSetIfChanged(value); }
         }
 
         public IObservable<bool> IsActiveChanged
@@ -37,7 +37,7 @@ namespace Naru.WPF.ViewModel
         public string Message
         {
             get { return _message.Value; }
-            private set { this.RaiseAndSetIfChanged(_message, value); }
+            private set { _message.RaiseAndSetIfChanged(value); }
         }
 
         #endregion

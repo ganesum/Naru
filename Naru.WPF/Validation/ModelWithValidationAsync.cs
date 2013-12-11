@@ -11,14 +11,13 @@ using Naru.WPF.Scheduler;
 
 namespace Naru.WPF.Validation
 {
-    public abstract class ModelWithValidationAsync<TModel, TValidation> : ViewModel.ViewModel,
-                                                                          ISupportValidationAsync<TModel, TValidation>,
-                                                                          IDisposable
-        where TModel : ModelWithValidationAsync<TModel, TValidation>
-        where TValidation : AbstractValidator<TModel>, new()
+    public abstract class ModelWithValidationAsync<TModel, TValidator> : ViewModel.ViewModel,
+                                                                         ISupportValidationAsync<TModel, TValidator>,
+                                                                         IDisposable
+        where TModel : ModelWithValidationAsync<TModel, TValidator>
+        where TValidator : AbstractValidator<TModel>, new()
     {
-        private readonly ISchedulerProvider _scheduler;
-        protected readonly ValidationAsync<TModel, TValidation> Validation;
+        protected readonly ValidationAsync<TModel, TValidator> Validation;
 
         #region INotifyDataErrorInfo
 
@@ -41,15 +40,13 @@ namespace Naru.WPF.Validation
             get
             {
                 return Validation.ErrorsChanged
-                    .SelectMany(_ => ((TModel)this).IsValidAsync<TModel, TValidation>(_scheduler))
-                    .DistinctUntilChanged();
+                                 .SelectMany(_ => Validation.IsValidAsync((TModel) this))
+                                 .DistinctUntilChanged();
             }
         }
 
-        protected ModelWithValidationAsync(ISchedulerProvider scheduler, ValidationAsync<TModel, TValidation> validation)
+        protected ModelWithValidationAsync(ISchedulerProvider scheduler, ValidationAsync<TModel, TValidator> validation)
         {
-            _scheduler = scheduler;
-
             Validation = validation;
             Validation.Initialise((TModel) this);
             Validation.ErrorsChanged

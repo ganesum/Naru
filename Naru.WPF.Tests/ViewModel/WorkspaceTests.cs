@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 
@@ -82,7 +83,7 @@ namespace Naru.WPF.Tests.ViewModel
 
                     viewModel.ExecuteOnClosed(() => eventWasFired = true);
 
-                    viewModel.Close();
+                    viewModel.ClosingStrategy.Close();
 
                     Assert.That(eventWasFired, Is.True);
                 }
@@ -102,7 +103,7 @@ namespace Naru.WPF.Tests.ViewModel
 
                     viewModel.DisposablesWasDisposed += (s, e) => eventWasFired = true;
 
-                    viewModel.Close();
+                    viewModel.ClosingStrategy.Close();
 
                     Assert.That(eventWasFired, Is.True);
                 }
@@ -122,7 +123,7 @@ namespace Naru.WPF.Tests.ViewModel
 
                     viewModel.CleanUpWasCalled += (s, e) => eventWasFired = true;
 
-                    viewModel.Close();
+                    viewModel.ClosingStrategy.Close();
 
                     Assert.That(eventWasFired, Is.True);
                 }
@@ -143,7 +144,7 @@ namespace Naru.WPF.Tests.ViewModel
 
                 viewModel.ExecuteOnClosed(() => eventWasFired = true);
 
-                viewModel.CloseCommand.Execute(null);
+                viewModel.ClosingStrategy.CloseCommand.Execute(null);
 
                 Assert.That(eventWasFired, Is.True);
             }

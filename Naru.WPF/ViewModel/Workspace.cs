@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Reactive.Threading.Tasks;
@@ -9,7 +8,6 @@ using Common.Logging;
 
 using Naru.RX;
 using Naru.TPL;
-using Naru.WPF.Command;
 using Naru.WPF.Dialog;
 using Naru.WPF.Scheduler;
 
@@ -21,18 +19,31 @@ namespace Naru.WPF.ViewModel
         protected readonly ISchedulerProvider Scheduler;
         protected readonly IStandardDialog StandardDialog;
 
-        private readonly Subject<Unit> _closed = new Subject<Unit>();
         private readonly Subject<bool> _isVisibleChanged = new Subject<bool>();
 
-        public BusyViewModel BusyViewModel { get; private set; }
+        public IBusyViewModel BusyViewModel { get; private set; }
 
         public IActivationStateViewModel ActivationStateViewModel { get; private set; }
+
+        public IClosingStrategy ClosingStrategy { get; private set; }
 
         protected Workspace(ILog log, ISchedulerProvider scheduler, IStandardDialog standardDialog)
         {
             Log = log;
             Scheduler = scheduler;
             StandardDialog = standardDialog;
+
+            ClosingStrategy = new ClosingStrategy(log);
+            ClosingStrategy.Closing
+                           .TakeUntil(ClosingStrategy.Closed)
+                           .Subscribe(_ =>
+                                      {
+                                          Closing();
+
+                                          Disposables.Dispose();
+
+                                          CleanUp();
+                                      });
 
             BusyViewModel = new BusyViewModel(scheduler);
             BusyViewModel.AddDisposable(Disposables);
@@ -43,49 +54,25 @@ namespace Naru.WPF.ViewModel
             ActivationStateViewModel.OnInitialise
                                     .SelectMany(_ => OnInitialise().ToObservable()
                                                                    .TakeUntil(BusyViewModel.BusyLatch))
-                                    .TakeUntil(Closed)
+                                    .TakeUntil(ClosingStrategy.Closed)
                                     .Subscribe(_ => { });
 
             ActivationStateViewModel.ActivationStateChanged
                                     .ObserveOn(scheduler.Dispatcher.RX)
                                     .Where(isActive => isActive)
-                                    .TakeUntil(Closed)
+                                    .TakeUntil(ClosingStrategy.Closed)
                                     .Subscribe(_ => OnActivate());
 
             ActivationStateViewModel.ActivationStateChanged
                                     .ObserveOn(scheduler.Dispatcher.RX)
                                     .Where(isActive => !isActive)
-                                    .TakeUntil(Closed)
+                                    .TakeUntil(ClosingStrategy.Closed)
                                     .Subscribe(_ => OnDeActivate());
-
-            CloseCommand = new DelegateCommand(Close);
 
             Show();
         }
 
         #region SupportClosing
-
-        public DelegateCommand CloseCommand { get; private set; }
-
-        public virtual bool CanClose()
-        {
-            return false;
-        }
-
-        public void Close()
-        {
-            Log.Debug(string.Format("Closing ViewModel {0} - {1}", GetType().FullName, Header));
-
-            Closing();
-
-            Disposables.Dispose();
-
-            CleanUp();
-
-            _closed.OnNext(Unit.Default);
-        }
-
-        public IObservable<Unit> Closed { get { return _closed.AsObservable(); } }
 
         protected virtual void Closing()
         { }

@@ -25,7 +25,7 @@ namespace Naru.WPF.UserInteractionHost
         public IViewModel ViewModel
         {
             get { return _viewModel.Value; }
-            private set { this.RaiseAndSetIfChanged(_viewModel, value); }
+            private set { _viewModel.RaiseAndSetIfChanged(value); }
         }
 
         #endregion
@@ -37,7 +37,7 @@ namespace Naru.WPF.UserInteractionHost
         public bool ShowClose
         {
             get { return _showClose.Value; }
-            private set { this.RaiseAndSetIfChanged(_showClose, value); }
+            private set { _showClose.RaiseAndSetIfChanged(value); }
         }
 
         #endregion
@@ -59,13 +59,13 @@ namespace Naru.WPF.UserInteractionHost
                 ShowClose = true;
 
                 IDisposable closing = null;
-                closing = supportClosing.Closed
+                closing = supportClosing.ClosingStrategy.Closed
                                         .Subscribe(x =>
                                                    {
                                                        if (!_viewModelIsClosed)
                                                        {
                                                            _viewModelIsClosed = true;
-                                                           Close();
+                                                           ClosingStrategy.Close();
                                                        }
 
                                                        if (closing != null)
@@ -87,7 +87,7 @@ namespace Naru.WPF.UserInteractionHost
             if (!_viewModelIsClosed)
             {
                 _viewModelIsClosed = true;
-                supportClosing.Close();
+                supportClosing.ClosingStrategy.Close();
             }
         }
     }

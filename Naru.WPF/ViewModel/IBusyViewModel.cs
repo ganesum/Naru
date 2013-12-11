@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace Naru.WPF.ViewModel
 {
@@ -6,10 +7,18 @@ namespace Naru.WPF.ViewModel
     {
         IObservable<bool> IsActiveChanged { get; }
 
+        bool IsActive { get; }
+
         string Message { get; }
+
+        BusyLatch BusyLatch { get; }
 
         void Active(string message);
 
         void InActive();
+
+        Task ActiveAsync(string message);
+
+        Task InActiveAsync();
     }
 }

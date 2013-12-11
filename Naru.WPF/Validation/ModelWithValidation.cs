@@ -1,22 +1,21 @@
-﻿using System;
-
-using FluentValidation;
+﻿using FluentValidation;
+using FluentValidation.Results;
 
 namespace Naru.WPF.Validation
 {
-    public abstract class ModelWithValidation<TModel, TValidation> : ViewModel.ViewModel,
-                                                                     ISupportValidation<TModel, TValidation>,
-                                                                     IDisposable
-        where TModel : ModelWithValidation<TModel, TValidation>
-        where TValidation : AbstractValidator<TModel>, new()
+    public abstract class ModelWithValidation<TModel, TValidator> : ISupportValidation<TModel, TValidator>
+        where TModel : ModelWithValidation<TModel, TValidator>
+        where TValidator : AbstractValidator<TModel>, new()
     {
+        private readonly TValidator _validator;
+
         #region IDataErrorInfo Members
 
         public string Error
         {
             get
             {
-                return ((TModel)this).Validate<TModel, TValidation>().GetError();
+                return Validate().GetError();
             }
         }
 
@@ -24,15 +23,25 @@ namespace Naru.WPF.Validation
         {
             get
             {
-                return ((TModel)this).Validate<TModel, TValidation>().GetErrorForProperty(columnName);
+                return Validate().GetErrorForProperty(columnName);
             }
         }
 
         #endregion
 
-        public void Dispose()
+        protected ModelWithValidation()
         {
-            Disposables.Dispose();
+            _validator = new TValidator();
+        }
+
+        public ValidationResult Validate()
+        {
+            return _validator.Validate((TModel)this);
+        }
+
+        public bool IsValid()
+        {
+            return _validator.Validate((TModel)this) != null;
         }
     }
 }
