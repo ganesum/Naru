@@ -47,6 +47,7 @@ namespace Naru.WPF.ViewModel
             _closing.OnCompleted();
 
             _closed.OnNext(Unit.Default);
+            _closed.OnCompleted();
         }
 
         public IObservable<Unit> Closing { get { return _closing.AsObservable(); } }
