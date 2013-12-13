@@ -1,10 +1,10 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Windows;
 using Common.Logging;
 
 using Naru.TPL;
 using Naru.WPF.Scheduler;
+using Naru.WPF.TPL;
 using Naru.WPF.ViewModel;
 using Naru.WPF.Windows.Controls;
 
@@ -69,33 +69,13 @@ namespace Naru.WPF.MVVM
             }
         }
 
-        private static void ConnectUpActivation(IViewModel viewModel, Window window)
+        private void ConnectUpActivation(IViewModel viewModel, Window window)
         {
             var supportActivationState = viewModel as ISupportActivationState;
             if (supportActivationState == null) return;
 
-            var supportClosing = viewModel as ISupportClosing;
-            if (supportClosing == null) return;
-
-            RoutedEventHandler windowOnLoaded = null;
-            windowOnLoaded = (s, e) =>
-            {
-                supportActivationState.ActivationStateViewModel.Activate();
-
-                if (windowOnLoaded != null)
-                {
-                    window.Loaded -= windowOnLoaded;
-                }
-            };
-            window.Loaded += windowOnLoaded;
-
-            supportClosing.ExecuteOnClosed(() =>
-            {
-                if (windowOnLoaded != null)
-                {
-                    window.Loaded -= windowOnLoaded;
-                }
-            });
+            RoutedEventAsync.FromRoutedEvent(eh => window.Loaded += eh, eh => window.Loaded -= eh)
+                            .Do(() => supportActivationState.ActivationStateViewModel.Activate(), _scheduler.Dispatcher.TPL);
         }
 
         private void ConnectUpClosing(IViewModel viewModel, Window window)
@@ -103,21 +83,12 @@ namespace Naru.WPF.MVVM
             var supportClosing = viewModel as ISupportClosing;
             if (supportClosing == null) return;
 
-            // ViewModel is closed
+            // ViewModel is closed, so close the Window
             supportClosing.ExecuteOnClosed(() => _scheduler.Dispatcher.ExecuteSync(window.Close));
 
-            // Window is closed
-            EventHandler windowOnClosed = null;
-            windowOnClosed = (s, e) =>
-            {
-                supportClosing.ClosingStrategy.Close();
-
-                if (windowOnClosed != null)
-                {
-                    window.Closed -= windowOnClosed;
-                }
-            };
-            window.Closed += windowOnClosed;
+            // Window is closed, so close the ViewModel
+            EventAsync.FromEvent(eh => window.Closed += eh, eh => window.Closed -= eh)
+                      .Do(() => supportClosing.ClosingStrategy.Close(), _scheduler.Dispatcher.TPL);
         }
     }
 }

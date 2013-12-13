@@ -6,7 +6,7 @@ namespace Naru.WPF
 {
     public static class UnhandledExceptionHandler
     {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof(TPL.UnhandledExceptionHandler));
+        private static readonly ILog Logger = LogManager.GetLogger(typeof(Naru.TPL.UnhandledExceptionHandler));
 
         public static void InstallDispatcherUnhandledException()
         {
