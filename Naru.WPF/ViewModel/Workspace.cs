@@ -42,10 +42,10 @@ namespace Naru.WPF.ViewModel
                                       {
                                           Closing();
 
-                                          Disposables.Dispose();
-
                                           CleanUp();
                                       });
+
+            this.ExecuteOnClosed(() => Disposables.Dispose());
 
             BusyViewModel = new BusyViewModel(scheduler);
             BusyViewModel.AddDisposable(Disposables);

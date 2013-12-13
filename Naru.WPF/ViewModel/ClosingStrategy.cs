@@ -50,10 +50,8 @@ namespace Naru.WPF.ViewModel
             _log.Debug(string.Format("Closing ViewModel {0}", GetType().FullName));
 
             _closing.OnNext(Unit.Default);
-            _closing.OnCompleted();
 
             _closed.OnNext(Unit.Default);
-            _closed.OnCompleted();
         }
 
         public IObservable<Unit> Closing { get { return _closing.AsObservable(); } }
