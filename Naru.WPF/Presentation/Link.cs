@@ -1,4 +1,7 @@
-﻿using Naru.WPF.Command;
+﻿using System.Windows.Input;
+
+using Naru.RX;
+using Naru.WPF.Scheduler;
 using Naru.WPF.ViewModel;
 
 namespace Naru.WPF.Presentation
@@ -6,31 +9,25 @@ namespace Naru.WPF.Presentation
     /// <summary>
     /// Represents a displayable link.
     /// </summary>
-    public class Link : NotifyPropertyChanged
+    public class Link : ViewModel.ViewModel
     {
         #region DisplayName
 
-        private string _displayName;
+        private readonly ObservableProperty<string> _displayName = new ObservableProperty<string>();
 
-        /// <summary>
-        /// Gets or sets the display name.
-        /// </summary>
-        /// <value>The display name.</value>
         public string DisplayName
         {
-            get { return _displayName; }
-            set
-            {
-                if (_displayName != value)
-                {
-                    _displayName = value;
-                    RaisePropertyChanged(() => DisplayName);
-                }
-            }
+            get { return _displayName.Value; }
+            set { _displayName.RaiseAndSetIfChanged(value); }
         }
 
         #endregion
 
-        public DelegateCommand Command { get; set; }
+        public ICommand Command { get; set; }
+
+        public Link(ISchedulerProvider scheduler)
+        {
+            _displayName.ConnectINPCProperty(this, () => DisplayName, scheduler).AddDisposable(Disposables);
+        }
     }
 }
