@@ -4,7 +4,7 @@ using System.Windows.Input;
 
 namespace Naru.WPF.ViewModel
 {
-    public interface IClosingStrategy
+    public interface IClosingStrategy : IDisposable
     {
         bool CanClose();
 

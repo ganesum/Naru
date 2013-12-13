@@ -34,6 +34,8 @@ namespace Naru.WPF.ViewModel
             StandardDialog = standardDialog;
 
             ClosingStrategy = new ClosingStrategy(log);
+            ClosingStrategy.AddDisposable(Disposables);
+
             ClosingStrategy.Closing
                            .TakeUntil(ClosingStrategy.Closed)
                            .Subscribe(_ =>

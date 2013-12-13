@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Interactivity;
 using System.Windows.Threading;
 
+using Naru.WPF.MVVM;
 using Naru.WPF.ViewModel;
 
 namespace Naru.WPF.TabControl
@@ -15,12 +16,15 @@ namespace Naru.WPF.TabControl
     {
         private Dispatcher _dispatcher;
 
-        public static readonly DependencyProperty ItemsSourceProperty =
-            DependencyProperty.Register("ItemsSource", typeof (ObservableCollection<IViewModel>), 
-            typeof (TabControlItemSourceBehavior), 
-            new PropertyMetadata(default(ObservableCollection<IViewModel>), ItemsSourcePropertyChangedCallback));
+        #region ItemsSource
 
-        private static void ItemsSourcePropertyChangedCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
+        public static readonly DependencyProperty ItemsSourceProperty =
+            DependencyProperty.Register("ItemsSource", typeof (ObservableCollection<IViewModel>),
+                                        typeof (TabControlItemSourceBehavior),
+                                        new PropertyMetadata(default(ObservableCollection<IViewModel>), ItemsSourcePropertyChangedCallback));
+
+        private static void ItemsSourcePropertyChangedCallback(DependencyObject dependencyObject,
+                                                               DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
         {
             var behavior = dependencyObject as TabControlItemSourceBehavior;
             if (behavior == null)
@@ -28,7 +32,7 @@ namespace Naru.WPF.TabControl
                 return;
             }
 
-            behavior.ItemsSource.CollectionChanged += behavior.items_CollectionChanged;
+            behavior.ItemsSource.CollectionChanged += behavior.ItemsCollectionChanged;
 
             foreach (var viewModel in behavior.ItemsSource)
             {
@@ -42,6 +46,8 @@ namespace Naru.WPF.TabControl
             set { SetValue(ItemsSourceProperty, value); }
         }
 
+        #endregion
+
         protected override void OnAttached()
         {
             AssociatedObject.SelectionChanged += TabControlSelectionChanged;
@@ -51,12 +57,12 @@ namespace Naru.WPF.TabControl
 
         protected override void OnDetaching()
         {
-            ItemsSource.CollectionChanged -= items_CollectionChanged;
+            ItemsSource.CollectionChanged -= ItemsCollectionChanged;
 
             AssociatedObject.SelectionChanged -= TabControlSelectionChanged;
         }
 
-        private void items_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private void ItemsCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == NotifyCollectionChangedAction.Add)
             {
@@ -100,6 +106,7 @@ namespace Naru.WPF.TabControl
                 Action action = () => AssociatedObject.SelectedItem = tabItem;
                 _dispatcher.BeginInvoke(action);
             }
+
             return false;
         }
 
@@ -189,15 +196,13 @@ namespace Naru.WPF.TabControl
             if (supportClosing == null) return;
 
             supportActivationState.ActivationStateViewModel.ActivationStateChanged
+                                  .Where(isActive => isActive)
                                   .TakeUntil(supportClosing.ClosingStrategy.Closed)
-                                  .Subscribe(x =>
-                                  {
-                                      if (supportActivationState.ActivationStateViewModel.IsActive)
-                                      {
-                                          Action action = () => tabControl.SelectedItem = tabItem;
-                                          _dispatcher.BeginInvoke(action);
-                                      }
-                                  });
+                                  .Subscribe(_ =>
+                                             {
+                                                 Action action = () => tabControl.SelectedItem = tabItem;
+                                                 _dispatcher.BeginInvoke(action);
+                                             });
         }
 
         private static void SetupHeader(IViewModel viewModel, TabItem tabItem)

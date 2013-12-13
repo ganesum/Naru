@@ -3,7 +3,5 @@
 namespace Naru.WPF.MVVM
 {
     public interface IUserInteractionViewModel : IViewModel, ISupportClosing
-    {
-        
-    }
+    { }
 }
