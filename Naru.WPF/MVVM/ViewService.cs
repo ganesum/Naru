@@ -84,7 +84,7 @@ namespace Naru.WPF.MVVM
             if (supportClosing == null) return;
 
             // ViewModel is closed, so close the Window
-            supportClosing.ExecuteOnClosed(() => _scheduler.Dispatcher.ExecuteSync(window.Close));
+            supportClosing.ExecuteOnClosed(() => Task.Factory.StartNew(() => window.Close(), _scheduler.Dispatcher.TPL));
 
             // Window is closed, so close the ViewModel
             EventAsync.FromEvent(eh => window.Closed += eh, eh => window.Closed -= eh)

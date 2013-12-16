@@ -74,6 +74,7 @@
     <Reference Include="System.Reactive.Windows.Threading">
       <HintPath>..\packages\Rx-XAML.2.1.30214.0\lib\Net45\System.Reactive.Windows.Threading.dll</HintPath>
     </Reference>
+    <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -89,6 +90,7 @@
   <ItemGroup>
     <Compile Include="Converters\BooleanToVisibilityConverterTests.cs" />
     <Compile Include="MVVM\BindableCollectionTests.cs" />
+    <Compile Include="MVVM\ContentControlViewResolverBehaviorTests.cs" />
     <Compile Include="Scheduler\TestCurrentScheduler.cs" />
     <Compile Include="Scheduler\TestDispatcherScheduler.cs" />
     <Compile Include="Scheduler\TestImmediateScheduler.cs" />
@@ -98,6 +100,7 @@
     <Compile Include="Scheduler\TestTaskScheduler.cs" />
     <Compile Include="Scheduler\TestThreadPoolScheduler.cs" />
     <Compile Include="Validation\ValidationAsyncTests.cs" />
+    <Compile Include="ViewModel\ActivationStateViewModelTests.cs" />
     <Compile Include="ViewModel\BusyLatchTests.cs" />
     <Compile Include="ViewModel\BusyViewModelTests.cs" />
     <Compile Include="ViewModel\ClosingStrategyTests.cs" />
@@ -107,7 +110,7 @@
     <Compile Include="ViewModel\ReactiveMultiSelectCollectionTests.cs" />
     <Compile Include="ViewModel\ReactiveSingleSelectCollectionTests.cs" />
     <Compile Include="ViewModel\ViewModelHelpersTests.cs" />
-    <Compile Include="MVVM\ViewServiceTests.cs" />
+    <Compile Include="MVVM\ViewServiceHelperTests.cs" />
     <Compile Include="ViewModel\WorkspaceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

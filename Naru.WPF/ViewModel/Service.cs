@@ -1,17 +1,19 @@
-﻿using Common.Logging;
+﻿using System.Reactive.Disposables;
 
 namespace Naru.WPF.ViewModel
 {
     public abstract class Service : IService
     {
-        protected readonly ILog Log;
+        private readonly CompositeDisposable _disposables = new CompositeDisposable();
 
-        protected Service(ILog log)
+        protected CompositeDisposable Disposables
         {
-            Log = log;
+            get { return _disposables; }
         }
 
-        public virtual void Dispose()
-        { }
+        public void Dispose()
+        {
+            _disposables.Dispose();
+        }
     }
 }

@@ -121,6 +121,7 @@
     <Compile Include="UserInteractionHost\UserInteractionHostViewModel.cs" />
     <Compile Include="Validation\ISupportValidation.cs" />
     <Compile Include="Validation\ISupportValidationAsync.cs" />
+    <Compile Include="Validation\IValidationAsync.cs" />
     <Compile Include="Validation\ModelWithValidation.cs" />
     <Compile Include="Validation\ModelWithValidationAsync.cs" />
     <Compile Include="Validation\ValidationAsync.cs" />

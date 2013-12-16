@@ -16,7 +16,7 @@ using Naru.WPF.ViewModel;
 
 namespace Naru.WPF.Validation
 {
-    public class ValidationAsync<T, TValidator>
+    public class ValidationAsync<T, TValidator> : IValidationAsync<T, TValidator>
         where T : ISupportValidationAsync<T, TValidator>
         where TValidator : AbstractValidator<T>, new()
     {

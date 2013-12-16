@@ -44,7 +44,7 @@ namespace Naru.WPF
             builder.RegisterGeneric(typeof(ReactiveMultiSelectCollection<>)).AsSelf().InstancePerDependency();
 
             // Validation
-            builder.RegisterGeneric(typeof (ValidationAsync<,>)).AsSelf().InstancePerDependency();
+            builder.RegisterGeneric(typeof(ValidationAsync<,>)).As(typeof(IValidationAsync<,>)).InstancePerDependency();
         }
     }
 }

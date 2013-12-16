@@ -39,7 +39,7 @@ namespace Naru.WPF.ViewModel
         }
 
         public static IDisposable AddValidation<T, TModel, TValidation, TProperty>(this ObservableProperty<T> observableProperty,
-                                                                                   ValidationAsync<TModel, TValidation> validation,
+                                                                                   IValidationAsync<TModel, TValidation> validation,
                                                                                    ISchedulerProvider scheduler,
                                                                                    Expression<Func<TProperty>> propertyExpression)
             where TModel : ISupportValidationAsync<TModel, TValidation>

@@ -4,6 +4,11 @@ namespace Naru.WPF.ViewModel
 {
     public abstract class ViewModel : NotifyPropertyChanged, IViewModel
     {
-        protected readonly CompositeDisposable Disposables = new CompositeDisposable();
+        private readonly CompositeDisposable _disposables = new CompositeDisposable();
+
+        protected CompositeDisposable Disposables
+        {
+            get { return _disposables; }
+        }
     }
 }

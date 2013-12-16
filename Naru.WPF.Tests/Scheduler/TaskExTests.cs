@@ -24,30 +24,30 @@ namespace Naru.WPF.Tests.Scheduler
 
             new TaskFactory(scheduler)
                 .StartNew(() =>
-                {
-                    Assert.That(task1HasRun, Is.False);
-                    Assert.That(task2HasRun, Is.False);
-                    Assert.That(task3HasRun, Is.False);
-                    task1HasRun = true;
+                          {
+                              Assert.That(task1HasRun, Is.False);
+                              Assert.That(task2HasRun, Is.False);
+                              Assert.That(task3HasRun, Is.False);
+                              task1HasRun = true;
 
-                    throw new Exception();
-                })
+                              throw new Exception();
+                          })
                 .CatchAndHandle(_ =>
-                {
-                    Assert.That(task1HasRun, Is.True);
-                    Assert.That(task2HasRun, Is.False);
-                    Assert.That(task3HasRun, Is.False);
-                    task2HasRun = true;
-                }, scheduler)
+                                {
+                                    Assert.That(task1HasRun, Is.True);
+                                    Assert.That(task2HasRun, Is.False);
+                                    Assert.That(task3HasRun, Is.False);
+                                    task2HasRun = true;
+                                }, scheduler)
                 .Finally(() =>
-                {
-                    Assert.That(task1HasRun, Is.True);
-                    Assert.That(task2HasRun, Is.True);
-                    Assert.That(task3HasRun, Is.False);
-                    task3HasRun = true;
+                         {
+                             Assert.That(task1HasRun, Is.True);
+                             Assert.That(task2HasRun, Is.True);
+                             Assert.That(task3HasRun, Is.False);
+                             task3HasRun = true;
 
-                    autoResetEvent.Set();
-                }, scheduler);
+                             autoResetEvent.Set();
+                         }, scheduler);
 
             autoResetEvent.WaitOne();
 
@@ -67,28 +67,28 @@ namespace Naru.WPF.Tests.Scheduler
 
             new TaskFactory(scheduler)
                 .StartNew(() =>
-                {
-                    Assert.That(task1HasRun, Is.False);
-                    Assert.That(task2HasRun, Is.False);
-                    Assert.That(task3HasRun, Is.False);
-                    task1HasRun = true;
+                          {
+                              Assert.That(task1HasRun, Is.False);
+                              Assert.That(task2HasRun, Is.False);
+                              Assert.That(task3HasRun, Is.False);
+                              task1HasRun = true;
 
-                    throw new Exception();
-                })
+                              throw new Exception();
+                          })
                 .CatchAndHandle(_ =>
-                {
-                    Assert.That(task1HasRun, Is.True);
-                    Assert.That(task2HasRun, Is.False);
-                    Assert.That(task3HasRun, Is.False);
-                    task2HasRun = true;
-                }, scheduler)
+                                {
+                                    Assert.That(task1HasRun, Is.True);
+                                    Assert.That(task2HasRun, Is.False);
+                                    Assert.That(task3HasRun, Is.False);
+                                    task2HasRun = true;
+                                }, scheduler)
                 .Finally(() =>
-                {
-                    Assert.That(task1HasRun, Is.True);
-                    Assert.That(task2HasRun, Is.True);
-                    Assert.That(task3HasRun, Is.False);
-                    task3HasRun = true;
-                }, scheduler);
+                         {
+                             Assert.That(task1HasRun, Is.True);
+                             Assert.That(task2HasRun, Is.True);
+                             Assert.That(task3HasRun, Is.False);
+                             task3HasRun = true;
+                         }, scheduler);
 
             Assert.That(task1HasRun, Is.True);
             Assert.That(task2HasRun, Is.True);
@@ -109,30 +109,30 @@ namespace Naru.WPF.Tests.Scheduler
 
             new TaskFactory(taskScheduler)
                 .StartNew(() =>
-                {
-                    Assert.That(task1HasRun, Is.False);
-                    Assert.That(task2HasRun, Is.False);
-                    Assert.That(task3HasRun, Is.False);
-                    task1HasRun = true;
+                          {
+                              Assert.That(task1HasRun, Is.False);
+                              Assert.That(task2HasRun, Is.False);
+                              Assert.That(task3HasRun, Is.False);
+                              task1HasRun = true;
 
-                    throw new Exception();
-                })
+                              throw new Exception();
+                          })
                 .CatchAndHandle(_ =>
-                {
-                    Assert.That(task1HasRun, Is.True);
-                    Assert.That(task2HasRun, Is.False);
-                    Assert.That(task3HasRun, Is.False);
-                    task2HasRun = true;
-                }, taskScheduler)
+                                {
+                                    Assert.That(task1HasRun, Is.True);
+                                    Assert.That(task2HasRun, Is.False);
+                                    Assert.That(task3HasRun, Is.False);
+                                    task2HasRun = true;
+                                }, taskScheduler)
                 .Finally(() =>
-                {
-                    Assert.That(task1HasRun, Is.True);
-                    Assert.That(task2HasRun, Is.True);
-                    Assert.That(task3HasRun, Is.False);
-                    task3HasRun = true;
+                         {
+                             Assert.That(task1HasRun, Is.True);
+                             Assert.That(task2HasRun, Is.True);
+                             Assert.That(task3HasRun, Is.False);
+                             task3HasRun = true;
 
-                    autoResetEvent.Set();
-                }, currentTaskScheduler);
+                             autoResetEvent.Set();
+                         }, currentTaskScheduler);
 
             autoResetEvent.WaitOne();
 
@@ -154,22 +154,22 @@ namespace Naru.WPF.Tests.Scheduler
 
             new TaskFactory(taskScheduler)
                 .StartNew(() =>
-                {
-                    Assert.That(task1HasRun, Is.False);
+                          {
+                              Assert.That(task1HasRun, Is.False);
 
-                    task1HasRun = true;
+                              task1HasRun = true;
 
-                    return 0;
-                }, taskScheduler)
+                              return 0;
+                          }, taskScheduler)
                 .Then(_ =>
-                {
-                    Assert.That(task1HasRun, Is.True);
-                    Assert.That(task2HasRun, Is.False);
+                      {
+                          Assert.That(task1HasRun, Is.True);
+                          Assert.That(task2HasRun, Is.False);
 
-                    task2HasRun = true;
+                          task2HasRun = true;
 
-                    return CompletedTask<int>.Default;
-                }, currentThreadTaskScheduler)
+                          return CompletedTask<int>.Default;
+                      }, currentThreadTaskScheduler)
                 .Finally(() => autoResetEvent.Set(), taskScheduler);
 
             autoResetEvent.WaitOne();
@@ -191,22 +191,22 @@ namespace Naru.WPF.Tests.Scheduler
 
             new TaskFactory(taskScheduler)
                 .StartNew(() =>
-                {
-                    Assert.That(task1HasRun, Is.False);
+                          {
+                              Assert.That(task1HasRun, Is.False);
 
-                    task1HasRun = true;
+                              task1HasRun = true;
 
-                    return 0;
-                }, taskScheduler)
+                              return 0;
+                          }, taskScheduler)
                 .Then(() =>
-                {
-                    Assert.That(task1HasRun, Is.True);
-                    Assert.That(task2HasRun, Is.False);
+                      {
+                          Assert.That(task1HasRun, Is.True);
+                          Assert.That(task2HasRun, Is.False);
 
-                    task2HasRun = true;
+                          task2HasRun = true;
 
-                    return CompletedTask<int>.Default;
-                }, currentThreadTaskScheduler)
+                          return CompletedTask<int>.Default;
+                      }, currentThreadTaskScheduler)
                 .Finally(() => autoResetEvent.Set(), taskScheduler);
 
             autoResetEvent.WaitOne();
@@ -228,22 +228,22 @@ namespace Naru.WPF.Tests.Scheduler
 
             new TaskFactory(taskScheduler)
                 .StartNew(() =>
-                {
-                    Assert.That(task1HasRun, Is.False);
+                          {
+                              Assert.That(task1HasRun, Is.False);
 
-                    task1HasRun = true;
+                              task1HasRun = true;
 
-                    return 0;
-                }, taskScheduler)
+                              return 0;
+                          }, taskScheduler)
                 .Then(_ =>
-                {
-                    Assert.That(task1HasRun, Is.True);
-                    Assert.That(task2HasRun, Is.False);
+                      {
+                          Assert.That(task1HasRun, Is.True);
+                          Assert.That(task2HasRun, Is.False);
 
-                    task2HasRun = true;
+                          task2HasRun = true;
 
-                    return CompletedTask.Default;
-                }, currentThreadTaskScheduler)
+                          return CompletedTask.Default;
+                      }, currentThreadTaskScheduler)
                 .Finally(() => autoResetEvent.Set(), taskScheduler);
 
             autoResetEvent.WaitOne();
@@ -265,20 +265,20 @@ namespace Naru.WPF.Tests.Scheduler
 
             new TaskFactory(taskScheduler)
                 .StartNew(() =>
-                {
-                    Assert.That(task1HasRun, Is.False);
+                          {
+                              Assert.That(task1HasRun, Is.False);
 
-                    task1HasRun = true;
+                              task1HasRun = true;
 
-                    return 0;
-                }, taskScheduler)
+                              return 0;
+                          }, taskScheduler)
                 .Do(_ =>
-                {
-                    Assert.That(task1HasRun, Is.True);
-                    Assert.That(task2HasRun, Is.False);
+                    {
+                        Assert.That(task1HasRun, Is.True);
+                        Assert.That(task2HasRun, Is.False);
 
-                    task2HasRun = true;
-                }, currentThreadTaskScheduler)
+                        task2HasRun = true;
+                    }, currentThreadTaskScheduler)
                 .Finally(() => autoResetEvent.Set(), taskScheduler);
 
             autoResetEvent.WaitOne();
@@ -300,18 +300,18 @@ namespace Naru.WPF.Tests.Scheduler
 
             new TaskFactory(taskScheduler)
                 .StartNew(() =>
-                {
-                    Assert.That(task1HasRun, Is.False);
+                          {
+                              Assert.That(task1HasRun, Is.False);
 
-                    task1HasRun = true;
-                }, taskScheduler)
+                              task1HasRun = true;
+                          }, taskScheduler)
                 .Do(() =>
-                {
-                    Assert.That(task1HasRun, Is.True);
-                    Assert.That(task2HasRun, Is.False);
+                    {
+                        Assert.That(task1HasRun, Is.True);
+                        Assert.That(task2HasRun, Is.False);
 
-                    task2HasRun = true;
-                }, currentThreadTaskScheduler)
+                        task2HasRun = true;
+                    }, currentThreadTaskScheduler)
                 .Finally(() => autoResetEvent.Set(), taskScheduler);
 
             autoResetEvent.WaitOne();
@@ -333,20 +333,20 @@ namespace Naru.WPF.Tests.Scheduler
 
             new TaskFactory(taskScheduler)
                 .StartNew(() =>
-                {
-                    Assert.That(task1HasRun, Is.False);
+                          {
+                              Assert.That(task1HasRun, Is.False);
 
-                    task1HasRun = true;
-                }, taskScheduler)
+                              task1HasRun = true;
+                          }, taskScheduler)
                 .Then(() =>
-                {
-                    Assert.That(task1HasRun, Is.True);
-                    Assert.That(task2HasRun, Is.False);
+                      {
+                          Assert.That(task1HasRun, Is.True);
+                          Assert.That(task2HasRun, Is.False);
 
-                    task2HasRun = true;
+                          task2HasRun = true;
 
-                    return CompletedTask.Default;
-                }, currentThreadTaskScheduler)
+                          return CompletedTask.Default;
+                      }, currentThreadTaskScheduler)
                 .Finally(() => autoResetEvent.Set(), taskScheduler);
 
             autoResetEvent.WaitOne();
@@ -367,21 +367,21 @@ namespace Naru.WPF.Tests.Scheduler
 
             new TaskFactory(taskScheduler)
                 .StartNew<int>(() =>
-                {
-                    Assert.That(task1HasRun, Is.False);
+                               {
+                                   Assert.That(task1HasRun, Is.False);
 
-                    task1HasRun = true;
+                                   task1HasRun = true;
 
-                    throw new Exception();
-                })
+                                   throw new Exception();
+                               })
                 .Then(_ =>
-                {
-                    Assert.That(task2HasRun, Is.False);
+                      {
+                          Assert.That(task2HasRun, Is.False);
 
-                    task2HasRun = true;
+                          task2HasRun = true;
 
-                    return CompletedTask<int>.Default;
-                }, taskScheduler)
+                          return CompletedTask<int>.Default;
+                      }, taskScheduler)
                 .Finally(() => autoResetEvent.Set(), taskScheduler);
 
             autoResetEvent.WaitOne();
@@ -402,21 +402,21 @@ namespace Naru.WPF.Tests.Scheduler
 
             new TaskFactory(taskScheduler)
                 .StartNew<int>(() =>
-                {
-                    Assert.That(task1HasRun, Is.False);
+                               {
+                                   Assert.That(task1HasRun, Is.False);
 
-                    task1HasRun = true;
+                                   task1HasRun = true;
 
-                    throw new Exception();
-                })
+                                   throw new Exception();
+                               })
                 .Then(() =>
-                {
-                    Assert.That(task2HasRun, Is.False);
+                      {
+                          Assert.That(task2HasRun, Is.False);
 
-                    task2HasRun = true;
+                          task2HasRun = true;
 
-                    return CompletedTask<int>.Default;
-                }, taskScheduler)
+                          return CompletedTask<int>.Default;
+                      }, taskScheduler)
                 .Finally(() => autoResetEvent.Set(), taskScheduler);
 
             autoResetEvent.WaitOne();
@@ -437,21 +437,21 @@ namespace Naru.WPF.Tests.Scheduler
 
             new TaskFactory(taskScheduler)
                 .StartNew(() =>
-                {
-                    Assert.That(task1HasRun, Is.False);
+                          {
+                              Assert.That(task1HasRun, Is.False);
 
-                    task1HasRun = true;
+                              task1HasRun = true;
 
-                    throw new Exception();
-                })
+                              throw new Exception();
+                          })
                 .Then(() =>
-                {
-                    Assert.That(task2HasRun, Is.False);
+                      {
+                          Assert.That(task2HasRun, Is.False);
 
-                    task2HasRun = true;
+                          task2HasRun = true;
 
-                    return CompletedTask<int>.Default;
-                }, taskScheduler)
+                          return CompletedTask<int>.Default;
+                      }, taskScheduler)
                 .Finally(() => autoResetEvent.Set(), taskScheduler);
 
             autoResetEvent.WaitOne();
@@ -472,21 +472,21 @@ namespace Naru.WPF.Tests.Scheduler
 
             new TaskFactory(taskScheduler)
                 .StartNew<int>(() =>
-                {
-                    Assert.That(task1HasRun, Is.False);
+                               {
+                                   Assert.That(task1HasRun, Is.False);
 
-                    task1HasRun = true;
+                                   task1HasRun = true;
 
-                    throw new Exception();
-                })
+                                   throw new Exception();
+                               })
                 .Then(_ =>
-                {
-                    Assert.That(task2HasRun, Is.False);
+                      {
+                          Assert.That(task2HasRun, Is.False);
 
-                    task2HasRun = true;
+                          task2HasRun = true;
 
-                    return CompletedTask.Default;
-                }, taskScheduler)
+                          return CompletedTask.Default;
+                      }, taskScheduler)
                 .Finally(() => autoResetEvent.Set(), taskScheduler);
 
             autoResetEvent.WaitOne();
@@ -507,19 +507,19 @@ namespace Naru.WPF.Tests.Scheduler
 
             new TaskFactory(taskScheduler)
                 .StartNew<int>(() =>
-                {
-                    Assert.That(task1HasRun, Is.False);
+                               {
+                                   Assert.That(task1HasRun, Is.False);
 
-                    task1HasRun = true;
+                                   task1HasRun = true;
 
-                    throw new Exception();
-                })
+                                   throw new Exception();
+                               })
                 .Do(_ =>
-                {
-                    Assert.That(task2HasRun, Is.False);
+                    {
+                        Assert.That(task2HasRun, Is.False);
 
-                    task2HasRun = true;
-                }, taskScheduler)
+                        task2HasRun = true;
+                    }, taskScheduler)
                 .Finally(() => autoResetEvent.Set(), taskScheduler);
 
             autoResetEvent.WaitOne();
@@ -540,21 +540,21 @@ namespace Naru.WPF.Tests.Scheduler
 
             new TaskFactory(taskScheduler)
                 .StartNew(() =>
-                {
-                    Assert.That(task1HasRun, Is.False);
+                          {
+                              Assert.That(task1HasRun, Is.False);
 
-                    task1HasRun = true;
+                              task1HasRun = true;
 
-                    throw new Exception();
-                })
+                              throw new Exception();
+                          })
                 .Then(() =>
-                {
-                    Assert.That(task2HasRun, Is.False);
+                      {
+                          Assert.That(task2HasRun, Is.False);
 
-                    task2HasRun = true;
+                          task2HasRun = true;
 
-                    return CompletedTask.Default;
-                }, taskScheduler)
+                          return CompletedTask.Default;
+                      }, taskScheduler)
                 .Finally(() => autoResetEvent.Set(), taskScheduler);
 
             autoResetEvent.WaitOne();

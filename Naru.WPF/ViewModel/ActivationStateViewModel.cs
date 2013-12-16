@@ -29,14 +29,29 @@ namespace Naru.WPF.ViewModel
 
         #endregion
 
-        public IObservable<bool> ActivationStateChanged { get { return _isActive.ValueChanged.AsObservable().DistinctUntilChanged(); } }
+        public IObservable<bool> ActivationStateChanged
+        {
+            get
+            {
+                return _isActive.ValueChanged.AsObservable().DistinctUntilChanged();
+            }
+        }
 
-        public IObservable<Unit> OnInitialise { get { return _onInitialise.AsObservable(); } }
+        public IObservable<Unit> OnInitialise
+        {
+            get
+            {
+                return _onInitialise.AsObservable();
+            }
+        }
 
         public ActivationStateViewModel(ILog log, ISchedulerProvider scheduler)
         {
             _log = log;
+
             _isActive.ConnectINPCProperty(this, () => IsActive, scheduler).AddDisposable(Disposables);
+
+            _onInitialise.AddDisposable(Disposables);
         }
 
         public void Activate()

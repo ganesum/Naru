@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using Naru.WPF.MVVM;
-
 namespace Naru.WPF.Dialog
 {
     public class DialogBuilder<T> : IDialogBuilder<T>

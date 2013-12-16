@@ -17,7 +17,7 @@ namespace Naru.WPF.Validation
         where TModel : ModelWithValidationAsync<TModel, TValidator>
         where TValidator : AbstractValidator<TModel>, new()
     {
-        protected readonly ValidationAsync<TModel, TValidator> Validation;
+        protected readonly IValidationAsync<TModel, TValidator> Validation;
 
         #region INotifyDataErrorInfo
 
@@ -45,7 +45,7 @@ namespace Naru.WPF.Validation
             }
         }
 
-        protected ModelWithValidationAsync(ISchedulerProvider scheduler, ValidationAsync<TModel, TValidator> validation)
+        protected ModelWithValidationAsync(ISchedulerProvider scheduler, IValidationAsync<TModel, TValidator> validation)
         {
             Validation = validation;
             Validation.Initialise((TModel) this);
