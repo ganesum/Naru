@@ -43,12 +43,6 @@ namespace Naru.WPF.MVVM
             }
         }
 
-        public virtual void NotifyOfPropertyChange(string propertyName)
-        {
-            if (IsNotifying)
-                _scheduler.Dispatcher.ExecuteSync(() => OnPropertyChanged(new PropertyChangedEventArgs(propertyName)));
-        }
-
         public void Refresh()
         {
             _scheduler.Dispatcher.ExecuteSync(RefreshInternal);
