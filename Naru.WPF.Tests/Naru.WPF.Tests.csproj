@@ -88,7 +88,10 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Converters\BooleanToFontWeightConverterTests.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverterTests.cs" />
+    <Compile Include="Converters\ToLowerConverterTests.cs" />
+    <Compile Include="Converters\ToUpperConverterTests.cs" />
     <Compile Include="MVVM\BindableCollectionTests.cs" />
     <Compile Include="MVVM\ContentControlViewResolverBehaviorTests.cs" />
     <Compile Include="Scheduler\TestCurrentScheduler.cs" />

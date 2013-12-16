@@ -8,8 +8,7 @@ namespace Naru.WPF.Converters
     /// <summary>
     /// Converts a null value to Visibility.Visible and any other value to Visibility.Collapsed
     /// </summary>
-    public class NullToVisibilityConverter
-        : IValueConverter
+    public class NullToVisibilityConverter : IValueConverter
     {
         /// <summary>
         /// Converts a value.
@@ -26,10 +25,12 @@ namespace Naru.WPF.Converters
             var flag = value == null;
             var inverse = (parameter as string) == "inverse";
 
-            if (inverse) {
+            if (inverse)
+            {
                 return (flag ? Visibility.Collapsed : Visibility.Visible);
             }
-            else {
+            else
+            {
                 return (flag ? Visibility.Visible : Visibility.Collapsed);
             }
         }

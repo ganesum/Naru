@@ -8,8 +8,7 @@ namespace Naru.WPF.Converters
     /// <summary>
     /// Converts a null or empty string value to Visibility.Visible and any other value to Visibility.Collapsed
     /// </summary>
-    public class NullOrEmptyStringToVisibilityConverter
-        : IValueConverter
+    public class NullOrEmptyStringToVisibilityConverter : IValueConverter
     {
         /// <summary>
         /// Converts a value.
@@ -24,15 +23,18 @@ namespace Naru.WPF.Converters
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             var flag = value == null;
-            if (value is string) {
-                flag = string.IsNullOrEmpty((string)value);
+            if (value is string)
+            {
+                flag = string.IsNullOrEmpty((string) value);
             }
             var inverse = (parameter as string) == "inverse";
 
-            if (inverse) {
+            if (inverse)
+            {
                 return (flag ? Visibility.Collapsed : Visibility.Visible);
             }
-            else {
+            else
+            {
                 return (flag ? Visibility.Visible : Visibility.Collapsed);
             }
         }

@@ -6,8 +6,7 @@ namespace Naru.WPF.Converters
     /// <summary>
     /// Converts string values to upper case.
     /// </summary>
-    public class ToUpperConverter
-        : IValueConverter
+    public class ToUpperConverter : IValueConverter
     {
         /// <summary>
         /// Converts a value.
@@ -21,12 +20,11 @@ namespace Naru.WPF.Converters
         /// </returns>
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            if (value != null) {
-                var strValue = value.ToString();
+            if (value == null) return null;
 
-                return strValue.ToUpperInvariant();
-            }
-            return null;
+            var strValue = value.ToString();
+
+            return strValue.ToUpperInvariant();
         }
 
         /// <summary>

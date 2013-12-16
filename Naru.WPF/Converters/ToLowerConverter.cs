@@ -7,8 +7,7 @@ namespace Naru.WPF.Converters
     /// <summary>
     /// Converts string values to lower case.
     /// </summary>
-    public class ToLowerConverter
-        : IValueConverter
+    public class ToLowerConverter : IValueConverter
     {
         /// <summary>
         /// Converts a value.
@@ -23,10 +22,11 @@ namespace Naru.WPF.Converters
         [SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase")]
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            if (value != null) {
+            if (value != null)
+            {
                 var strValue = value.ToString();
 
-                
+
                 return strValue.ToLowerInvariant();
             }
             return null;

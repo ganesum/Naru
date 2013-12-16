@@ -7,8 +7,7 @@ namespace Naru.WPF.Converters
     /// <summary>
     /// Converts a boolean value to a font weight (false: normal, true: bold)
     /// </summary>
-    public class BooleanToFontWeightConverter
-        : IValueConverter
+    public class BooleanToFontWeightConverter : IValueConverter
     {
         /// <summary>
         /// Converts a value.
