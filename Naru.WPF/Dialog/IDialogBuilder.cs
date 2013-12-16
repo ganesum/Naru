@@ -8,7 +8,7 @@
 
         IDialogBuilder<T> WithTitle(string title);
 
-        IDialogBuilder<T> WithMessage(string message);
+        IDialogBuilder<T> WithContent(object content);
 
         DialogViewModel<T> Build();
     }

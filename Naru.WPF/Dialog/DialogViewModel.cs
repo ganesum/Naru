@@ -17,7 +17,7 @@ namespace Naru.WPF.Dialog
 
         public T SelectedAnswer { get; private set; }
 
-        public string Message { get; private set; }
+        public object Content { get; private set; }
 
         public DelegateCommand<DialogItemViewModel<T>> ExecuteCommand { get; private set; }
 
@@ -35,10 +35,10 @@ namespace Naru.WPF.Dialog
                                                                          });
         }
 
-        public void Initialise(DialogType dialogType, List<T> answers, string title, string message)
+        public void Initialise(DialogType dialogType, List<T> answers, string title, object content)
         {
             this.SetupHeader(Scheduler, string.Format("{0} - {1}", dialogType, title));
-            Message = message;
+            Content = content;
 
             for (var index = 0; index < answers.Count; index++)
             {

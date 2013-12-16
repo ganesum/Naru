@@ -10,7 +10,7 @@ namespace Naru.WPF.Dialog
 
         private DialogType _dialogType;
         private string _title;
-        private string _message;
+        private object _content;
 
         public DialogBuilder(Func<DialogViewModel<T>> dialogViewModelFactory)
         {
@@ -41,9 +41,9 @@ namespace Naru.WPF.Dialog
             return this;
         }
 
-        public IDialogBuilder<T> WithMessage(string message)
+        public IDialogBuilder<T> WithContent(object content)
         {
-            _message = message;
+            _content = content;
 
             return this;
         }
@@ -51,7 +51,7 @@ namespace Naru.WPF.Dialog
         public DialogViewModel<T> Build()
         {
             var viewModel = _dialogViewModelFactory();
-            viewModel.Initialise(_dialogType, _answers, _title, _message);
+            viewModel.Initialise(_dialogType, _answers, _title, _content);
             return viewModel;
         }
     }

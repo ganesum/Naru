@@ -25,7 +25,7 @@ namespace Naru.WPF.Dialog
                 .WithDialogType(DialogType.Question)
                 .WithAnswers(Answer.Yes, Answer.No)
                 .WithTitle(title)
-                .WithMessage(message)
+                .WithContent(message)
                 .Build();
 
             return _userInteraction.ShowModalAsync(viewModel)
@@ -38,7 +38,7 @@ namespace Naru.WPF.Dialog
                 .WithDialogType(DialogType.Question)
                 .WithAnswers(possibleResponens)
                 .WithTitle(title)
-                .WithMessage(message)
+                .WithContent(message)
                 .Build();
 
             return _userInteraction.ShowModalAsync(viewModel)
@@ -51,7 +51,7 @@ namespace Naru.WPF.Dialog
                 .WithDialogType(DialogType.Warning)
                 .WithAnswers(Answer.Ok)
                 .WithTitle(title)
-                .WithMessage(message)
+                .WithContent(message)
                 .Build();
 
             return _userInteraction.ShowModalAsync(viewModel)
@@ -64,7 +64,7 @@ namespace Naru.WPF.Dialog
                 .WithDialogType(DialogType.Warning)
                 .WithAnswers(possibleResponens)
                 .WithTitle(title)
-                .WithMessage(message)
+                .WithContent(message)
                 .Build();
 
             return _userInteraction.ShowModalAsync(viewModel)
@@ -77,7 +77,7 @@ namespace Naru.WPF.Dialog
                 .WithDialogType(DialogType.Information)
                 .WithAnswers(Answer.Ok)
                 .WithTitle(title)
-                .WithMessage(message)
+                .WithContent(message)
                 .Build();
 
             return _userInteraction.ShowModalAsync(viewModel)
@@ -90,7 +90,7 @@ namespace Naru.WPF.Dialog
                 .WithDialogType(DialogType.Information)
                 .WithAnswers(possibleResponens)
                 .WithTitle(title)
-                .WithMessage(message)
+                .WithContent(message)
                 .Build();
 
             return _userInteraction.ShowModalAsync(viewModel)
@@ -103,7 +103,7 @@ namespace Naru.WPF.Dialog
                 .WithDialogType(DialogType.Error)
                 .WithAnswers(Answer.Ok)
                 .WithTitle(title)
-                .WithMessage(message)
+                .WithContent(message)
                 .Build();
 
             return _userInteraction.ShowModalAsync(viewModel)
@@ -117,7 +117,7 @@ namespace Naru.WPF.Dialog
                 .WithDialogType(DialogType.Error)
                 .WithAnswers(Answer.Ok)
                 .WithTitle(title)
-                .WithMessage(message)
+                .WithContent(message)
                 .Build();
 
             return _userInteraction.ShowModalAsync(viewModel)
@@ -130,7 +130,7 @@ namespace Naru.WPF.Dialog
                 .WithDialogType(DialogType.Error)
                 .WithAnswers(possibleResponens)
                 .WithTitle(title)
-                .WithMessage(message)
+                .WithContent(message)
                 .Build();
 
             return _userInteraction.ShowModalAsync(viewModel)

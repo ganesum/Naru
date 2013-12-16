@@ -3,6 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:mvvm="clr-namespace:Naru.WPF.MVVM"
              mc:Ignorable="d">
 
     <Grid x:Name="root">
@@ -35,13 +37,16 @@
             </ItemsControl.ItemTemplate>
         </ItemsControl>
 
-        <TextBlock Grid.Column="1"
-                   Margin="5 10 25 10"
-                   HorizontalAlignment="Left"
-                   VerticalAlignment="Center"
-                   Style="{DynamicResource Heading2}"
-                   Text="{Binding Message}"
-                   TextWrapping="Wrap" />
+        <ContentControl Grid.Column="1"
+                        Margin="5 10 25 10"
+                        DataContext="{Binding Content}"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center"
+                        Style="{DynamicResource Heading2}">
+            <i:Interaction.Behaviors>
+                <mvvm:ContentControlViewResolverBehavior />
+            </i:Interaction.Behaviors>
+        </ContentControl>
 
     </Grid>
 </UserControl>
