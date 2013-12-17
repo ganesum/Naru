@@ -11,7 +11,7 @@ namespace Naru.WPF.ViewModel
     {
         public BindableCollection<T> Items { get; private set; }
 
-        #region SelectedItem
+        #region SelectedItems
 
         private readonly ObservableProperty<IEnumerable<T>> _selectedItems = new ObservableProperty<IEnumerable<T>>();
 

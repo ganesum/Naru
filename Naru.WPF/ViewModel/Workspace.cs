@@ -15,11 +15,24 @@ namespace Naru.WPF.ViewModel
 {
     public abstract class Workspace : ViewModel, ISupportClosing, ISupportVisibility, ISupportHeader, ISupportActivationState, ISupportBusy
     {
-        protected readonly ILog Log;
-        protected readonly ISchedulerProvider Scheduler;
-        protected readonly IStandardDialog StandardDialog;
+        private readonly ILog _log;
+        private readonly ISchedulerProvider _scheduler;
+        private readonly IStandardDialog _standardDialog;
 
-        private readonly Subject<bool> _isVisibleChanged = new Subject<bool>();
+        protected ILog Log
+        {
+            get { return _log; }
+        }
+
+        protected ISchedulerProvider Scheduler
+        {
+            get { return _scheduler; }
+        }
+
+        protected IStandardDialog StandardDialog
+        {
+            get { return _standardDialog; }
+        }
 
         public IBusyViewModel BusyViewModel { get; private set; }
 
@@ -29,9 +42,9 @@ namespace Naru.WPF.ViewModel
 
         protected Workspace(ILog log, ISchedulerProvider scheduler, IStandardDialog standardDialog)
         {
-            Log = log;
-            Scheduler = scheduler;
-            StandardDialog = standardDialog;
+            _log = log;
+            _scheduler = scheduler;
+            _standardDialog = standardDialog;
 
             ClosingStrategy = new ClosingStrategy(log);
             ClosingStrategy.AddDisposable(Disposables);
@@ -100,6 +113,8 @@ namespace Naru.WPF.ViewModel
         #endregion
 
         #region SupportVisibility
+
+        private readonly Subject<bool> _isVisibleChanged = new Subject<bool>();
 
         #region IsVisible
 
