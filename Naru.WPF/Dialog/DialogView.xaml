@@ -41,8 +41,7 @@
                         Margin="5 10 25 10"
                         DataContext="{Binding Content}"
                         HorizontalAlignment="Left"
-                        VerticalAlignment="Center"
-                        Style="{DynamicResource Heading2}">
+                        VerticalAlignment="Center">
             <i:Interaction.Behaviors>
                 <mvvm:ContentControlViewResolverBehavior />
             </i:Interaction.Behaviors>

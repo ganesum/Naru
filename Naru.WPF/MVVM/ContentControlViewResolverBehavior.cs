@@ -36,12 +36,14 @@ namespace Naru.WPF.MVVM
             var viewModel = AssociatedObject.DataContext as IViewModel;
             if (viewModel == null)
             {
-                return;
+                AssociatedObject.Content = AssociatedObject.DataContext;
             }
+            else
+            {
+                var view = viewModel.GetViewAndBind();
 
-            var view = viewModel.GetViewAndBind();
-
-            AssociatedObject.Content = view;
+                AssociatedObject.Content = view;
+            }
         }
     }
 }
