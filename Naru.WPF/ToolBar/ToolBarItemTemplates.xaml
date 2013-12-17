@@ -9,7 +9,7 @@
 
     <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
 
-    <DataTemplate x:Key="ToolBarButtonItemTemplate"
+    <DataTemplate x:Key="{x:Static toolBar:ToolBarItemTemplateSelector.ToolBarButtonItemTemplate}"
                   DataType="toolBar:ToolBarButtonItem">
         <Button Margin="3,0"
                 ToolTip="{Binding DisplayName}"

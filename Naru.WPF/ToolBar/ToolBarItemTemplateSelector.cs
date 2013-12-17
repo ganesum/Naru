@@ -5,16 +5,15 @@ namespace Naru.WPF.ToolBar
 {
     public class ToolBarItemTemplateSelector : DataTemplateSelector
     {
+        public const string ToolBarButtonItemTemplate = "ToolBarButtonItemTemplate";
+
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
             if (item == null) return null;
 
-            switch (item.GetType().Name)
+            if (item.GetType().Name == typeof (ToolBarButtonItem).Name)
             {
-                case "ToolBarButtonItem":
-                {
-                    return Application.Current.TryFindResource("ToolBarButtonItemTemplate") as DataTemplate;
-                }
+                return Application.Current.TryFindResource(ToolBarButtonItemTemplate) as DataTemplate;
             }
 
             return null;

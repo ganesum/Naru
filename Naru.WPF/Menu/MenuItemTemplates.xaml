@@ -11,7 +11,7 @@
 
     <menu:MenuItemTemplateSelector x:Key="MenuItemTemplateSelector" />
 
-    <HierarchicalDataTemplate x:Key="MenuItemTemplate"
+    <HierarchicalDataTemplate x:Key="{x:Static menu:MenuItemTemplateSelector.MenuItemTemplate}"
                               ItemsSource="{Binding Items}"
                               ItemTemplateSelector="{StaticResource MenuItemTemplateSelector}">
         <StackPanel Orientation="Horizontal"
@@ -37,7 +37,7 @@
 
     </HierarchicalDataTemplate>
 
-    <DataTemplate x:Key="MenuSeperatorItemTemplate"
+    <DataTemplate x:Key="{x:Static menu:MenuItemTemplateSelector.MenuSeperatorItemTemplate}"
                   DataType="menu:MenuSeperatorItem">
         <Separator Style="{DynamicResource {x:Static MenuItem.SeparatorStyleKey}}" />
     </DataTemplate>

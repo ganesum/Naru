@@ -7,6 +7,7 @@ namespace Naru.WPF.ToolBar
     public class ToolBarService : IToolBarService
     {
         private readonly Func<ToolBarButtonItem> _toolBarButtonItemFactory;
+
         public BindableCollection<IToolBarItem> Items { get; private set; }
 
         public ToolBarService(BindableCollection<IToolBarItem> itemsCollection,

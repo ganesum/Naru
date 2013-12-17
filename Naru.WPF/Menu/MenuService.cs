@@ -20,6 +20,7 @@ namespace Naru.WPF.Menu
             _menuButtonItemFactory = menuButtonItemFactory;
             _menuGroupItemFactory = menuGroupItemFactory;
             _menuSeperatorItemFactory = menuSeperatorItemFactory;
+
             Items = itemsCollection;
         }
 

@@ -5,24 +5,26 @@ namespace Naru.WPF.Menu
 {
     public class MenuItemTemplateSelector : DataTemplateSelector
     {
+        public const string MenuItemTemplate = "MenuItemTemplate";
+        public const string MenuSeperatorItemTemplate = "MenuSeperatorItemTemplate";
+
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
             if (item == null) return null;
 
-            switch (item.GetType().Name)
+            if (item.GetType().Name == typeof (MenuGroupItem).Name)
             {
-                case "MenuGroupItem":
-                {
-                    return Application.Current.TryFindResource("MenuItemTemplate") as DataTemplate;
-                }
-                case "MenuButtonItem":
-                {
-                    return Application.Current.TryFindResource("MenuItemTemplate") as DataTemplate;
-                }
-                case "MenuSeperatorItem":
-                {
-                    return Application.Current.TryFindResource("MenuSeperatorItemTemplate") as DataTemplate;
-                }
+                return Application.Current.TryFindResource(MenuItemTemplate) as DataTemplate;
+            }
+
+            if (item.GetType().Name == typeof (MenuButtonItem).Name)
+            {
+                return Application.Current.TryFindResource(MenuItemTemplate) as DataTemplate;
+            }
+
+            if (item.GetType().Name == typeof (MenuSeperatorItem).Name)
+            {
+                return Application.Current.TryFindResource(MenuSeperatorItemTemplate) as DataTemplate;
             }
 
             return null;

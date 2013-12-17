@@ -1,4 +1,6 @@
-﻿using Naru.WPF.Command;
+﻿using System.Windows.Input;
+
+using Naru.WPF.Command;
 using Naru.WPF.ViewModel;
 
 namespace Naru.WPF.TabControl
@@ -9,7 +11,7 @@ namespace Naru.WPF.TabControl
 
         public bool CanClose { get; private set; }
 
-        public DelegateCommand CloseCommand { get; private set; }
+        public ICommand CloseCommand { get; private set; }
 
         public TabControlHeaderViewModel(ISupportHeader viewModel)
         {
@@ -19,6 +21,7 @@ namespace Naru.WPF.TabControl
             if (supportClose == null) return;
 
             CloseCommand = new DelegateCommand(() => supportClose.ClosingStrategy.Close());
+
             CanClose = supportClose.ClosingStrategy.CanClose();
         }
     }
