@@ -8,7 +8,31 @@ namespace Naru.WPF.ToolBar
 {
     public class ToolBarButtonItem : ViewModel.ViewModel, IToolBarItem
     {
-        public string DisplayName { get; set; }
+        #region DisplayName
+
+        private readonly ObservableProperty<string> _displayName = new ObservableProperty<string>();
+
+        public string DisplayName
+        {
+            get { return _displayName.Value; }
+            set { _displayName.RaiseAndSetIfChanged(value); }
+        }
+
+        #endregion
+
+        #region ImageName
+
+        private readonly ObservableProperty<string> _imageName = new ObservableProperty<string>();
+
+        public string ImageName
+        {
+            get { return _imageName.Value; }
+            set { _imageName.RaiseAndSetIfChanged(value); }
+        }
+
+        #endregion
+
+        public ICommand Command { get; set; }
 
         #region IsVisible
 
@@ -22,12 +46,10 @@ namespace Naru.WPF.ToolBar
 
         #endregion
 
-        public ICommand Command { get; set; }
-        
-        public string ImageName { get; set; }
-
         public ToolBarButtonItem(ISchedulerProvider scheduler)
         {
+            _displayName.ConnectINPCProperty(this, () => DisplayName, scheduler).AddDisposable(Disposables);
+            _imageName.ConnectINPCProperty(this, () => ImageName, scheduler).AddDisposable(Disposables);
             _isVisible.ConnectINPCProperty(this, () => IsVisible, scheduler).AddDisposable(Disposables);
 
             IsVisible = true;

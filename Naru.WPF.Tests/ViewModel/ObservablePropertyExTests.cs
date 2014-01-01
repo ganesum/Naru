@@ -14,7 +14,7 @@ namespace Naru.WPF.Tests.ViewModel
     [TestFixture]
     public class ObservablePropertyExTests
     {
-        public class TestViewModel : Naru.WPF.ViewModel.ViewModel
+        public class TestViewModel : WPF.ViewModel.ViewModel
         {
             #region Name
 

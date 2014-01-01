@@ -13,7 +13,7 @@ namespace Naru.WPF.Tests.MVVM
         public class StubView : UserControl
         { }
 
-        public class StubViewModel : Naru.WPF.ViewModel.ViewModel
+        public class StubViewModel : WPF.ViewModel.ViewModel
         {
         }
 

@@ -69,7 +69,6 @@ namespace Naru.WPF.TabControl
                 foreach (IViewModel viewModel in e.NewItems)
                 {
                     if (AddViewModel(viewModel)) return;
-                    else continue;
                 }
             }
 

@@ -31,7 +31,7 @@ namespace Naru.WPF.TPL
         /// </returns>
         public static Task<RoutedEventArgs> FromRoutedEvent(Action<RoutedEventHandler> addEventHandler, Action<RoutedEventHandler> removeEventHandler)
         {
-            return new RoutedEventAsync.RoutedEventHandlerTaskSource(addEventHandler, removeEventHandler).Task;
+            return new RoutedEventHandlerTaskSource(addEventHandler, removeEventHandler).Task;
         }
 
         private sealed class RoutedEventHandlerTaskSource
