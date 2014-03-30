@@ -24,7 +24,7 @@ namespace Naru.WPF.ViewModel
 
         #endregion
 
-        public ReactiveSingleSelectCollection(BindableCollection<T> itemsCollection, ISchedulerProvider scheduler)
+        public ReactiveSingleSelectCollection(BindableCollection<T> itemsCollection, IDispatcherSchedulerProvider scheduler)
         {
             Items = itemsCollection;
 

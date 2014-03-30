@@ -13,9 +13,9 @@ namespace Naru.WPF.MVVM
     public class ViewService : IViewService
     {
         private readonly ILog _log;
-        private readonly ISchedulerProvider _scheduler;
+        private readonly IDispatcherSchedulerProvider _scheduler;
 
-        public ViewService(ILog log, ISchedulerProvider scheduler)
+        public ViewService(ILog log, IDispatcherSchedulerProvider scheduler)
         {
             _log = log;
             _scheduler = scheduler;

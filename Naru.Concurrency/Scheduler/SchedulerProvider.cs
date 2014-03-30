@@ -1,11 +1,7 @@
-﻿using System.Windows;
-
-namespace Naru.WPF.Scheduler
+﻿namespace Naru.Concurrency.Scheduler
 {
     public class SchedulerProvider : ISchedulerProvider
     {
-        public IDispatcherScheduler Dispatcher { get; private set; }
-
         public ITaskScheduler Task { get; private set; }
 
         public IIOCompletionScheduler IOCompletion { get; private set; }
@@ -20,7 +16,6 @@ namespace Naru.WPF.Scheduler
 
         public SchedulerProvider()
         {
-            Dispatcher = new DispatcherScheduler(Application.Current.Dispatcher);
             Task = new TaskScheduler();
             IOCompletion = new IOCompletionScheduler();
             Current = new CurrentScheduler();

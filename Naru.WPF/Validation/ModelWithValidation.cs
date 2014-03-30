@@ -36,7 +36,7 @@ namespace Naru.WPF.Validation
 
         public ValidationResult Validate()
         {
-            return _validator.Validate((TModel)this);
+            return _validator.Validate((TModel) this);
         }
 
         public bool IsValid()

@@ -25,7 +25,7 @@ namespace Naru.WPF.Presentation
 
         public ICommand Command { get; set; }
 
-        public Link(ISchedulerProvider scheduler)
+        public Link(IDispatcherSchedulerProvider scheduler)
         {
             _displayName.ConnectINPCProperty(this, () => DisplayName, scheduler).AddDisposable(Disposables);
         }

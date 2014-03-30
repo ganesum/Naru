@@ -5,6 +5,7 @@ using System.Reactive.Linq;
 
 using FluentValidation;
 
+using Naru.Core;
 using Naru.WPF.Scheduler;
 using Naru.WPF.Validation;
 
@@ -30,7 +31,7 @@ namespace Naru.WPF.ViewModel
         public static IDisposable ConnectINPCProperty<T>(this ObservableProperty<T> observableProperty,
                                                          INotifyPropertyChangedEx viewModel,
                                                          Expression<Func<T>> propertyExpression,
-                                                         ISchedulerProvider scheduler)
+                                                         IDispatcherSchedulerProvider scheduler)
         {
             var propertyName = PropertyExtensions.ExtractPropertyName(propertyExpression);
             return observableProperty.ValueChanged
@@ -40,7 +41,7 @@ namespace Naru.WPF.ViewModel
 
         public static IDisposable AddValidation<T, TModel, TValidation, TProperty>(this ObservableProperty<T> observableProperty,
                                                                                    IValidationAsync<TModel, TValidation> validation,
-                                                                                   ISchedulerProvider scheduler,
+                                                                                   IDispatcherSchedulerProvider scheduler,
                                                                                    Expression<Func<TProperty>> propertyExpression)
             where TModel : ISupportValidationAsync<TModel, TValidation>
             where TValidation : AbstractValidator<TModel>, new()

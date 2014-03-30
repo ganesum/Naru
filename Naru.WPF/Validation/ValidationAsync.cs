@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 using FluentValidation;
 using FluentValidation.Results;
 
+using Naru.Core;
 using Naru.TPL;
 using Naru.WPF.Scheduler;
-using Naru.WPF.ViewModel;
 
 namespace Naru.WPF.Validation
 {
@@ -20,7 +20,7 @@ namespace Naru.WPF.Validation
         where T : ISupportValidationAsync<T, TValidator>
         where TValidator : AbstractValidator<T>, new()
     {
-        private readonly ISchedulerProvider _scheduler;
+        private readonly IDispatcherSchedulerProvider _scheduler;
 
         private readonly Dictionary<string, IEnumerable<string>> _validationErrors = new Dictionary<string, IEnumerable<string>>();
 
@@ -35,7 +35,7 @@ namespace Naru.WPF.Validation
             get { return _errorsChangedSubject.AsObservable(); }
         }
 
-        public ValidationAsync(ISchedulerProvider scheduler)
+        public ValidationAsync(IDispatcherSchedulerProvider scheduler)
         {
             _scheduler = scheduler;
 

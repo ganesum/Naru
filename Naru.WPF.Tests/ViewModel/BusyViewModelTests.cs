@@ -1,5 +1,7 @@
 ﻿using System;
 
+using Naru.Concurrency.Scheduler;
+using Naru.Concurrency.Tests.Scheduler;
 using Naru.Tests;
 using Naru.WPF.Scheduler;
 using Naru.WPF.Tests.Scheduler;

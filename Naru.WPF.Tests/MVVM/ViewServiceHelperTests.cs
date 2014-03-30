@@ -3,6 +3,7 @@ using System.Windows.Controls;
 
 using Common.Logging;
 
+using Naru.Concurrency.Scheduler;
 using Naru.Tests;
 using Naru.WPF.Dialog;
 using Naru.WPF.MVVM;
@@ -22,7 +23,7 @@ namespace Naru.WPF.Tests.MVVM
 
         public class StubViewModel : Workspace
         {
-            public StubViewModel(ILog log, ISchedulerProvider scheduler, IStandardDialog standardDialog) 
+            public StubViewModel(ILog log, IDispatcherSchedulerProvider scheduler, IStandardDialog standardDialog) 
                 : base(log, scheduler, standardDialog)
             {
             }
@@ -34,7 +35,7 @@ namespace Naru.WPF.Tests.MVVM
         [UseView(typeof(StubViewNameNotMatchingView))]
         public class StubViewModelWithUseViewAttribute : Workspace
         {
-            public StubViewModelWithUseViewAttribute(ILog log, ISchedulerProvider scheduler, IStandardDialog standardDialog)
+            public StubViewModelWithUseViewAttribute(ILog log, IDispatcherSchedulerProvider scheduler, IStandardDialog standardDialog)
                 : base(log, scheduler, standardDialog)
             {
             }
@@ -46,7 +47,7 @@ namespace Naru.WPF.Tests.MVVM
         {
             var container = AutoMock.GetStrict();
 
-            container.Provide<ISchedulerProvider>(new TestSchedulerProvider());
+            container.Provide<ISchedulerProvider>(new TestDispatcherSchedulerProvider());
 
             var view = new UserControl();
             Assert.That(view.DataContext, Is.Null);
@@ -64,7 +65,7 @@ namespace Naru.WPF.Tests.MVVM
         {
             var container = AutoMock.GetStrict();
 
-            container.Provide<ISchedulerProvider>(new TestSchedulerProvider());
+            container.Provide<ISchedulerProvider>(new TestDispatcherSchedulerProvider());
 
             var viewModel = container.Create<StubViewModel>();
 
@@ -79,7 +80,7 @@ namespace Naru.WPF.Tests.MVVM
         {
             var container = AutoMock.GetStrict();
 
-            container.Provide<ISchedulerProvider>(new TestSchedulerProvider());
+            container.Provide<ISchedulerProvider>(new TestDispatcherSchedulerProvider());
 
             var viewModel = container.Create<StubViewModelWithUseViewAttribute>();
 

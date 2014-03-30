@@ -25,7 +25,7 @@ namespace Naru.WPF.ViewModel
 
         public IObservable<IEnumerable<T>> SelectedItemsChanged { get { return _selectedItems.ValueChanged; } }
 
-        public ReactiveMultiSelectCollection(BindableCollection<T> itemsCollection, ISchedulerProvider scheduler)
+        public ReactiveMultiSelectCollection(BindableCollection<T> itemsCollection, IDispatcherSchedulerProvider scheduler)
         {
             Items = itemsCollection;
 

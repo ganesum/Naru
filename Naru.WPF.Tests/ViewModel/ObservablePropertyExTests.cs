@@ -2,6 +2,7 @@
 
 using Microsoft.Reactive.Testing;
 
+using Naru.Core;
 using Naru.RX;
 using Naru.WPF.Scheduler;
 using Naru.WPF.Tests.Scheduler;
@@ -28,7 +29,7 @@ namespace Naru.WPF.Tests.ViewModel
 
             #endregion
 
-            public TestViewModel(ISchedulerProvider scheduler)
+            public TestViewModel(IDispatcherSchedulerProvider scheduler)
             {
                 _name.ConnectINPCProperty(this, () => Name, scheduler).AddDisposable(Disposables);
             }
@@ -37,7 +38,7 @@ namespace Naru.WPF.Tests.ViewModel
         [Test]
         public void when_RaiseAndSetIfChanged_is_called_with_a_different_value_then_it_is_set()
         {
-            var testSchedulerProvider = new TestSchedulerProvider();
+            var testSchedulerProvider = new TestDispatcherSchedulerProvider();
 
             var viewModel = new TestViewModel(testSchedulerProvider);
 
@@ -57,7 +58,7 @@ namespace Naru.WPF.Tests.ViewModel
         [Test]
         public void when_ConnectINPCProperty_is_setup_then_when_ObservableProperty_changes_then_INPC_is_fired()
         {
-            var testSchedulerProvider = new TestSchedulerProvider();
+            var testSchedulerProvider = new TestDispatcherSchedulerProvider();
 
             var viewModel = new TestViewModel(testSchedulerProvider);
 

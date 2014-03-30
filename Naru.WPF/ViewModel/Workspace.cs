@@ -16,7 +16,7 @@ namespace Naru.WPF.ViewModel
     public abstract class Workspace : ViewModel, ISupportClosing, ISupportVisibility, ISupportHeader, ISupportActivationState, ISupportBusy
     {
         private readonly ILog _log;
-        private readonly ISchedulerProvider _scheduler;
+        private readonly IDispatcherSchedulerProvider _scheduler;
         private readonly IStandardDialog _standardDialog;
 
         protected ILog Log
@@ -24,7 +24,7 @@ namespace Naru.WPF.ViewModel
             get { return _log; }
         }
 
-        protected ISchedulerProvider Scheduler
+        protected IDispatcherSchedulerProvider Scheduler
         {
             get { return _scheduler; }
         }
@@ -40,7 +40,7 @@ namespace Naru.WPF.ViewModel
 
         public IClosingStrategy ClosingStrategy { get; private set; }
 
-        protected Workspace(ILog log, ISchedulerProvider scheduler, IStandardDialog standardDialog)
+        protected Workspace(ILog log, IDispatcherSchedulerProvider scheduler, IStandardDialog standardDialog)
         {
             _log = log;
             _scheduler = scheduler;

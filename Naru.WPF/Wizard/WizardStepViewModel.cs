@@ -27,7 +27,7 @@ namespace Naru.WPF.Wizard
 
         #endregion
 
-        protected WizardStepViewModel(ILog log, ISchedulerProvider scheduler, IStandardDialog standardDialog) 
+        protected WizardStepViewModel(ILog log, IDispatcherSchedulerProvider scheduler, IStandardDialog standardDialog) 
             : base(log, scheduler, standardDialog)
         {
         }

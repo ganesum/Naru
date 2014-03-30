@@ -46,7 +46,7 @@ namespace Naru.WPF.Menu
 
         #endregion
 
-        public MenuButtonItem(ISchedulerProvider scheduler)
+        public MenuButtonItem(IDispatcherSchedulerProvider scheduler)
         {
             _displayName.ConnectINPCProperty(this, () => DisplayName, scheduler).AddDisposable(Disposables);
             _imageName.ConnectINPCProperty(this, () => ImageName, scheduler).AddDisposable(Disposables);

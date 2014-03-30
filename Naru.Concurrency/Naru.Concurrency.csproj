@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{1D9CA7E1-B622-4C2C-B0CC-B317404C8F45}</ProjectGuid>
+    <ProjectGuid>{4C72DCB6-93BD-4BCC-95B8-2B0DE191BC01}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Naru.Agatha</RootNamespace>
-    <AssemblyName>Naru.Agatha</AssemblyName>
+    <RootNamespace>Naru.Concurrency</RootNamespace>
+    <AssemblyName>Naru.Concurrency</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
@@ -32,23 +32,20 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Agatha.Common">
-      <HintPath>..\packages\Agatha-rrsl.1.2.0\lib\35\Agatha.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="Agatha.ServiceLayer">
-      <HintPath>..\packages\Agatha-rrsl.1.2.0\lib\35\Agatha.ServiceLayer.dll</HintPath>
-    </Reference>
-    <Reference Include="Autofac, Version=3.3.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Autofac.3.3.1\lib\net40\Autofac.dll</HintPath>
-    </Reference>
-    <Reference Include="Common.Logging, Version=2.1.2.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Common.Logging.2.1.2\lib\net40\Common.Logging.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Reactive.Core">
+      <HintPath>..\packages\Rx-Core.2.2.2\lib\net45\System.Reactive.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.Interfaces">
+      <HintPath>..\packages\Rx-Interfaces.2.2.2\lib\net45\System.Reactive.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.Linq">
+      <HintPath>..\packages\Rx-Linq.2.2.2\lib\net45\System.Reactive.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.PlatformServices">
+      <HintPath>..\packages\Rx-PlatformServices.2.2.3\lib\net45\System.Reactive.PlatformServices.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -56,44 +53,45 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AgathaClientModule.cs" />
-    <Compile Include="AgathaKnownTypeRegistration.cs" />
-    <Compile Include="AgathaServerModule.cs" />
-    <Compile Include="Handler.cs" />
-    <Compile Include="IRequestTask.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Request.cs" />
-    <Compile Include="RequestException.cs" />
-    <Compile Include="RequestTask.cs" />
+    <Compile Include="Scheduler\CurrentScheduler.cs" />
+    <Compile Include="Scheduler\ICurrentScheduler.cs" />
+    <Compile Include="Scheduler\IImmediateScheduler.cs" />
+    <Compile Include="Scheduler\IIOCompletionScheduler.cs" />
+    <Compile Include="Scheduler\ImmediateScheduler.cs" />
+    <Compile Include="Scheduler\INewThreadScheduler.cs" />
+    <Compile Include="Scheduler\IOCompletionScheduler.cs" />
+    <Compile Include="Scheduler\IRXScheduler.cs" />
+    <Compile Include="Scheduler\ISchedulerProvider.cs" />
+    <Compile Include="Scheduler\ITaskScheduler.cs" />
+    <Compile Include="Scheduler\IThreadPoolScheduler.cs" />
+    <Compile Include="Scheduler\ITPLScheduler.cs" />
+    <Compile Include="Scheduler\NewThreadScheduler.cs" />
+    <Compile Include="Scheduler\SchedulerProvider.cs" />
+    <Compile Include="Scheduler\TaskScheduler.cs" />
+    <Compile Include="Scheduler\ThreadPoolScheduler.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Naru.Aufofac\Naru.Aufofac.csproj">
-      <Project>{15981272-c201-438a-aeef-ce3cacd97179}</Project>
-      <Name>Naru.Aufofac</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Naru.Concurrency\Naru.Concurrency.csproj">
-      <Project>{4C72DCB6-93BD-4BCC-95B8-2B0DE191BC01}</Project>
-      <Name>Naru.Concurrency</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Naru.Core\Naru.Core.csproj">
-      <Project>{17EA4111-2679-4155-A6E5-FE45E171AC2B}</Project>
-      <Name>Naru.Core</Name>
+    <ProjectReference Include="..\Naru.RX\Naru.RX.csproj">
+      <Project>{9a778612-df3e-417a-91f7-e354a1b3a412}</Project>
+      <Name>Naru.RX</Name>
     </ProjectReference>
     <ProjectReference Include="..\Naru.TPL\Naru.TPL.csproj">
-      <Project>{2BBCA269-6FDF-446D-9651-32717907AFA8}</Project>
+      <Project>{2bbca269-6fdf-446d-9651-32717907afa8}</Project>
       <Name>Naru.TPL</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Naru.WPF\Naru.WPF.csproj">
-      <Project>{6DA2B9AD-0810-4C8C-A886-EDBD8130C89B}</Project>
-      <Name>Naru.WPF</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

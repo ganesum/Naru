@@ -26,7 +26,7 @@ namespace Naru.WPF.ContextMenu
 
         public string ImageName { get; set; }
 
-        public ContextMenuButtonItem(ISchedulerProvider scheduler)
+        public ContextMenuButtonItem(IDispatcherSchedulerProvider scheduler)
         {
             _isVisible.ConnectINPCProperty(this, () => IsVisible, scheduler).AddDisposable(Disposables);
 

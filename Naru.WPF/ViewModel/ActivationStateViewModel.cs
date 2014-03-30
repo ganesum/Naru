@@ -45,7 +45,7 @@ namespace Naru.WPF.ViewModel
             }
         }
 
-        public ActivationStateViewModel(ILog log, ISchedulerProvider scheduler)
+        public ActivationStateViewModel(ILog log, IDispatcherSchedulerProvider scheduler)
         {
             _log = log;
 

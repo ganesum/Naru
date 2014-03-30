@@ -1,4 +1,4 @@
-﻿namespace Naru.WPF.Scheduler
+﻿namespace Naru.Concurrency.Scheduler
 {
     public interface INewThreadScheduler : IRXScheduler
     {

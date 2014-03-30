@@ -16,7 +16,7 @@ namespace Naru.WPF.Tests.MVVM
         [Test]
         public void when_Add_is_called_then_Add_event_is_fired()
         {
-            var testSchedulerProvider = new TestSchedulerProvider();
+            var testSchedulerProvider = new TestDispatcherSchedulerProvider();
 
             var result = false;
 
@@ -38,7 +38,7 @@ namespace Naru.WPF.Tests.MVVM
         [Test]
         public void when_Add_is_called_and_IsNotifying_is_false_then_Add_event_is_not_fired()
         {
-            var testSchedulerProvider = new TestSchedulerProvider();
+            var testSchedulerProvider = new TestDispatcherSchedulerProvider();
 
             var result = false;
 
@@ -62,7 +62,7 @@ namespace Naru.WPF.Tests.MVVM
         [Test]
         public void when_Remove_is_called_then_Remove_event_is_fired()
         {
-            var testSchedulerProvider = new TestSchedulerProvider();
+            var testSchedulerProvider = new TestDispatcherSchedulerProvider();
 
             var result = false;
 
@@ -88,7 +88,7 @@ namespace Naru.WPF.Tests.MVVM
         [Test]
         public void when_Remove_is_called_and_IsNotifying_is_false_then_Remove_event_is_fired()
         {
-            var testSchedulerProvider = new TestSchedulerProvider();
+            var testSchedulerProvider = new TestDispatcherSchedulerProvider();
 
             var result = false;
 
@@ -116,7 +116,7 @@ namespace Naru.WPF.Tests.MVVM
         [Test]
         public void when_Clear_is_called_then_Reset_event_is_fired()
         {
-            var testSchedulerProvider = new TestSchedulerProvider();
+            var testSchedulerProvider = new TestDispatcherSchedulerProvider();
 
             var result = false;
 
@@ -142,7 +142,7 @@ namespace Naru.WPF.Tests.MVVM
         [Test]
         public void when_Clear_is_called_and_IsNotifying_is_false_then_Reset_event_is_fired()
         {
-            var testSchedulerProvider = new TestSchedulerProvider();
+            var testSchedulerProvider = new TestDispatcherSchedulerProvider();
 
             var result = false;
 
@@ -170,7 +170,7 @@ namespace Naru.WPF.Tests.MVVM
         [Test]
         public void when_ClearAsync_is_called_then_Reset_event_is_fired()
         {
-            var testSchedulerProvider = new TestSchedulerProvider();
+            var testSchedulerProvider = new TestDispatcherSchedulerProvider();
 
             var result = false;
 
@@ -196,7 +196,7 @@ namespace Naru.WPF.Tests.MVVM
         [Test]
         public void when_ClearAsync_is_called_and_IsNotifying_is_false_then_Reset_event_is_fired()
         {
-            var testSchedulerProvider = new TestSchedulerProvider();
+            var testSchedulerProvider = new TestDispatcherSchedulerProvider();
 
             var result = false;
 
@@ -224,7 +224,7 @@ namespace Naru.WPF.Tests.MVVM
         [Test]
         public void when_AddRange_is_called_then_Reset_event_fired()
         {
-            var testSchedulerProvider = new TestSchedulerProvider();
+            var testSchedulerProvider = new TestDispatcherSchedulerProvider();
 
             var result = false;
 
@@ -246,7 +246,7 @@ namespace Naru.WPF.Tests.MVVM
         [Test]
         public void when_AddRange_is_called_and_IsNotifying_is_false_then_Reset_event_fired()
         {
-            var testSchedulerProvider = new TestSchedulerProvider();
+            var testSchedulerProvider = new TestDispatcherSchedulerProvider();
 
             var result = false;
 
@@ -270,7 +270,7 @@ namespace Naru.WPF.Tests.MVVM
         [Test]
         public void when_AddRangeAsync_is_called_then_Reset_event_fired()
         {
-            var testSchedulerProvider = new TestSchedulerProvider();
+            var testSchedulerProvider = new TestDispatcherSchedulerProvider();
 
             var result = false;
 
@@ -292,7 +292,7 @@ namespace Naru.WPF.Tests.MVVM
         [Test]
         public void when_AddRangeAsync_is_called_and_IsNotifying_is_false_then_Reset_event_fired()
         {
-            var testSchedulerProvider = new TestSchedulerProvider();
+            var testSchedulerProvider = new TestDispatcherSchedulerProvider();
 
             var result = false;
 
@@ -316,7 +316,7 @@ namespace Naru.WPF.Tests.MVVM
         [Test]
         public void when_RemoveRange_is_called_then_Reset_event_fired()
         {
-            var testSchedulerProvider = new TestSchedulerProvider();
+            var testSchedulerProvider = new TestDispatcherSchedulerProvider();
 
             var result = false;
 
@@ -342,7 +342,7 @@ namespace Naru.WPF.Tests.MVVM
         [Test]
         public void when_RemoveRange_is_called_and_IsNotifying_is_false_then_Reset_event_fired()
         {
-            var testSchedulerProvider = new TestSchedulerProvider();
+            var testSchedulerProvider = new TestDispatcherSchedulerProvider();
 
             var result = false;
 
@@ -370,7 +370,7 @@ namespace Naru.WPF.Tests.MVVM
         [Test]
         public void when_RemoveRangeAsync_is_called_then_Reset_event_fired()
         {
-            var testSchedulerProvider = new TestSchedulerProvider();
+            var testSchedulerProvider = new TestDispatcherSchedulerProvider();
 
             var result = false;
 
@@ -396,7 +396,7 @@ namespace Naru.WPF.Tests.MVVM
         [Test]
         public void when_RemoveRangeAsync_is_called_and_IsNotifying_is_false_then_Reset_event_fired()
         {
-            var testSchedulerProvider = new TestSchedulerProvider();
+            var testSchedulerProvider = new TestDispatcherSchedulerProvider();
 
             var result = false;
 
@@ -424,7 +424,7 @@ namespace Naru.WPF.Tests.MVVM
         [Test]
         public void when_Refresh_is_called_then_Reset_event_fired()
         {
-            var testSchedulerProvider = new TestSchedulerProvider();
+            var testSchedulerProvider = new TestDispatcherSchedulerProvider();
 
             var result = false;
 
@@ -450,7 +450,7 @@ namespace Naru.WPF.Tests.MVVM
         [Test]
         public void when_Refresh_is_called_and_IsNotifying_is_false_then_Reset_event_fired()
         {
-            var testSchedulerProvider = new TestSchedulerProvider();
+            var testSchedulerProvider = new TestDispatcherSchedulerProvider();
 
             var result = false;
 
@@ -478,7 +478,7 @@ namespace Naru.WPF.Tests.MVVM
         [Test]
         public void when_RefreshAsync_is_called_then_Reset_event_fired()
         {
-            var testSchedulerProvider = new TestSchedulerProvider();
+            var testSchedulerProvider = new TestDispatcherSchedulerProvider();
 
             var result = false;
 
@@ -504,7 +504,7 @@ namespace Naru.WPF.Tests.MVVM
         [Test]
         public void when_RefreshAsync_is_called_and_IsNotifying_is_false_then_Reset_event_fired()
         {
-            var testSchedulerProvider = new TestSchedulerProvider();
+            var testSchedulerProvider = new TestDispatcherSchedulerProvider();
 
             var result = false;
 
@@ -532,7 +532,7 @@ namespace Naru.WPF.Tests.MVVM
         [Test]
         public void when_items_are_added_those_items_are_pumped_onto_AddedItemsCollectionChanged()
         {
-            var testSchedulerProvider = new TestSchedulerProvider();
+            var testSchedulerProvider = new TestDispatcherSchedulerProvider();
 
             var results = new List<Guid>();
 

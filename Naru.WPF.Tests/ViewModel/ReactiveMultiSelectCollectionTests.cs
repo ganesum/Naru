@@ -4,6 +4,7 @@ using System.Linq;
 
 using Microsoft.Reactive.Testing;
 
+using Naru.Core;
 using Naru.WPF.MVVM;
 using Naru.WPF.Tests.Scheduler;
 using Naru.WPF.ViewModel;
@@ -18,7 +19,7 @@ namespace Naru.WPF.Tests.ViewModel
         [Test]
         public void when_SelectedItem_is_set_then_the_SelectedItemChanged_pumps_the_value()
         {
-            var testSchedulerProvider = new TestSchedulerProvider();
+            var testSchedulerProvider = new TestDispatcherSchedulerProvider();
 
             var result = new List<int>();
 
@@ -37,7 +38,7 @@ namespace Naru.WPF.Tests.ViewModel
         [Test]
         public void when_SelectedItem_is_set_then_the_SelectedItems_INPC_is_fired()
         {
-            var testSchedulerProvider = new TestSchedulerProvider();
+            var testSchedulerProvider = new TestDispatcherSchedulerProvider();
 
             var reactiveMultiSelectCollection = new ReactiveMultiSelectCollection<int>(new BindableCollection<int>(testSchedulerProvider),
                                                                                        testSchedulerProvider);

@@ -2,6 +2,7 @@
 
 using Microsoft.Reactive.Testing;
 
+using Naru.Core;
 using Naru.WPF.MVVM;
 using Naru.WPF.Tests.Scheduler;
 using Naru.WPF.ViewModel;
@@ -16,7 +17,7 @@ namespace Naru.WPF.Tests.ViewModel
         [Test]
         public void when_SelectedItem_is_set_then_the_SelectedItemChanged_pumps_the_value()
         {
-            var testSchedulerProvider = new TestSchedulerProvider();
+            var testSchedulerProvider = new TestDispatcherSchedulerProvider();
 
             var result = Guid.Empty;
 
@@ -35,7 +36,7 @@ namespace Naru.WPF.Tests.ViewModel
         [Test]
         public void when_SelectedItem_is_set_then_the_SelectedItem_INPC_is_fired()
         {
-            var testSchedulerProvider = new TestSchedulerProvider();
+            var testSchedulerProvider = new TestDispatcherSchedulerProvider();
 
             var reactiveSingleSelectCollection = new ReactiveSingleSelectCollection<object>(new BindableCollection<object>(testSchedulerProvider),
                                                                                             testSchedulerProvider);

@@ -56,7 +56,7 @@ namespace Naru.WPF.Wizard
             get { return _context; }
         }
 
-        protected WizardViewModel(ILog log, ISchedulerProvider scheduler, IStandardDialog standardDialog)
+        protected WizardViewModel(ILog log, IDispatcherSchedulerProvider scheduler, IStandardDialog standardDialog)
             : base(log, scheduler, standardDialog)
         {
 

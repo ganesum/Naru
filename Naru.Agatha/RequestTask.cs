@@ -5,6 +5,7 @@ using Agatha.Common;
 
 using Common.Logging;
 
+using Naru.Concurrency.Scheduler;
 using Naru.Core;
 using Naru.TPL;
 using Naru.WPF.Scheduler;
@@ -27,7 +28,7 @@ namespace Naru.Agatha
         public Task<TResponse> Get<TResponse>(Request<TResponse> request) 
             where TResponse : Response
         {
-            return Task.Factory.StartNew(() => Execute(request), _schedulerProvider.IOCompletion.TPL);
+            return Task.Factory.StartNew(() => Execute(request), _schedulerProvider.Task.TPL);
         }
 
         private TResponse Execute<TResponse>(Request<TResponse> request)

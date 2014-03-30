@@ -45,7 +45,7 @@ namespace Naru.WPF.Menu
 
         #endregion
 
-        public MenuGroupItem(BindableCollection<IMenuItem> itemsCollection, ISchedulerProvider scheduler)
+        public MenuGroupItem(BindableCollection<IMenuItem> itemsCollection, IDispatcherSchedulerProvider scheduler)
         {
             _displayName.ConnectINPCProperty(this, () => DisplayName, scheduler).AddDisposable(Disposables);
             _imageName.ConnectINPCProperty(this, () => ImageName, scheduler).AddDisposable(Disposables);

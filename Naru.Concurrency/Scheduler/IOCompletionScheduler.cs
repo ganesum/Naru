@@ -1,6 +1,6 @@
 ﻿using Naru.TPL;
 
-namespace Naru.WPF.Scheduler
+namespace Naru.Concurrency.Scheduler
 {
     public class IOCompletionScheduler : IIOCompletionScheduler
     {

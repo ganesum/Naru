@@ -1,4 +1,5 @@
-﻿using Naru.WPF.Scheduler;
+﻿using Naru.Concurrency.Scheduler;
+using Naru.WPF.Scheduler;
 
 namespace Naru.WPF
 {

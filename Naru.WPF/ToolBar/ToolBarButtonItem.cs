@@ -46,7 +46,7 @@ namespace Naru.WPF.ToolBar
 
         #endregion
 
-        public ToolBarButtonItem(ISchedulerProvider scheduler)
+        public ToolBarButtonItem(IDispatcherSchedulerProvider scheduler)
         {
             _displayName.ConnectINPCProperty(this, () => DisplayName, scheduler).AddDisposable(Disposables);
             _imageName.ConnectINPCProperty(this, () => ImageName, scheduler).AddDisposable(Disposables);

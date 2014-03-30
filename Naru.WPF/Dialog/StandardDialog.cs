@@ -10,9 +10,9 @@ namespace Naru.WPF.Dialog
     {
         private readonly IDialogBuilder<Answer> _dialogBuilder;
         private readonly IUserInteraction _userInteraction;
-        private readonly ISchedulerProvider _scheduler;
+        private readonly IDispatcherSchedulerProvider _scheduler;
 
-        public StandardDialog(IDialogBuilder<Answer> dialogBuilder, IUserInteraction userInteraction, ISchedulerProvider scheduler)
+        public StandardDialog(IDialogBuilder<Answer> dialogBuilder, IUserInteraction userInteraction, IDispatcherSchedulerProvider scheduler)
         {
             _dialogBuilder = dialogBuilder;
             _userInteraction = userInteraction;

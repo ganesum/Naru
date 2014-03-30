@@ -42,7 +42,7 @@ namespace Naru.WPF.UserInteractionHost
 
         #endregion
 
-        public UserInteractionHostViewModel(ILog log, ISchedulerProvider scheduler, IStandardDialog standardDialog)
+        public UserInteractionHostViewModel(ILog log, IDispatcherSchedulerProvider scheduler, IStandardDialog standardDialog)
             : base(log, scheduler, standardDialog)
         {
             _viewModel.ConnectINPCProperty(this, () => ViewModel, scheduler).AddDisposable(Disposables);

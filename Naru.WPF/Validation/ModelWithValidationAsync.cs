@@ -45,7 +45,7 @@ namespace Naru.WPF.Validation
             }
         }
 
-        protected ModelWithValidationAsync(ISchedulerProvider scheduler, IValidationAsync<TModel, TValidator> validation)
+        protected ModelWithValidationAsync(IDispatcherSchedulerProvider scheduler, IValidationAsync<TModel, TValidator> validation)
         {
             Validation = validation;
             Validation.Initialise((TModel) this);

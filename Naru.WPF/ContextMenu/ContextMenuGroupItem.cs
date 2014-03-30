@@ -25,7 +25,7 @@ namespace Naru.WPF.ContextMenu
 
         public BindableCollection<IContextMenuItem> Items { get; private set; }
 
-        public ContextMenuGroupItem(ISchedulerProvider scheduler, BindableCollection<IContextMenuItem> itemsCollection)
+        public ContextMenuGroupItem(IDispatcherSchedulerProvider scheduler, BindableCollection<IContextMenuItem> itemsCollection)
         {
             _isVisible.ConnectINPCProperty(this, () => IsVisible, scheduler).AddDisposable(Disposables);
 

@@ -1,6 +1,8 @@
 ﻿using Common.Logging;
 using Common.Logging.Simple;
 
+using Naru.Concurrency.Scheduler;
+using Naru.Concurrency.Tests.Scheduler;
 using Naru.Tests;
 using Naru.WPF.Dialog;
 using Naru.WPF.MVVM;
@@ -18,7 +20,7 @@ namespace Naru.WPF.Tests.ViewModel
     {
         public class WorkspaceViewModel : Workspace
         {
-            public WorkspaceViewModel(ILog log, ISchedulerProvider scheduler, IStandardDialog standardDialog) 
+            public WorkspaceViewModel(ILog log, IDispatcherSchedulerProvider scheduler, IStandardDialog standardDialog) 
                 : base(log, scheduler, standardDialog)
             {
             }
@@ -75,7 +77,7 @@ namespace Naru.WPF.Tests.ViewModel
         {
             var container = AutoMock.GetLoose();
 
-            var testSchedulerProvider = new TestSchedulerProvider();
+            var testSchedulerProvider = new TestDispatcherSchedulerProvider();
             container.Provide<ISchedulerProvider>(testSchedulerProvider);
 
             var workspace = container.Create<WorkspaceViewModel>();
@@ -96,7 +98,7 @@ namespace Naru.WPF.Tests.ViewModel
         {
             public IBusyViewModel BusyViewModel { get; private set; }
 
-            public SupportBusyViewModel(ISchedulerProvider scheduler)
+            public SupportBusyViewModel(IDispatcherSchedulerProvider scheduler)
             {
                 BusyViewModel = new BusyViewModel(scheduler);
             }
@@ -105,7 +107,7 @@ namespace Naru.WPF.Tests.ViewModel
         [Test]
         public void when_child_isbusy_changes_then_the_parent_isbusy_changes()
         {
-            var testSchedulerProvider = new TestSchedulerProvider();
+            var testSchedulerProvider = new TestDispatcherSchedulerProvider();
 
             var parent = new SupportBusyViewModel(testSchedulerProvider);
             var child = new SupportBusyViewModel(testSchedulerProvider);
@@ -132,7 +134,7 @@ namespace Naru.WPF.Tests.ViewModel
         {
             public IActivationStateViewModel ActivationStateViewModel { get; private set; }
 
-            public SupportActivationState(ISchedulerProvider scheduler)
+            public SupportActivationState(IDispatcherSchedulerProvider scheduler)
             {
                 ActivationStateViewModel = new ActivationStateViewModel(new NoOpLogger(), scheduler);
             }
@@ -141,7 +143,7 @@ namespace Naru.WPF.Tests.ViewModel
         [Test]
         public void when_parent_activation_state_changes_then_the_toolbaritem_activate_state_changes()
         {
-            var testSchedulerProvider = new TestSchedulerProvider();
+            var testSchedulerProvider = new TestDispatcherSchedulerProvider();
 
             var toolBarItem1 = new ToolBarButtonItem(testSchedulerProvider);
             var toolBarItem2 = new ToolBarButtonItem(testSchedulerProvider);

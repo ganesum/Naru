@@ -15,11 +15,11 @@ namespace Naru.WPF.MVVM
 {
     public class BindableCollection<T> : ObservableCollection<T>
     {
-        private readonly ISchedulerProvider _scheduler;
+        private readonly IDispatcherSchedulerProvider _scheduler;
         private readonly Subject<List<T>> _addedItemsCollectionChangedSubject = new Subject<List<T>>();
         private readonly Subject<List<T>> _removedItemsCollectionChangedSubject = new Subject<List<T>>();
 
-        public BindableCollection(ISchedulerProvider scheduler)
+        public BindableCollection(IDispatcherSchedulerProvider scheduler)
         {
             _scheduler = scheduler;
             IsNotifying = true;

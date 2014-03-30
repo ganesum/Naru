@@ -10,7 +10,7 @@ namespace Naru.WPF.ViewModel
 {
     public class BusyViewModel : ViewModel, IBusyViewModel
     {
-        private readonly ISchedulerProvider _scheduler;
+        private readonly IDispatcherSchedulerProvider _scheduler;
         private readonly BusyLatch _busyLatch = new BusyLatch();
 
         #region IsActive
@@ -47,7 +47,7 @@ namespace Naru.WPF.ViewModel
             get { return _busyLatch; }
         }
 
-        public BusyViewModel(ISchedulerProvider scheduler)
+        public BusyViewModel(IDispatcherSchedulerProvider scheduler)
         {
             _scheduler = scheduler;
 

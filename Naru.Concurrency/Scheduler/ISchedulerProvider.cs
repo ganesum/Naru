@@ -1,9 +1,7 @@
-﻿namespace Naru.WPF.Scheduler
+﻿namespace Naru.Concurrency.Scheduler
 {
     public interface ISchedulerProvider
     {
-        IDispatcherScheduler Dispatcher { get; }
-
         ITaskScheduler Task { get; }
 
         IIOCompletionScheduler IOCompletion { get; }

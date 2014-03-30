@@ -30,7 +30,7 @@ namespace Naru.WPF.MVVM
 
         #endregion
 
-        public HeaderViewModel(ISchedulerProvider scheduler)
+        public HeaderViewModel(IDispatcherSchedulerProvider scheduler)
         {
             _displayName.ConnectINPCProperty(this, () => DisplayName, scheduler).AddDisposable(Disposables);
             _imageName.ConnectINPCProperty(this, () => ImageName, scheduler).AddDisposable(Disposables);

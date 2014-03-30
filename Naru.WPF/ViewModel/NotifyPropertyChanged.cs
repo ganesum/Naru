@@ -2,6 +2,8 @@
 using System.ComponentModel;
 using System.Linq.Expressions;
 
+using Naru.Core;
+
 namespace Naru.WPF.ViewModel
 {
     /// <summary>

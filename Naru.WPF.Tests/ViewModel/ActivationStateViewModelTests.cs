@@ -15,7 +15,7 @@ namespace Naru.WPF.Tests.ViewModel
         [Test]
         public void when_IsActive_is_set_to_true_then_ActivationStateChanged_pumps_true()
         {
-            var testSchedulerProvider = new TestSchedulerProvider();
+            var testSchedulerProvider = new TestDispatcherSchedulerProvider();
 
             var activationStateViewModel = new ActivationStateViewModel(new NoOpLogger(), testSchedulerProvider);
             
@@ -32,7 +32,7 @@ namespace Naru.WPF.Tests.ViewModel
         [Test]
         public void when_IsActive_is_set_to_true_then_false_then_ActivationStateChanged_pumps_that_value()
         {
-            var testSchedulerProvider = new TestSchedulerProvider();
+            var testSchedulerProvider = new TestDispatcherSchedulerProvider();
 
             var activationStateViewModel = new ActivationStateViewModel(new NoOpLogger(), testSchedulerProvider);
 
@@ -51,7 +51,7 @@ namespace Naru.WPF.Tests.ViewModel
         [Test]
         public void the_first_time_IsActive_is_set_to_true_then_OnInitialise_pumps()
         {
-            var testSchedulerProvider = new TestSchedulerProvider();
+            var testSchedulerProvider = new TestDispatcherSchedulerProvider();
 
             var activationStateViewModel = new ActivationStateViewModel(new NoOpLogger(), testSchedulerProvider);
 
@@ -68,7 +68,7 @@ namespace Naru.WPF.Tests.ViewModel
         [Test]
         public void the_second_time_IsActive_is_set_to_true_then_OnInitialise_does_not_pumps()
         {
-            var testSchedulerProvider = new TestSchedulerProvider();
+            var testSchedulerProvider = new TestDispatcherSchedulerProvider();
 
             var activationStateViewModel = new ActivationStateViewModel(new NoOpLogger(), testSchedulerProvider);
 

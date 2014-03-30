@@ -67,7 +67,7 @@ namespace Naru.WPF.Tests.Validation
         [Test]
         public void when_ValidateProperty_is_called_then_ErrorsChanged_pumps()
         {
-            var testSchedulerProvider = new TestSchedulerProvider();
+            var testSchedulerProvider = new TestDispatcherSchedulerProvider();
             var rxTestScheduler = testSchedulerProvider.Current.RX as TestScheduler;
 
             var errorChangedPumped = false;
@@ -93,7 +93,7 @@ namespace Naru.WPF.Tests.Validation
         [Test]
         public void when_a_property_is_invalid_then_HasErrors_return_True()
         {
-            var testSchedulerProvider = new TestSchedulerProvider();
+            var testSchedulerProvider = new TestDispatcherSchedulerProvider();
 
             var validatingObject = new ValidatingObject();
 
@@ -108,7 +108,7 @@ namespace Naru.WPF.Tests.Validation
         [Test]
         public void when_a_property_is_invalid_then_GetErrors_return_the_correct_validation_results()
         {
-            var testSchedulerProvider = new TestSchedulerProvider();
+            var testSchedulerProvider = new TestDispatcherSchedulerProvider();
 
             var validatingObject = new ValidatingObject();
 
@@ -126,7 +126,7 @@ namespace Naru.WPF.Tests.Validation
         [Test]
         public void when_there_is_an_exception_during_validation_then_the_exception_is_diplayed_in_the_valiation_result()
         {
-            var testSchedulerProvider = new TestSchedulerProvider();
+            var testSchedulerProvider = new TestDispatcherSchedulerProvider();
 
             var validatingObject = new ErrorValidatingObject();
 

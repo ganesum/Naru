@@ -8,7 +8,7 @@ namespace Naru.WPF.ViewModel
 {
     public static class ViewModelHelpers
     {
-        public static void SetupHeader(this ISupportHeader viewModel, ISchedulerProvider scheduler, string displayName = null, string uri = null)
+        public static void SetupHeader(this ISupportHeader viewModel, IDispatcherSchedulerProvider scheduler, string displayName = null, string uri = null)
         {
             var headerViewModel = new HeaderViewModel(scheduler)
                                   {

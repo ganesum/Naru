@@ -1,5 +1,6 @@
 ﻿using Autofac;
 
+using Naru.Concurrency.Scheduler;
 using Naru.WPF.Dialog;
 using Naru.WPF.Menu;
 using Naru.WPF.MVVM;
@@ -16,6 +17,7 @@ namespace Naru.WPF
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<SchedulerProvider>().As<ISchedulerProvider>().SingleInstance();
+            builder.RegisterType<DispatcherSchedulerProvider>().As<IDispatcherSchedulerProvider>().SingleInstance();
 
             builder.RegisterType<ViewService>().As<IViewService>();
 

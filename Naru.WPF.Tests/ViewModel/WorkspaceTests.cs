@@ -6,6 +6,8 @@ using Common.Logging;
 
 using Microsoft.Reactive.Testing;
 
+using Naru.Concurrency.Scheduler;
+using Naru.Concurrency.Tests.Scheduler;
 using Naru.Core;
 using Naru.Tests;
 using Naru.TPL;
@@ -23,7 +25,7 @@ namespace Naru.WPF.Tests.ViewModel
     {
         public class WorkspaceViewModel : Workspace
         {
-            public WorkspaceViewModel(ILog log, ISchedulerProvider scheduler, IStandardDialog standardDialog) 
+            public WorkspaceViewModel(ILog log, IDispatcherSchedulerProvider scheduler, IStandardDialog standardDialog) 
                 : base(log, scheduler, standardDialog)
             {
                 Disposables.Add(AnonymousDisposable.Create(() => DisposablesWasDisposed.SafeInvoke(this)));
@@ -243,7 +245,7 @@ namespace Naru.WPF.Tests.ViewModel
 
                     var eventWasFired = false;
 
-                    var testSchedulerProvider = new TestSchedulerProvider();
+                    var testSchedulerProvider = new TestDispatcherSchedulerProvider();
                     container.Provide<ISchedulerProvider>(testSchedulerProvider);
                     var viewModel = container.Create<WorkspaceViewModel>();
 
@@ -314,7 +316,7 @@ namespace Naru.WPF.Tests.ViewModel
 
                     var eventWasFired = false;
 
-                    var testSchedulerProvider = new TestSchedulerProvider();
+                    var testSchedulerProvider = new TestDispatcherSchedulerProvider();
                     container.Provide<ISchedulerProvider>(testSchedulerProvider);
                     var viewModel = container.Create<WorkspaceViewModel>();
 

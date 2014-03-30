@@ -103,36 +103,37 @@
     <Compile Include="Presentation\AppearanceManager.cs" />
     <Compile Include="Presentation\FontSize.cs" />
     <Compile Include="Presentation\Link.cs" />
-    <Compile Include="Scheduler\CurrentScheduler.cs" />
     <Compile Include="Scheduler\DispatcherScheduler.cs" />
-    <Compile Include="Scheduler\ICurrentScheduler.cs" />
+    <Compile Include="Scheduler\DispatcherSchedulerProvider.cs" />
     <Compile Include="Scheduler\IDispatcherScheduler.cs" />
-    <Compile Include="Scheduler\IImmediateScheduler.cs" />
-    <Compile Include="Scheduler\IIOCompletionScheduler.cs" />
-    <Compile Include="Scheduler\ImmediateScheduler.cs" />
-    <Compile Include="Scheduler\INewThreadScheduler.cs" />
-    <Compile Include="Scheduler\IOCompletionScheduler.cs" />
-    <Compile Include="Scheduler\IRXScheduler.cs" />
-    <Compile Include="Scheduler\ITaskScheduler.cs" />
-    <Compile Include="Scheduler\IThreadPoolScheduler.cs" />
-    <Compile Include="Scheduler\ITPLScheduler.cs" />
-    <Compile Include="Scheduler\NewThreadScheduler.cs" />
-    <Compile Include="Scheduler\SchedulerProvider.cs" />
-    <Compile Include="Scheduler\TaskScheduler.cs" />
-    <Compile Include="Scheduler\ThreadPoolScheduler.cs" />
+    <Compile Include="Scheduler\IDispatcherSchedulerProvider.cs" />
     <Compile Include="TPL\RoutedEventAsync.cs" />
     <Compile Include="UnhandledExceptionHandler.cs" />
     <Compile Include="UserInteractionHost\UserInteractionHostView.xaml.cs">
       <DependentUpon>UserInteractionHostView.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserInteractionHost\UserInteractionHostViewModel.cs" />
-    <Compile Include="Validation\ISupportValidation.cs" />
-    <Compile Include="Validation\ISupportValidationAsync.cs" />
-    <Compile Include="Validation\IValidationAsync.cs" />
-    <Compile Include="Validation\ModelWithValidation.cs" />
-    <Compile Include="Validation\ModelWithValidationAsync.cs" />
-    <Compile Include="Validation\ValidationAsync.cs" />
-    <Compile Include="Validation\ValidationExtensions.cs" />
+    <Compile Include="Validation\ISupportValidation.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Validation\ISupportValidationAsync.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Validation\IValidationAsync.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Validation\ModelWithValidation.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Validation\ModelWithValidationAsync.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Validation\ValidationAsync.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Validation\ValidationExtensions.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="ViewModel\ActivationStateViewModel.cs" />
     <Compile Include="ViewModel\BusyLatch.cs" />
     <Compile Include="ViewModel\ClosingStrategy.cs" />
@@ -167,7 +168,6 @@
     <Compile Include="ContextMenu\ContextMenuSeperatorItem.cs" />
     <Compile Include="ContextMenu\IContextMenuItem.cs" />
     <Compile Include="TabControl\TabControlItemSourceBehaviour.cs" />
-    <Compile Include="Scheduler\ISchedulerProvider.cs" />
     <Compile Include="TabControl\TabControlHeaderView.xaml.cs">
       <DependentUpon>TabControlHeaderView.xaml</DependentUpon>
     </Compile>
@@ -175,7 +175,6 @@
     <Compile Include="ViewModel\IReactiveMultiSelect.cs" />
     <Compile Include="ViewModel\IReactiveSingleSelect.cs" />
     <Compile Include="ViewModel\NotifyPropertyChanged.cs" />
-    <Compile Include="ViewModel\PropertyExtensions.cs" />
     <Compile Include="Scheduler\DispatcherTaskScheduler.cs" />
     <Compile Include="MVVM\BindableCollection.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
@@ -436,6 +435,10 @@
     <ProjectReference Include="..\Naru.Aufofac\Naru.Aufofac.csproj">
       <Project>{15981272-c201-438a-aeef-ce3cacd97179}</Project>
       <Name>Naru.Aufofac</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Naru.Concurrency\Naru.Concurrency.csproj">
+      <Project>{4C72DCB6-93BD-4BCC-95B8-2B0DE191BC01}</Project>
+      <Name>Naru.Concurrency</Name>
     </ProjectReference>
     <ProjectReference Include="..\Naru.Core\Naru.Core.csproj">
       <Project>{17ea4111-2679-4155-a6e5-fe45e171ac2b}</Project>

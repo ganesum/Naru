@@ -1,6 +1,6 @@
 ﻿using System.Reactive.Concurrency;
 
-namespace Naru.WPF.Scheduler
+namespace Naru.Concurrency.Scheduler
 {
     public class ImmediateScheduler : IImmediateScheduler
     {

@@ -1,4 +1,5 @@
-﻿using Naru.WPF.ViewModel;
+﻿using Naru.Core;
+using Naru.WPF.ViewModel;
 
 using NUnit.Framework;
 

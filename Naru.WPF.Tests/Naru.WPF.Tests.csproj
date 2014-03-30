@@ -102,14 +102,8 @@
     <Compile Include="Converters\ToUpperConverterTests.cs" />
     <Compile Include="MVVM\BindableCollectionTests.cs" />
     <Compile Include="MVVM\ContentControlViewResolverBehaviorTests.cs" />
-    <Compile Include="Scheduler\TestCurrentScheduler.cs" />
     <Compile Include="Scheduler\TestDispatcherScheduler.cs" />
-    <Compile Include="Scheduler\TestImmediateScheduler.cs" />
-    <Compile Include="Scheduler\TestIOCompletionScheduler.cs" />
-    <Compile Include="Scheduler\TestNewThreadScheduler.cs" />
-    <Compile Include="Scheduler\TestSchedulerProvider.cs" />
-    <Compile Include="Scheduler\TestTaskScheduler.cs" />
-    <Compile Include="Scheduler\TestThreadPoolScheduler.cs" />
+    <Compile Include="Scheduler\TestDispatcherSchedulerProvider.cs" />
     <Compile Include="Validation\ValidationAsyncTests.cs" />
     <Compile Include="ViewModel\ActivationStateViewModelTests.cs" />
     <Compile Include="ViewModel\BusyLatchTests.cs" />
@@ -150,6 +144,14 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Naru.Concurrency.Tests\Naru.Concurrency.Tests.csproj">
+      <Project>{B22FA3A7-CB84-49B0-B69D-DF0FB4657D25}</Project>
+      <Name>Naru.Concurrency.Tests</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Naru.Concurrency\Naru.Concurrency.csproj">
+      <Project>{4C72DCB6-93BD-4BCC-95B8-2B0DE191BC01}</Project>
+      <Name>Naru.Concurrency</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Naru.Core\Naru.Core.csproj">
       <Project>{17ea4111-2679-4155-a6e5-fe45e171ac2b}</Project>
       <Name>Naru.Core</Name>
