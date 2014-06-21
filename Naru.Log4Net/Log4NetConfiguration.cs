@@ -37,15 +37,18 @@ namespace Naru.Log4Net
         {
             get
             {
-                if (string.IsNullOrEmpty(_logFileName))
+                if (!string.IsNullOrEmpty(_logFileName))
                 {
-                    var section = (NameValueCollection)ConfigurationManager.GetSection(_sectionName);
-                    if (section == null)
-                    {
-                        throw new ConfigurationErrorsException(string.Format("Missing section in application configuration file: {0}", _sectionName));
-                    }
-                    _logFileName = Environment.ExpandEnvironmentVariables(section["LogFileName"]);
+                    return _logFileName;
                 }
+
+                var section = (NameValueCollection)ConfigurationManager.GetSection(_sectionName);
+                if (section == null)
+                {
+                    throw new ConfigurationErrorsException(string.Format("Missing section in application configuration file: {0}", _sectionName));
+                }
+                _logFileName = Environment.ExpandEnvironmentVariables(section["LogFileName"]);
+
                 return _logFileName;
             }
             set { _logFileName = value; }

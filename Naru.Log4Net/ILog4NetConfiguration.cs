@@ -3,6 +3,7 @@
     public interface ILog4NetConfiguration
     {
         string LogDirectoryPath { get; set; }
+
         string LogFileName { get; set; }
     }
 }
