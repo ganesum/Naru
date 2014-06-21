@@ -4,8 +4,7 @@ using System.Xml.Serialization;
 
 namespace Naru.Configuration
 {
-    public abstract class Configuration<T> : ConfigurationSection
-        where T : Configuration<T>
+    public class Configuration<T> : ConfigurationSection
     {
         private XmlSerializer _serializer;
 

@@ -4,19 +4,17 @@ namespace Naru.Configuration
 {
     public interface IConfigurationService
     {
-        T Get<T>()
-            where T : Configuration<T>;
+        T Get<T>();
     }
 
     public class ConfigurationService : IConfigurationService
     {
         public T Get<T>()
-            where T : Configuration<T>
         {
-            var section = (T) ConfigurationManager.GetSection(typeof (T).Name);
+            var section = (Configuration<T>)ConfigurationManager.GetSection(typeof(T).Name);
 
             return section == null
-                       ? null
+                       ? default(T)
                        : section.ConfigurationItem;
         }
     }
