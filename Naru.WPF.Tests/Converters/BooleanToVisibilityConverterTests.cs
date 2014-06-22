@@ -28,6 +28,26 @@ namespace Naru.WPF.Tests.Converters
         }
 
         [Test]
+        public void when_nullable_true_is_passed_then_Visible_is_returned()
+        {
+            var converter = new BooleanToVisibilityConverter();
+            var value = (bool?)true;
+            var result = converter.Convert(value, null, null, null);
+
+            Assert.That(result, Is.EqualTo(Visibility.Visible));
+        }
+
+        [Test]
+        public void when_nullable_false_is_passed_then_Collapsed_is_returned()
+        {
+            var converter = new BooleanToVisibilityConverter();
+            var value = (bool?)false;
+            var result = converter.Convert(value, null, null, null);
+
+            Assert.That(result, Is.EqualTo(Visibility.Collapsed));
+        }
+
+        [Test]
         public void when_Visible_is_passed_then_true_is_returned()
         {
             var converter = new BooleanToVisibilityConverter();

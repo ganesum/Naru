@@ -1,7 +1,5 @@
 ﻿using System;
 
-using Naru.Concurrency.Scheduler;
-using Naru.Concurrency.Tests.Scheduler;
 using Naru.Tests;
 using Naru.WPF.Scheduler;
 using Naru.WPF.Tests.Scheduler;
@@ -21,7 +19,7 @@ namespace Naru.WPF.Tests.ViewModel
             {
                 var container = AutoMock.GetStrict();
 
-                container.Provide<ISchedulerProvider>(new TestSchedulerProvider());
+                container.Provide<IDispatcherSchedulerProvider>(new TestDispatcherSchedulerProvider());
 
                 var viewModel = container.Create<BusyViewModel>();
 
@@ -37,7 +35,7 @@ namespace Naru.WPF.Tests.ViewModel
             {
                 var container = AutoMock.GetStrict();
 
-                container.Provide<ISchedulerProvider>(new TestSchedulerProvider());
+                container.Provide<IDispatcherSchedulerProvider>(new TestDispatcherSchedulerProvider());
 
                 var viewModel = container.Create<BusyViewModel>();
 
@@ -58,7 +56,7 @@ namespace Naru.WPF.Tests.ViewModel
             {
                 var container = AutoMock.GetStrict();
 
-                container.Provide<ISchedulerProvider>(new TestSchedulerProvider());
+                container.Provide<IDispatcherSchedulerProvider>(new TestDispatcherSchedulerProvider());
 
                 var viewModel = container.Create<BusyViewModel>();
                 viewModel.Active(string.Empty);
@@ -75,7 +73,7 @@ namespace Naru.WPF.Tests.ViewModel
             {
                 var container = AutoMock.GetStrict();
 
-                container.Provide<ISchedulerProvider>(new TestSchedulerProvider());
+                container.Provide<IDispatcherSchedulerProvider>(new TestDispatcherSchedulerProvider());
 
                 var viewModel = container.Create<BusyViewModel>();
 

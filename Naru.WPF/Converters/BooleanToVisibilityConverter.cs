@@ -27,11 +27,6 @@ namespace Naru.WPF.Converters
             {
                 flag = (bool) value;
             }
-            else if (value is bool?)
-            {
-                var nullable = (bool?) value;
-                flag = nullable.HasValue ? nullable.Value : false;
-            }
 
             var inverse = (parameter as string) == "inverse";
 

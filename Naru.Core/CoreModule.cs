@@ -6,7 +6,7 @@ namespace Naru.Core
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<EventStream>().As<IEventStream>().SingleInstance();
+            builder.RegisterType<MessageStream>().As<IMessageStream>().SingleInstance();
         }
     }
 }

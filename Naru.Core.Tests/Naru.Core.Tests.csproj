@@ -60,7 +60,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnonymousDisposableTests.cs" />
-    <Compile Include="EventStreamTests.cs" />
+    <Compile Include="MessageStreamTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

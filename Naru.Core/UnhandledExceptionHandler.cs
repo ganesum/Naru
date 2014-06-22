@@ -10,11 +10,15 @@ namespace Naru.Core
 
         public static void InstallDomainUnhandledException()
         {
+            Logger.Debug("Installing Domain UnhandledException logging");
+
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
         }
 
         public static void UninstallDomainUnhandledException()
         {
+            Logger.Debug("Uninstalling Domain UnhandledException logging");
+
             AppDomain.CurrentDomain.UnhandledException -= CurrentDomain_UnhandledException;
         }
 

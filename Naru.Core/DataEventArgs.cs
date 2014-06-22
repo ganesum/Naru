@@ -12,6 +12,15 @@ namespace Naru.Core
         private readonly TData _value;
 
         /// <summary>
+        /// Initializes the DataEventArgs class.
+        /// </summary>
+        /// <param name="value">Information related to the event.</param>
+        public DataEventArgs(TData value)
+        {
+            _value = value;
+        }
+
+        /// <summary>
         /// Gets the information related to the event.
         /// </summary>
         /// <value>
@@ -19,19 +28,7 @@ namespace Naru.Core
         /// </value>
         public TData Value
         {
-            get
-            {
-                return _value;
-            }
-        }
-
-        /// <summary>
-        /// Initializes the DataEventArgs class.
-        /// </summary>
-        /// <param name="value">Information related to the event.</param>
-        public DataEventArgs(TData value)
-        {
-            _value = value;
+            get { return _value; }
         }
     }
 }

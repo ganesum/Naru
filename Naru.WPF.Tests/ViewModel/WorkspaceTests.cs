@@ -6,8 +6,6 @@ using Common.Logging;
 
 using Microsoft.Reactive.Testing;
 
-using Naru.Concurrency.Scheduler;
-using Naru.Concurrency.Tests.Scheduler;
 using Naru.Core;
 using Naru.Tests;
 using Naru.TPL;
@@ -74,7 +72,7 @@ namespace Naru.WPF.Tests.ViewModel
                 {
                     var container = AutoMock.GetLoose();
 
-                    container.Provide<ISchedulerProvider>(new TestSchedulerProvider());
+                    container.Provide<IDispatcherSchedulerProvider>(new TestDispatcherSchedulerProvider());
 
                     var eventWasFired = false;
 
@@ -94,7 +92,10 @@ namespace Naru.WPF.Tests.ViewModel
                 {
                     var container = AutoMock.GetLoose();
 
-                    container.Provide<ISchedulerProvider>(new TestSchedulerProvider());
+                    var testDispatcherSchedulerProvider = new TestDispatcherSchedulerProvider();
+                    var testScheduler = testDispatcherSchedulerProvider.Dispatcher.RX as TestScheduler;
+
+                    container.Provide<IDispatcherSchedulerProvider>(new TestDispatcherSchedulerProvider());
 
                     var eventWasFired = false;
 
@@ -114,7 +115,7 @@ namespace Naru.WPF.Tests.ViewModel
                 {
                     var container = AutoMock.GetLoose();
 
-                    container.Provide<ISchedulerProvider>(new TestSchedulerProvider());
+                    container.Provide<IDispatcherSchedulerProvider>(new TestDispatcherSchedulerProvider());
 
                     var eventWasFired = false;
 
@@ -135,7 +136,7 @@ namespace Naru.WPF.Tests.ViewModel
             {
                 var container = AutoMock.GetLoose();
 
-                container.Provide<ISchedulerProvider>(new TestSchedulerProvider());
+                container.Provide<IDispatcherSchedulerProvider>(new TestDispatcherSchedulerProvider());
 
                 var eventWasFired = false;
 
@@ -163,7 +164,8 @@ namespace Naru.WPF.Tests.ViewModel
 
                     var eventWasFired = 0;
 
-                    container.Provide<ISchedulerProvider>(new TestSchedulerProvider());
+                    container.Provide<IDispatcherSchedulerProvider>(new TestDispatcherSchedulerProvider());
+
                     var viewModel = container.Create<WorkspaceViewModel>();
 
                     Assert.That(eventWasFired, Is.EqualTo(0));
@@ -184,8 +186,11 @@ namespace Naru.WPF.Tests.ViewModel
 
                     var eventWasFired = 0;
 
-                    var testScheduler = new TestScheduler();
-                    container.Provide<ISchedulerProvider>(new TestSchedulerProvider());
+                    var testDispatcherSchedulerProvider = new TestDispatcherSchedulerProvider();
+                    var testScheduler = testDispatcherSchedulerProvider.Dispatcher.RX as TestScheduler;
+
+                    container.Provide<IDispatcherSchedulerProvider>(testDispatcherSchedulerProvider);
+
                     var viewModel = container.Create<WorkspaceViewModel>();
 
                     Assert.That(eventWasFired, Is.EqualTo(0));
@@ -208,7 +213,8 @@ namespace Naru.WPF.Tests.ViewModel
                 {
                     var container = AutoMock.GetLoose();
 
-                    container.Provide<ISchedulerProvider>(new TestSchedulerProvider());
+                    container.Provide<IDispatcherSchedulerProvider>(new TestDispatcherSchedulerProvider());
+
                     var viewModel = container.Create<WorkspaceViewModel>();
 
                     Assert.That(viewModel.ActivationStateViewModel.IsActive, Is.False);
@@ -225,7 +231,8 @@ namespace Naru.WPF.Tests.ViewModel
 
                     var eventWasFired = false;
 
-                    container.Provide<ISchedulerProvider>(new TestSchedulerProvider());
+                    container.Provide<IDispatcherSchedulerProvider>(new TestDispatcherSchedulerProvider());
+
                     var viewModel = container.Create<WorkspaceViewModel>();
 
                     Assert.That(eventWasFired, Is.False);
@@ -245,8 +252,11 @@ namespace Naru.WPF.Tests.ViewModel
 
                     var eventWasFired = false;
 
-                    var testSchedulerProvider = new TestDispatcherSchedulerProvider();
-                    container.Provide<ISchedulerProvider>(testSchedulerProvider);
+                    var testDispatcherSchedulerProvider = new TestDispatcherSchedulerProvider();
+                    var testScheduler = testDispatcherSchedulerProvider.Dispatcher.RX as TestScheduler;
+
+                    container.Provide<IDispatcherSchedulerProvider>(testDispatcherSchedulerProvider);
+
                     var viewModel = container.Create<WorkspaceViewModel>();
 
                     Assert.That(eventWasFired, Is.False);
@@ -255,7 +265,7 @@ namespace Naru.WPF.Tests.ViewModel
 
                     viewModel.ActivationStateViewModel.Activate();
 
-                    ((TestScheduler)testSchedulerProvider.Dispatcher.RX).AdvanceBy(1);
+                    testScheduler.AdvanceBy(1);
 
                     Assert.That(eventWasFired, Is.True);
                 }
@@ -269,7 +279,8 @@ namespace Naru.WPF.Tests.ViewModel
                 {
                     var container = AutoMock.GetLoose();
 
-                    container.Provide<ISchedulerProvider>(new TestSchedulerProvider());
+                    container.Provide<IDispatcherSchedulerProvider>(new TestDispatcherSchedulerProvider());
+
                     var viewModel = container.Create<WorkspaceViewModel>();
 
                     Assert.That(viewModel.ActivationStateViewModel.IsActive, Is.False);
@@ -290,8 +301,11 @@ namespace Naru.WPF.Tests.ViewModel
 
                     var eventWasFired = false;
 
-                    var testScheduler = new TestScheduler();
-                    container.Provide<ISchedulerProvider>(new TestSchedulerProvider());
+                    var testDispatcherSchedulerProvider = new TestDispatcherSchedulerProvider();
+                    var testScheduler = testDispatcherSchedulerProvider.Dispatcher.RX as TestScheduler;
+
+                    container.Provide<IDispatcherSchedulerProvider>(new TestDispatcherSchedulerProvider());
+
                     var viewModel = container.Create<WorkspaceViewModel>();
 
                     viewModel.ActivationStateViewModel.Activate();
@@ -316,8 +330,11 @@ namespace Naru.WPF.Tests.ViewModel
 
                     var eventWasFired = false;
 
-                    var testSchedulerProvider = new TestDispatcherSchedulerProvider();
-                    container.Provide<ISchedulerProvider>(testSchedulerProvider);
+                    var testDispatcherSchedulerProvider = new TestDispatcherSchedulerProvider();
+                    var testScheduler = testDispatcherSchedulerProvider.Dispatcher.RX as TestScheduler;
+
+                    container.Provide<IDispatcherSchedulerProvider>(testDispatcherSchedulerProvider);
+
                     var viewModel = container.Create<WorkspaceViewModel>();
 
                     viewModel.ActivationStateViewModel.Activate();
@@ -328,7 +345,7 @@ namespace Naru.WPF.Tests.ViewModel
 
                     viewModel.ActivationStateViewModel.DeActivate();
 
-                    ((TestScheduler)testSchedulerProvider.Dispatcher.RX).AdvanceBy(2);
+                    testScheduler.AdvanceBy(2);
 
                     Assert.That(eventWasFired, Is.True);
                 }

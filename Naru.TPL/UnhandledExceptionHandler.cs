@@ -10,11 +10,15 @@ namespace Naru.TPL
 
         public static void InstallTaskUnobservedException()
         {
+            Logger.Debug("Installing UnobservedTaskException logging");
+
             TaskScheduler.UnobservedTaskException += TaskScheduler_UnobservedTaskException;
         }
 
         public static void UninstallTaskUnobservedException()
         {
+            Logger.Debug("Uninstalling UnobservedTaskException logging");
+
             TaskScheduler.UnobservedTaskException -= TaskScheduler_UnobservedTaskException;
         }
 

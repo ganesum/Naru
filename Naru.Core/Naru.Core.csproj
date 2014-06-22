@@ -72,7 +72,7 @@
     <Compile Include="DataEventArgs.cs" />
     <Compile Include="EnumerableEx.cs" />
     <Compile Include="EventHandlerExtensions.cs" />
-    <Compile Include="EventStream.cs" />
+    <Compile Include="MessageStream.cs" />
     <Compile Include="Guard.cs" />
     <Compile Include="PerformanceTester.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

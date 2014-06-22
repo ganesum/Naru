@@ -1,8 +1,6 @@
 ﻿using Common.Logging;
 using Common.Logging.Simple;
 
-using Naru.Concurrency.Scheduler;
-using Naru.Concurrency.Tests.Scheduler;
 using Naru.Tests;
 using Naru.WPF.Dialog;
 using Naru.WPF.MVVM;
@@ -31,7 +29,7 @@ namespace Naru.WPF.Tests.ViewModel
         {
             var container = AutoMock.GetLoose();
 
-            container.Provide<ISchedulerProvider>(new TestSchedulerProvider());
+            container.Provide<IDispatcherSchedulerProvider>(new TestDispatcherSchedulerProvider());
 
             var parent = container.Create<WorkspaceViewModel>() as ISupportActivationState;
             parent.ActivationStateViewModel.DeActivate();
@@ -54,7 +52,7 @@ namespace Naru.WPF.Tests.ViewModel
         {
             var container = AutoMock.GetLoose();
 
-            container.Provide<ISchedulerProvider>(new TestSchedulerProvider());
+            container.Provide<IDispatcherSchedulerProvider>(new TestDispatcherSchedulerProvider());
 
             var parent = container.Create<WorkspaceViewModel>() as ISupportActivationState;
             parent.ActivationStateViewModel.Activate();
@@ -77,15 +75,15 @@ namespace Naru.WPF.Tests.ViewModel
         {
             var container = AutoMock.GetLoose();
 
-            var testSchedulerProvider = new TestDispatcherSchedulerProvider();
-            container.Provide<ISchedulerProvider>(testSchedulerProvider);
+            var testDispatcherSchedulerProvider = new TestDispatcherSchedulerProvider();
+            container.Provide<IDispatcherSchedulerProvider>(testDispatcherSchedulerProvider);
 
             var workspace = container.Create<WorkspaceViewModel>();
 
             var displayName = "DisplayName";
             var imageuri = "ImageUri";
 
-            workspace.SetupHeader(testSchedulerProvider, displayName, imageuri);
+            workspace.SetupHeader(testDispatcherSchedulerProvider, displayName, imageuri);
 
             var headerViewModel = workspace.Header as HeaderViewModel;
 
