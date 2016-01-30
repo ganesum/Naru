@@ -98,7 +98,6 @@
     <Compile Include="Converters\NullToVisibilityConverter.cs" />
     <Compile Include="Converters\ToLowerConverter.cs" />
     <Compile Include="Converters\ToUpperConverter.cs" />
-    <Compile Include="Debug\DebugConverter.cs" />
     <Compile Include="MVVM\IUserInteraction.cs" />
     <Compile Include="MVVM\IUserInteractionViewModel.cs" />
     <Compile Include="MVVM\UserInteraction.cs" />
